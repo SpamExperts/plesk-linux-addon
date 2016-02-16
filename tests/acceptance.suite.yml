@@ -1,0 +1,31 @@
+# Codeception Test Suite Configuration
+#
+# Suite for acceptance tests.
+# Perform tests in browser using the WebDriver or PhpBrowser.
+# If you need both WebDriver and PHPBrowser tests - create a separate suite.
+
+class_name: WebGuy
+modules:
+    enabled:
+        - WebDriver
+        - Helper\Acceptance
+        - Helper\SpampanelApi
+        - Asserts
+    config:
+        WebDriver:
+         url: 'http://localhost/'
+         browser: firefox
+         wait: 0
+         restart: true
+#         window_size: 1240x768
+         clear_cookies: true
+
+env:
+    plesk11:
+        username: 'PLESK11_USERNAME'
+        password: 'PLESK11_PASSWORD'
+        url: 'PLESK11_URL'
+    plesk12:
+        username: 'PLESK12_USERNAME'
+        password: 'PLESK12_PASSWORD'
+        url: 'PLESK12_URL'
