@@ -20,4 +20,5 @@ class ProfessionalSpamFilterPage
     const MIGRATION_LINK     = "//a[contains(.,'Migration')]";
     const UPDATE_LINK        = "//a[contains(.,'Update')]";
     const SUPPORT_LINK       = "//a[contains(.,'Support')]";
+    const CONFIGURE_HREF     = "//a[contains(@href,'?q=admin/settings')]";
 }

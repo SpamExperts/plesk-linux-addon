@@ -36,11 +36,7 @@ class ConfigurationPage
     const REDIRECT_BACK_TO_CPANEL_OPT       = "//input[@data-original-title='Redirect back to Cpanel upon logout']";
     const ADD_DOMAIN_DURING_LOGIN_OPT       = "//input[@data-original-title='Add the domain to the spamfilter during login if it does not exist']";
     const FORCE_CHANGE_MX_ROUTE_OPT         = "//input[@data-original-title='Force changing route &amp; MX records, even if the domain exists.']";
-    const CHANGE_EMAIL_ROUTING_OPT          = "//input[@data-original-title='Change email routing setting \"auto\" to \"local\" in bulk protect.']";
-    const ADD_REMOVE_DOMAIN                 = "//input[@data-original-title='Add/Remove a domain when the email routing is changed in Cpanel']";
-    const DISABLE_ADDON_IN_CPANEL           = "//input[@data-original-title='Disable addon in cPanel for reseller accounts.Cpanel']";
     const USE_IP_AS_DESTINATION_OPT         = "//input[@data-original-title='Use IP as destination route instead of domain']";
-    const SET_SPF_RECORD                    = "//input[@data-original-title='Set SPF automatically for domains']";
 
     const SAVE_SETTINGS_BTN             = "//input[@class='btn btn-primary btn btn-primary']";
     const ERROR_MESSAGE_CONTAINER       = "//div[@class='alert alert-error alert-danger']";

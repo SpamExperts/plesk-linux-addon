@@ -46,6 +46,42 @@ class CommonSteps extends \WebGuy
         }
     }
 
+    public function setConfigurationOptions(array $options)
+    {
+        $options = array_merge($this->getDefaultConfigurationOptions(), $options);
+
+        foreach ($options as $option => $check) {
+            if ($check) {
+                $this->checkOption($option);
+            } else {
+                $this->uncheckOption($option);
+            }
+        }
+
+        $this->click(ConfigurationPage::SAVE_SETTINGS_BTN);
+        $this->see('The settings have been saved.');
+    }
+
+    private function getDefaultConfigurationOptions()
+    {
+        return array(
+            ConfigurationPage::ENABLE_SSL_FOR_API_OPT => false,
+            ConfigurationPage::ENABLE_AUTOMATIC_UPDATES_OPT => false,
+            ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT => true,
+            ConfigurationPage::AUTOMATICALLY_DELETE_DOMAINS_OPT => true,
+            ConfigurationPage::AUTOMATICALLY_CHANGE_MX_OPT => true,
+            ConfigurationPage::CONFIGURE_EMAIL_ADDRESS_OPT => true,
+            ConfigurationPage::PROCESS_ADDON_PLESK_OPT => true,
+            ConfigurationPage::ADD_ADDON_PLESK_OPT => false,
+            ConfigurationPage::USE_EXISTING_MX_OPT => true,
+            ConfigurationPage::DO_NOT_PROTECT_REMOTE_DOMAINS_OPT => false,
+            ConfigurationPage::REDIRECT_BACK_TO_PLESK_OPT => false,
+            ConfigurationPage::ADD_DOMAIN_DURING_LOGIN_OPT => true,
+            ConfigurationPage::FORCE_CHANGE_MX_ROUTE_OPT => false,
+            ConfigurationPage::USE_IP_AS_DESTINATION_OPT => false,
+        );
+    }
+
     public function logout()
     {
         $I = $this;
@@ -201,6 +237,23 @@ class CommonSteps extends \WebGuy
         $I->waitForElement("//div[@class='msg-content']", 30);
         $I->see("Customer {$this->customerUsername} was created.", "//div[@class='msg-box msg-info']");
         return [$this->customerUsername, $this->customerPassword, $this->domain];
+    }
+
+    public function changeCustomerPlan($customerUsername)
+    {
+        $I = $this;
+        $I->amGoingTo("\n\n --- Change the subscription plan for '$this->customerUsername' --- \n");
+        $I->switchToLeftFrame();
+        $I->click("//a[contains(.,'Customers')]");
+        $I->switchToWorkFrame();
+        $I->click("//a[contains(.,'$this->customerUsername')]");
+        $I->waitForElementVisible("//a[contains(.,'Subscription')]");
+        $I->checkOption("//input[contains(@name,'listGlobalCheckbox')]");
+        $I->click("//span[contains(.,'Change Plan')]");
+        $I->waitForElementVisible("//select[contains(@name,'planSection[servicePlan]')]");
+        $I->selectOption("//select[contains(@id,'planSection-servicePlan')]", "Unlimited");
+        $I->click("//button[contains(.,'OK')]");
+        $I->waitForElementVisible("//a[contains(.,'Subscription')]");
     }
 
     public function addNewSubscription(array $params = array())

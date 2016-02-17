@@ -41,7 +41,7 @@
 * @link      https://my.spamexperts.com/kb/34/Addons
 * @since     2.0
 */
- 
+
 require_once dirname(__FILE__) . '/../application/bootstrap.php';
 
 $paneltype = SpamFilter_Core::getPanelType();
