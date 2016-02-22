@@ -5,7 +5,9 @@ namespace Plesk;
 use PsfConfig;
 use WebGuy;
 use Pages\BulkprotectPage;
+use Pages\ConfigurationPage;
 use Pages\ProfessionalSpamFilterPage;
+use Step\Acceptance\CommonSteps;
 use Step\Acceptance\BulkProtectSteps;
 
 class C04BulkProtectCest
@@ -21,13 +23,39 @@ class C04BulkProtectCest
 
     public function verifyBulkProtectPage(BulkProtectSteps $I)
     {
+        $I->goToPage(ProfessionalSpamFilterPage::CONFIGURATION_BTN, ConfigurationPage::TITLE);
+        $I->setConfigurationOptions(array(
+            ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT => false,
+            ConfigurationPage::FORCE_CHANGE_MX_ROUTE_OPT => false,
+        ));
+
+        $I->removeAllDomains();
+        $account = $I->addNewSubscription();
+        $I->wait(120);
+
         $I->goToPage(ProfessionalSpamFilterPage::BULKPROTECT_BTN, BulkprotectPage::TITLE);
         $I->checkBulkProtectPageLayout();
         $I->checkLastExecutionInfo();
         $I->submitBulkprotectForm();
         $I->checkBulkprotectRunning();
         $I->checkBulkprotectRanSuccessfully();
+        $I->see('Domain has been added', '#resultdomainstatus');
 
-        //need to modify tests after a domain is added and then run bulk again
+        $I->goToPage(ProfessionalSpamFilterPage::BULKPROTECT_BTN, BulkprotectPage::TITLE);
+        $I->submitBulkprotectForm();
+        $I->checkBulkprotectRanSuccessfully();
+        $I->see('Skipped: Domain already exists', '#resultdomainstatus');
+
+        $I->goToPage(ProfessionalSpamFilterPage::CONFIGURATION_BTN, ConfigurationPage::TITLE);
+        $I->setConfigurationOptions(array(
+            ConfigurationPage::AUTOMATICALLY_CHANGE_MX_OPT => true,
+            ConfigurationPage::FORCE_CHANGE_MX_ROUTE_OPT => true,
+        ));
+
+        $I->goToPage(ProfessionalSpamFilterPage::BULKPROTECT_BTN, BulkprotectPage::TITLE);
+        $I->checkLastExecutionInfo();
+        $I->submitBulkprotectForm();
+        $I->checkBulkprotectRanSuccessfully();
+        $I->see('Route & MX have been updated', '#resultdomainstatus');
     }
 }

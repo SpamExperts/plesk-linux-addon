@@ -55,9 +55,9 @@ class ConfigurationSteps extends DomainListSteps
         $I->seeElement(ConfigurationPage::AUTOMATICALLY_CHANGE_MX_OPT);
         $I->see('Configure the email address for this domain');
         $I->seeElement(ConfigurationPage::CONFIGURE_EMAIL_ADDRESS_OPT);
-        $I->see('Process aliases and sub-domains');
+        $I->see('Process addon- and parked domains');
         $I->seeElement(ConfigurationPage::PROCESS_ADDON_PLESK_OPT);
-        $I->see('Add aliases and sub-domains as an alias instead of a normal domain.');
+        $I->see('Add addon- and parked domains as an alias instead of a normal domain.');
         $I->seeElement(ConfigurationPage::ADD_ADDON_PLESK_OPT);
         $I->see('Use existing MX records as routes in the spamfilter.');
         $I->seeElement(ConfigurationPage::USE_EXISTING_MX_OPT);

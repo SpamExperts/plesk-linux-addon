@@ -19,6 +19,11 @@ class C02BrandingCest
 
     public function _after(BrandingSteps $I)
     {
+        $I->logout();
+        $I->login();
+        $I->goToPage(ProfessionalSpamFilterPage::BRANDING_BTN, BrandingPage::TITLE);
+        $I->submitBrandingSettingForm("Professional Spam Filter");
+        $I->checkSettingsSavedSuccessfully();
     }
 
     public function verifyBrandingPage(BrandingSteps $I)

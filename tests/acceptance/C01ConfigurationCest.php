@@ -40,19 +40,19 @@ class C01ConfigurationCest
         $I->checkSubmissionIsSuccessful();
     }
 
-    public function verifyNotAutomaticallyAddDomainToPsf(ConfigurationSteps $I)
-    {
-        $I->setAutomaticallyAddDomainsToSpamfilterOption(false);
-        $account = $I->addNewSubscription();
-        $I->checkDomainIsNotPresentInFilter($account['domain']);
-    }
-
     public function verifyAutomaticallyAddDomainToPsf(ConfigurationSteps $I)
     {
         $I->setAutomaticallyAddDomainsToSpamfilterOption();
         $account = $I->addNewSubscription();
         $I->wait(120);
         $I->checkDomainIsPresentInFilter($account['domain']);
+    }
+
+    public function verifyNotAutomaticallyAddDomainToPsf(ConfigurationSteps $I)
+    {
+        $I->setAutomaticallyAddDomainsToSpamfilterOption(false);
+        $account = $I->addNewSubscription();
+        $I->checkDomainIsNotPresentInFilter($account['domain']);
     }
 
     public function verifyNotAutomaticallyDeleteDomainToPsf(ConfigurationSteps $I)
@@ -194,6 +194,7 @@ class C01ConfigurationCest
         $I->setAddOnAsAnAliasOption();
         $I->shareIp();
         list($customerUsername, $customerPassword, $domain) = $I->createCustomer();
+        $I->changeCustomerPlan($customerUsername);
         $I->logout();
         $I->login($customerUsername, $customerPassword, true);
 
@@ -216,7 +217,7 @@ class C01ConfigurationCest
         $I->setRedirectBackToPleskOption();
         $account = $I->addNewSubscription();
         $I->checkDomainList($account['domain'], true);
-        $I->searchDomainList($account['domain'], true);
+        $I->searchDomainList($account['domain']);
         $I->loginOnSpampanel($account['domain']);
         $I->logoutFromSpampanel();
         $I->seeInCurrentAbsoluteUrl($I->getEnvHostname());
