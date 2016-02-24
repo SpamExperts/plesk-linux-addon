@@ -217,7 +217,7 @@ class C01ConfigurationCest
         $I->setRedirectBackToPleskOption();
         $account = $I->addNewSubscription();
         $I->checkDomainList($account['domain'], true);
-        $I->searchDomainList($account['domain'], true);
+        $I->searchDomainList($account['domain']);
         $I->loginOnSpampanel($account['domain']);
         $I->logoutFromSpampanel();
         $I->seeInCurrentAbsoluteUrl($I->getEnvHostname());

@@ -200,7 +200,9 @@ class AjaxController extends Zend_Controller_Action
                     exit(Zend_Json::encode($output));
                 }
 
-                if (!$this->_panel->validateOwnership($domain)) {
+                $domainToValidate = $owner_domain ? $owner_domain : $domain;
+
+                if (!$this->_panel->validateOwnership($domainToValidate)) {
                     $output ['message'] = sprintf($this->t->_("You're not allowed to operate on the domain '%s'"), htmlspecialchars($domain, ENT_QUOTES, 'UTF-8'));
                     $output ['status'] = 'error';
                     exit(Zend_Json::encode($output));

@@ -59,13 +59,14 @@ class BulkProtectSteps extends CommonSteps
     public function removeAllDomains()
     {
         $I = $this;
+        $I->switchToLeftFrame();
+        $I->click(PleskLinuxClientPage::CLIENT_SUBSCRIPTIONS);
+        $I->switchToWorkFrame();
 
         if (!$I->getElementsCount("//td[contains(@class,'select')]")) {
             return;
         }
-        $I->switchToLeftFrame();
-        $I->click(PleskLinuxClientPage::CLIENT_SUBSCRIPTIONS);
-        $I->switchToWorkFrame();
+
         $I->click(PleskLinuxClientPage::CLIENT_ALL_ENTRIES_BUTTON);
         $I->waitForElementVisible(PleskLinuxClientPage::CLIENT_SELECT_ALL_SUBSCRIPTIONS);
         $I->checkOption(PleskLinuxClientPage::CLIENT_SELECT_ALL_SUBSCRIPTIONS);
