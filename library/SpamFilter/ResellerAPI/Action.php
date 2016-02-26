@@ -103,6 +103,18 @@ class SpamFilter_ResellerAPI_Action
 
     private $_api_access_allowed = true;
 
+    private static $registerMessagesOnInvalidCredentials = true;
+
+    public static function disableMessageRegistrationOnInvalidCredentials()
+    {
+        self::$registerMessagesOnInvalidCredentials = false;
+    }
+
+    public static function enableMessageRegistrationOnInvalidCredentials()
+    {
+        self::$registerMessagesOnInvalidCredentials = true;
+    }
+
     /**
      * Constructor
      *
@@ -341,7 +353,7 @@ class SpamFilter_ResellerAPI_Action
                         'status' => 'error'
                     );
 
-                    if ($this->_messageQueue) {
+                    if ($this->_messageQueue && self::$registerMessagesOnInvalidCredentials) {
                         $this->_messageQueue->addMessage($message);
                     }
                 }
