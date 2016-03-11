@@ -134,7 +134,7 @@ class SpamFilter_ResellerAPI_Action
         $this->_password   = $config->apipass;
         $this->_sslenabled = $config->ssl_enabled;
         if (PHP_SAPI !== 'cli') {
-            $this->_messageQueue = $messagesQueue ?: new SpamFilter_Controller_Action_Helper_FlashMessenger;
+            $this->_messageQueue = $messagesQueue ? $messagesQueue : new SpamFilter_Controller_Action_Helper_FlashMessenger;
         }
     }
 

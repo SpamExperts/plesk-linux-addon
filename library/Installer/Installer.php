@@ -1,29 +1,25 @@
 <?php
 
-namespace Installer;
 
-use Filesystem\AbstractFilesystem;
-use Output\OutputInterface;
-
-class Installer
+class Installer_Installer
 {
     /**
-     * @var AbstractFilesystem
+     * @var Filesystem_AbstractFilesystem
      */
     protected $filesystem;
 
     /**
-     * @var InstallPaths
+     * @var Installer_InstallPaths
      */
     protected $paths;
 
     /**
-     * @var \SpamFilter_PanelSupport_Plesk
+     * @var SpamFilter_PanelSupport_Plesk
      */
     protected $panelSupport;
 
     /**
-     * @var \SpamFilter_Logger
+     * @var SpamFilter_Logger
      */
     protected $logger;
 
@@ -33,16 +29,16 @@ class Installer
     protected $currentVersion;
 
     /**
-     * @var OutputInterface
+     * @var Output_OutputInterface
      */
     protected $output;
 
-    public function __construct(InstallPaths $paths, AbstractFilesystem $filesystem, OutputInterface $output)
+    public function __construct(Installer_InstallPaths $paths, Filesystem_AbstractFilesystem $filesystem, Output_OutputInterface $output)
     {
         $this->output = $output;
         $this->filesystem = $filesystem;
         $this->paths = $paths;
-        $this->logger = \Zend_Registry::get('logger');
+        $this->logger = Zend_Registry::get('logger');
         $this->findCurrentVersionAndInitPanelSupport();
     }
 
@@ -50,7 +46,7 @@ class Installer
     {
         try {
             $this->doInstall();
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $this->output->error($exception->getMessage());
             $this->logger->debug($exception->getMessage());
             $this->logger->debug($exception->getTraceAsString());
@@ -120,7 +116,7 @@ class Installer
         if ((!file_exists($file)) || (filesize($file) == 0)) {
             $this->output->info("Configuration file '" . $file . "' does not exist (or is empty).");
             $this->output->info("Generating default configuration file..");
-            $cfg = new \SpamFilter_Configuration($file);
+            $cfg = new SpamFilter_Configuration($file);
 
             if ($cfg) {
                 $this->output->info("Configuring initial settings..");
@@ -156,21 +152,21 @@ class Installer
             $this->currentVersion = null; //no version set, must be an upgrade
         }
 
-        $this->panelSupport = new \SpamFilter_PanelSupport_Plesk($options);
+        $this->panelSupport = new SpamFilter_PanelSupport_Plesk($options);
     }
 
     private function setupBrand()
     {
-        $brand = new \SpamFilter_Brand();
+        $brand = new SpamFilter_Brand();
 
         // Setup initial icon, but only if it does not exist already.
         $icon_content = base64_decode($brand->getBrandIcon(true));
 
-        if (!file_exists(\SpamFilter_Brand::ICON_PATH_PLESK)) {
-            file_put_contents(\SpamFilter_Brand::ICON_PATH_PLESK, $icon_content);
+        if (!file_exists(SpamFilter_Brand::ICON_PATH_PLESK)) {
+            file_put_contents(SpamFilter_Brand::ICON_PATH_PLESK, $icon_content);
         }
 
-        system("chown psaadm:sw-cp-server " . \SpamFilter_Brand::ICON_PATH_PLESK);
+        system("chown psaadm:sw-cp-server " . SpamFilter_Brand::ICON_PATH_PLESK);
     }
 
     private function outputInstallStartMessage()
@@ -194,7 +190,7 @@ class Installer
 
         try {
             $whoami = shell_exec('whoami');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->output->error(
                 "Error checking current user (via whoami), do you have the command 'whoami' or did you disallow shell_exec?."
             );
@@ -202,7 +198,7 @@ class Installer
         }
 
         // More detailed testing
-        $selfcheck = \SpamFilter_Core::selfCheck(false, array('skipapi' => true));
+        $selfcheck = SpamFilter_Core::selfCheck(false, array('skipapi' => true));
         $this->output->info("Running selfcheck...");
         if ($selfcheck['status'] != true) {
             if ($selfcheck['critital'] == true) {
