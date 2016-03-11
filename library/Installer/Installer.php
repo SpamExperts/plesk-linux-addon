@@ -201,6 +201,13 @@ class Installer
             exit(1);
         }
 
+        $atPath = trim(shell_exec('which at'));
+
+        if (! $atPath) {
+            $this->output->error("Package 'at' is not installed. Aborting");
+            exit(1);
+        }
+
         // More detailed testing
         $selfcheck = \SpamFilter_Core::selfCheck(false, array('skipapi' => true));
         $this->output->info("Running selfcheck...");
