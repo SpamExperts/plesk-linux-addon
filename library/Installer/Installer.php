@@ -204,7 +204,7 @@ class Installer
         $atPath = trim(shell_exec('which at'));
 
         if (! $atPath) {
-            $this->output->error("Package 'at' is not installed. Aborting");
+            $this->output->error("Package 'at' is missing and the setup can not continue as the package is required for proper functioning of the add-on. Install package 'at' to fix this problem and run the installer again.");
             exit(1);
         }
 
