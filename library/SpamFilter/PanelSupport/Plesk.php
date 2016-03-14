@@ -374,7 +374,7 @@ class SpamFilter_PanelSupport_Plesk
                         ),
                     ), Plesk_Driver_Domain_Extractor_V10::PROTOCOL_VERSION);
 
-                    $aliasesResult = !empty($allAliasesData['site-alias']['get']['result']) ? $allAliasesData['site-alias']['get']['result'] : [];
+                    $aliasesResult = !empty($allAliasesData['site-alias']['get']['result']) ? $allAliasesData['site-alias']['get']['result'] : array();
 
                     if (!empty($aliasesResult['info']['site-id'])) {
                         $siteId = (!empty($aliasesResult['info']['site-id']) ? (int) $aliasesResult['info']['site-id'] : 0);
