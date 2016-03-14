@@ -334,7 +334,7 @@ class SpamFilter_PanelSupport_Plesk
                 foreach($domains as $domain){
                     $convertedDomains[] = $IDNA->encode($domain);
                 }
-                
+
                 $pleskAPI = new Plesk_Driver;
                 $siteIdsByDomainData = $pleskAPI->doRequest(array(
                     'site' => array(
@@ -348,7 +348,7 @@ class SpamFilter_PanelSupport_Plesk
                         ),
                     ),
                 ), Plesk_Driver_Domain_Extractor_V10::PROTOCOL_VERSION);
-                
+
                 if (!empty($siteIdsByDomainData['site']['get']['result'])) {
                     if (!empty($siteIdsByDomainData['site']['get']['result']['id'])) { // if only one row in result not an array of rows
                         $domainsBySiteId[$siteIdsByDomainData['site']['get']['result']['id']]
@@ -374,10 +374,20 @@ class SpamFilter_PanelSupport_Plesk
                         ),
                     ), Plesk_Driver_Domain_Extractor_V10::PROTOCOL_VERSION);
 
-                    if (!empty($allAliasesData['site-alias']['get']['result'])
-                        && is_array($allAliasesData['site-alias']['get']['result'])
-                    ) {
-                        foreach ($allAliasesData['site-alias']['get']['result'] as $aliasInfo) {
+                    $aliasesResult = !empty($allAliasesData['site-alias']['get']['result']) ? $allAliasesData['site-alias']['get']['result'] : [];
+
+                    if (!empty($aliasesResult['info']['site-id'])) {
+                        $siteId = (!empty($aliasesResult['info']['site-id']) ? (int) $aliasesResult['info']['site-id'] : 0);
+
+                        if ($siteId && isset($domainsBySiteId[$siteId])) {
+                            if (!isset($allAliasesByDomain[$domainsBySiteId[$siteId]])) {
+                                $allAliasesByDomain[$domainsBySiteId[$siteId]] = array();
+                            }
+
+                            $allAliasesByDomain[$domainsBySiteId[$siteId]][] = $aliasesResult['info']['ascii-name'];
+                        }
+                    } elseif (!empty($aliasesResult) && is_array($aliasesResult)) {
+                        foreach ($aliasesResult as $aliasInfo) {
                             $siteId = (!empty($aliasInfo['info']['site-id']) ? (int) $aliasInfo['info']['site-id'] : 0);
                             if ($siteId && isset($domainsBySiteId[$siteId])) {
                                 if (!isset($allAliasesByDomain[$domainsBySiteId[$siteId]])) {
@@ -386,18 +396,6 @@ class SpamFilter_PanelSupport_Plesk
 
                                 $allAliasesByDomain[$domainsBySiteId[$siteId]][] = $aliasInfo['info']['ascii-name'];
                             }
-                        }
-                    } elseif (!empty($allAliasesData['site-alias']['get']['result']['info']['site-id'])) {
-                        $siteId = (!empty($allAliasesData['site-alias']['get']['result']['info']['site-id'])
-                            ? (int) $allAliasesData['site-alias']['get']['result']['info']['site-id']
-                            : 0);
-                        if ($siteId && isset($domainsBySiteId[$siteId])) {
-                            if (!isset($allAliasesByDomain[$domainsBySiteId[$siteId]])) {
-                                $allAliasesByDomain[$domainsBySiteId[$siteId]] = array();
-                            }
-
-                            $allAliasesByDomain[$domainsBySiteId[$siteId]][]
-                                = $allAliasesData['site-alias']['get']['result']['info']['ascii-name'];
                         }
                     }
                 }
