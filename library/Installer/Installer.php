@@ -197,6 +197,13 @@ class Installer_Installer
             exit(1);
         }
 
+        $atPath = trim(shell_exec('which at'));
+
+        if (! $atPath) {
+            $this->output->error("Package 'at' is missing and the setup can not continue as the package is required for proper functioning of the add-on. Install package 'at' to fix this problem and run the installer again.");
+            exit(1);
+        }
+
         // More detailed testing
         $selfcheck = SpamFilter_Core::selfCheck(false, array('skipapi' => true));
         $this->output->info("Running selfcheck...");
