@@ -2464,34 +2464,7 @@ trait WebGuyActions
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
-     * Saves current cookies into named snapshot in order to restore them in other tests
-     * This is useful to save session state between tests.
-     * For example, if user needs log in to site for each test this scenario can be executed once
-     * while other tests can just restore saved cookies.
-     *
-     * ``` php
-     * <?php
-     * // inside AcceptanceTester class:
-     *
-     * public function login()
-     * {
-     *      // if snapshot exists - skipping login
-     *      if ($I->loadSessionSnapshot('login')) return;
-     *
-     *      // logging in
-     *      $I->amOnPage('/login');
-     *      $I->fillField('name', 'jon');
-     *      $I->fillField('password', '123345');
-     *      $I->click('Login');
-     *
-     *      // saving snapshot
-     *      $I->saveSessionSnapshot('login');
-     * }
-     * ?>
-     * ```
-     *
-     * @param $name
-     * @return mixed
+     * @param string $name
      * @see \Codeception\Module\WebDriver::saveSessionSnapshot()
      */
     public function saveSessionSnapshot($name) {
@@ -2502,11 +2475,8 @@ trait WebGuyActions
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
-     * Loads cookies from saved snapshot.
-     *
-     * @param $name
-     * @see saveSessionSnapshot
-     * @return mixed
+     * @param string $name
+     * @return bool
      * @see \Codeception\Module\WebDriver::loadSessionSnapshot()
      */
     public function loadSessionSnapshot($name) {
@@ -2554,6 +2524,39 @@ trait WebGuyActions
      */
     public function seeInCurrentAbsoluteUrl($text) {
         return $this->getScenario()->runStep(new \Codeception\Step\Assertion('seeInCurrentAbsoluteUrl', func_get_args()));
+    }
+
+ 
+    /**
+     * [!] Method is generated. Documentation taken from corresponding module.
+     *
+     *
+     * @see \Helper\Acceptance::setWebDriverUrl()
+     */
+    public function setWebDriverUrl($scenario) {
+        return $this->getScenario()->runStep(new \Codeception\Step\Action('setWebDriverUrl', func_get_args()));
+    }
+
+ 
+    /**
+     * [!] Method is generated. Documentation taken from corresponding module.
+     *
+     *
+     * @see \Helper\SpampanelApi::assertIsAliasInSpampanel()
+     */
+    public function assertIsAliasInSpampanel($alias, $domain) {
+        return $this->getScenario()->runStep(new \Codeception\Step\Action('assertIsAliasInSpampanel', func_get_args()));
+    }
+
+ 
+    /**
+     * [!] Method is generated. Documentation taken from corresponding module.
+     *
+     *
+     * @see \Helper\SpampanelApi::assertIsNotAliasInSpampanel()
+     */
+    public function assertIsNotAliasInSpampanel($alias, $domain) {
+        return $this->getScenario()->runStep(new \Codeception\Step\Action('assertIsNotAliasInSpampanel', func_get_args()));
     }
 
  
@@ -2609,6 +2612,17 @@ trait WebGuyActions
      */
     public function makeSpampanelApiRequest($url, $params = null) {
         return $this->getScenario()->runStep(new \Codeception\Step\Action('makeSpampanelApiRequest', func_get_args()));
+    }
+
+ 
+    /**
+     * [!] Method is generated. Documentation taken from corresponding module.
+     *
+     *
+     * @see \Helper\SpampanelApi::addDomainAlias()
+     */
+    public function addDomainAlias($alias, $domain) {
+        return $this->getScenario()->runStep(new \Codeception\Step\Action('addDomainAlias', func_get_args()));
     }
 
  
@@ -2930,7 +2944,7 @@ trait WebGuyActions
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
-     * Checks if file doesn't exists
+     * Checks if file doesn't exist
      *  
      * @param string $filename
      * @param string $message

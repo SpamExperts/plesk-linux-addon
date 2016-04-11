@@ -55,10 +55,10 @@ class ConfigurationSteps extends DomainListSteps
         $I->seeElement(ConfigurationPage::AUTOMATICALLY_CHANGE_MX_OPT);
         $I->see('Configure the email address for this domain');
         $I->seeElement(ConfigurationPage::CONFIGURE_EMAIL_ADDRESS_OPT);
-        $I->see('Process addon- and parked domains');
+        $I->see('Process aliases and sub-domains');
         $I->seeElement(ConfigurationPage::PROCESS_ADDON_PLESK_OPT);
-        $I->see('Add addon- and parked domains as an alias instead of a normal domain.');
-        $I->seeElement(ConfigurationPage::ADD_ADDON_PLESK_OPT);
+        $I->see('Add aliases and sub-domains as an alias instead of a normal domain.');
+        $I->seeElement(ConfigurationPage::ADD_ADDON_AS_ALIAS_PLESK_OPT);
         $I->see('Use existing MX records as routes in the spamfilter.');
         $I->seeElement(ConfigurationPage::USE_EXISTING_MX_OPT);
         $I->see('Do not protect remote domains');
@@ -211,9 +211,9 @@ class ConfigurationSteps extends DomainListSteps
     public function setAddOnAsAnAliasOption($set = true)
     {
         if ($set) {
-            $this->checkOption(ConfigurationPage::ADD_ADDON_PLESK_OPT);
+            $this->checkOption(ConfigurationPage::ADD_ADDON_AS_ALIAS_PLESK_OPT);
         } else {
-            $this->uncheckOption(ConfigurationPage::ADD_ADDON_PLESK_OPT);
+            $this->uncheckOption(ConfigurationPage::ADD_ADDON_AS_ALIAS_PLESK_OPT);
         }
         $this->click(ConfigurationPage::SAVE_SETTINGS_BTN);
         $this->checkSubmissionIsSuccessful();
@@ -283,21 +283,5 @@ class ConfigurationSteps extends DomainListSteps
         }
         $this->click(ConfigurationPage::SAVE_SETTINGS_BTN);
         $this->checkSubmissionIsSuccessful();
-    }
-
-    public function checkDomainIsPresentInFilter($domain)
-    {
-        $this->goToPage(ProfessionalSpamFilterPage::DOMAIN_LIST_BTN, DomainListPage::TITLE);
-        $this->searchDomainList($domain);
-        $this->click('Check status');
-        $this->waitForText('This domain is present in the filter.');
-    }
-
-    public function checkDomainIsNotPresentInFilter($domain)
-    {
-        $this->goToPage(ProfessionalSpamFilterPage::DOMAIN_LIST_BTN, DomainListPage::TITLE);
-        $this->searchDomainList($domain);
-        $this->click('Check status');
-        $this->waitForText('This domain is not present in the filter.');
     }
 }

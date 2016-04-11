@@ -2,8 +2,22 @@
 
 namespace Helper;
 
+use RuntimeException;
+
 class SpampanelApi extends \Codeception\Module
 {
+    public function assertIsAliasInSpampanel($alias, $domain)
+    {
+        $aliases = $this->apiGetDomainAliases($domain);
+        $this->assertContains($alias, $aliases);
+    }
+
+    public function assertIsNotAliasInSpampanel($alias, $domain)
+    {
+        $aliases = $this->apiGetDomainAliases($domain);
+        $this->assertNotContains($alias, $aliases);
+    }
+
     public function apiCheckDomainExists($domain)
     {
         codecept_debug("Checking if $domain exists in spampanel api");
@@ -67,6 +81,24 @@ class SpampanelApi extends \Codeception\Module
         codecept_debug("Making api request: ".$url);
 
         return $response;
+    }
+
+    public function addDomainAlias($alias, $domain)
+    {
+        $response = $this->makeSpampanelApiRequest('domainalias/add/format/json', ['domain' => $domain, 'alias' => $alias]);
+        $this->checkResponseStatus($response);
+        $response = json_decode($response['output'], true);
+
+        if (! empty($response['messages']['error'])) {
+            throw new RuntimeException("Api error: ".var_export($response, true));
+        }
+    }
+
+    private function checkResponseStatus($response)
+    {
+        if (200 != $response['info']['http_code']) {
+            throw new RuntimeException("Invalid api status code ".$response['info']['http_code']);
+        }
     }
 
     public function requestUrl($url, $username = null, $password = null)

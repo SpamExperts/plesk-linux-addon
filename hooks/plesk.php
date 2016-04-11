@@ -46,6 +46,7 @@ class Prospamfilter implements EventListener
             }
 
             $hook = new SpamFilter_Hooks;
+            $protectionManager = new SpamFilter_ProtectionManager();
             // Retrieve config from the registry
             $config = Zend_Registry::get('general_config');
             /** @var $logger SpamFilter_Logger */
@@ -87,7 +88,7 @@ class Prospamfilter implements EventListener
                         $logger->debug("Post process hook ({$command}) status: " . $retval);
                     } else {
                         $logger->debug("Hook: Add domain '{$add_domain}'");
-                        $status = $hook->AddDomain($add_domain);
+                        $status = $protectionManager->protect($add_domain, null, "account");
                         $logger->debug("Hook: Add domain finished and returned: " . print_r($status, true));
                         if (!empty($status['reason'])) {
                             $logger->info("Hook AddDomain status: " . $status['reason']);
@@ -115,7 +116,7 @@ class Prospamfilter implements EventListener
                         return false;
                     }
                     $logger->debug("Hook: Delete domain '{$del_domain}'");
-                    $status = $hook->DelDomain($del_domain);
+                    $status = $protectionManager->unprotect($del_domain, null, "account");
                     if (!empty($status['reason'])) {
                         $logger->info("Hook DelDomain status: " . $status['reason']);
                     }
@@ -145,39 +146,18 @@ class Prospamfilter implements EventListener
                         return false;
                     }
 
-                    // Ok, we can proceed.
-                    if ($config->add_extra_alias) // Add the domain as ALIAS for existing one
-                    {
-                        // Add as alias
 
-                        // Since Plesk does not provide us with information on the domainNAME it belongs to we need to resolve the ID into a domain.
-                        $dapi        = new Plesk_Driver_Domain();
-                        $domain_data = $dapi->getDomainbyId($new_values['Domain Id']);
-                        $add_domain  = current(array_values($domain_data));
-                        if (!isset($add_domain)) {
-                            $logger->debug("[Hook] Parent Domain not supplied. Cannot proceed");
+                    // Since Plesk does not provide us with information on the domainNAME it belongs to we need to resolve the ID into a domain.
+                    $dapi        = new Plesk_Driver_Domain();
+                    $domain_data = $dapi->getDomainbyId($new_values['Domain Id']);
+                    $add_domain  = current(array_values($domain_data));
+                    if (!isset($add_domain)) {
+                        $logger->debug("[Hook] Parent Domain not supplied. Cannot proceed");
 
-                            return false;
-                        }
-
-                        $logger->info("Adding '{$add_alias}' as alias of '{$add_domain}' to the Antispam filter...");
-                        $status = $hook->AddAlias($add_domain, $add_alias);
-                    } else {
-                        // Add as normal domain.
-
-                        // Check if we need to handle this, no mail = no handling required
-                        /*
-                        $plesk = new Plesk_Driver_Aliases();
-                        $alias_info = $plesk->getAliasbyName( $add_alias );
-                        if( !(bool)$alias_info['get']['result']['info']['pref']['mail']['mail'] ) {
-                            $logger->debug("[Hook] The alias is configured not to receive email, therefor we cannot protect it");
-                            return false;
-                        }
-                        */
-
-                        $logger->info("Adding '{$add_alias}' to the Antispam filter (alias as real domain)...");
-                        $status = $hook->AddDomain($add_alias);
+                        return false;
                     }
+
+                    $status = $protectionManager->protect($add_alias, $add_domain, "alias");
                     break;
 
                 case "domain_alias_delete":
@@ -202,28 +182,17 @@ class Prospamfilter implements EventListener
                         return false;
                     }
 
-                    // Ok, we can proceed.
-                    if ($config->add_extra_alias) // Add the domain as ALIAS for existing one
-                    {
-                        // Deletion of alias
+                    // Since Plesk does not provide us with information on the domainNAME it belongs to we need to resolve the ID into a domain.
+                    $dapi        = new Plesk_Driver_Domain();
+                    $domain_data = $dapi->getDomainbyId($old_values['Domain Id']);
+                    $del_domain  = current(array_values($domain_data));
+                    if (!isset($del_domain)) {
+                        $logger->debug("[Hook] Parent Domain not supplied. Cannot proceed");
 
-                        // Since Plesk does not provide us with information on the domainNAME it belongs to we need to resolve the ID into a domain.
-                        $dapi        = new Plesk_Driver_Domain();
-                        $domain_data = $dapi->getDomainbyId($old_values['Domain Id']);
-                        $del_domain  = current(array_values($domain_data));
-                        if (!isset($del_domain)) {
-                            $logger->debug("[Hook] Parent Domain not supplied. Cannot proceed");
-
-                            return false;
-                        }
-
-                        $logger->info("Deleting '{$del_alias}' (alias from '{$del_domain}') from the Antispam filter...");
-                        $status = $hook->DelAlias($del_domain, $del_alias);
-                    } else {
-                        // Deletion of normal domain.
-                        $logger->info("Deleting '{$del_alias}' from the Antispam filter (alias as real domain)...");
-                        $status = $hook->DelDomain($del_alias);
+                        return false;
                     }
+
+                    $status = $protectionManager->unprotect($del_alias, $del_domain, "alias");
                     break;
 
                 //@TODO: Evaluate the need of implementing more events (http://download1.parallels.com/Plesk/PPP9/Doc/en-US/plesk-9.5-unix-mod-api/index.htm?fileName=38616.htm)

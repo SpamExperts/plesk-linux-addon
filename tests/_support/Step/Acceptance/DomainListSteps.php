@@ -26,38 +26,11 @@ class DomainListSteps extends CommonSteps
         $I->seeElement(DomainListPage::SEARCH_BTN);
         $I->seeElement(DomainListPage::RESET_BTN);
         $I->seeElement(DomainListPage::CHECK_STATUS_FOR_ALL_DOMAIN);
-        $I->seeElement(DomainListPage::TOOGLE_PROTECTION_FOR_SELECTED);
+        $I->seeElement(DomainListPage::TOGGLE_PROTECTION_FOR_SELECTED);
         $I->seeElement(DomainListPage::DOMAIN_TABLE);
         $I->seeElement(DomainListPage::ITEMS_PER_PAGE_INPUT);
         $I->seeElement(DomainListPage::CHANGE_BTN);
 
-    }
-
-    public function searchDomainList($domain)
-    {
-        $I = $this;
-        $I->amGoingTo("\n\n --- Search for {$domain} domain --- \n");
-        $I->fillField(DomainListPage::SEARCH_FIELD, $domain);
-        $I->click(DomainListPage::SEARCH_BTN);
-        $I->waitForText('Page 1 of 1. Total Items: 1');
-        $I->see($domain, DomainListPage::DOMAIN_TABLE);
-    }
-
-    public function checkDomainList($domainName, $isRoot = false)
-    {
-        $I = $this;
-        $I->amGoingTo("\n\n --- Check Domain list is present --- \n");
-        if ($isRoot) {
-            $I->goToPage(ProfessionalSpamFilterPage::DOMAIN_LIST_BTN, DomainListPage::TITLE);
-            $I->see($domainName, DomainListPage::DOMAIN_TABLE);
-        }
-        else {
-            $I->switchToLeftFrame();
-            $I->click("//a[contains(.,'Professional Spam Filter')]");
-            $I->switchToWorkFrame();
-            $I->amGoingTo("Check domin '{$domainName}' is present on the list");
-            $I->see($domainName, DomainListPage::DOMAIN_TABLE);
-        }
     }
 
     public function checkToogleProtection($domain)
@@ -69,7 +42,7 @@ class DomainListSteps extends CommonSteps
         $I->waitForText("This domain is not present in the filter.", 30);
         $I->see("This domain is not present in the filter.",
             DomainListPage::DOMAIN_TABLE);
-        $I->click(DomainListPage::TOOGLE_PROTECTION_LINK);
+        $I->click(DomainListPage::TOGGLE_PROTECTION_LINK);
         $I->waitForText("The protection status of {$domain} has been changed to protected", 30);
         $I->searchDomainList($domain);
         $I->click(DomainListPage::CHECK_STATUS_LINK);
@@ -86,11 +59,11 @@ class DomainListSteps extends CommonSteps
         $I->loginOnSpampanel($domain);
     }
 
-    public function toogleProtection($domain)
+    public function toggleProtection($domain)
     {
         $this->goToPage(ProfessionalSpamFilterPage::DOMAIN_LIST_BTN, DomainListPage::TITLE);
         $this->searchDomainList($domain);
-        $this->click(DomainListPage::TOOGLE_PROTECTION_LINK);
+        $this->click(DomainListPage::TOGGLE_PROTECTION_LINK);
         $this->waitForText("The protection status of {$domain} has been changed to protected", 30);
     }
 }

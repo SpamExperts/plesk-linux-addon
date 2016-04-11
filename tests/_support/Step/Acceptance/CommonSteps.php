@@ -32,11 +32,16 @@ class CommonSteps extends \WebGuy
         $I = $this;
         $I->amGoingTo("\n\n --- Login as '{$username}' --- \n");
         $I->amOnPage('/');
+        $I->waitForElement("//input[@id='loginSection-username']");
         $I->fillField("//input[@id='loginSection-username']", $username);
         $I->fillField("//input[@id='loginSection-password']", $password);
         $I->click('Log in');
         if ($isCustomer) {
-            $I->click("//button[@type='submit']");
+            $I->wait(2);
+            $canSeeElement = $I->canSeeElement("//button[contains(text(), 'OK, back to Plesk')]");
+            if ($canSeeElement) {
+                $I->click("//button[contains(text(), 'OK, back to Plesk')]");
+            }
             $I->see("Websites & Domains");
             $I->seeElement("//span[contains(.,'Professional Spam Filter')]");
         } else {
@@ -72,7 +77,7 @@ class CommonSteps extends \WebGuy
             ConfigurationPage::AUTOMATICALLY_CHANGE_MX_OPT => true,
             ConfigurationPage::CONFIGURE_EMAIL_ADDRESS_OPT => true,
             ConfigurationPage::PROCESS_ADDON_PLESK_OPT => true,
-            ConfigurationPage::ADD_ADDON_PLESK_OPT => false,
+            ConfigurationPage::ADD_ADDON_AS_ALIAS_PLESK_OPT => false,
             ConfigurationPage::USE_EXISTING_MX_OPT => true,
             ConfigurationPage::DO_NOT_PROTECT_REMOTE_DOMAINS_OPT => false,
             ConfigurationPage::REDIRECT_BACK_TO_PLESK_OPT => false,
@@ -119,6 +124,53 @@ class CommonSteps extends \WebGuy
         $I->waitForText('Configuration');
         $I->click($page);
         $I->waitForText($title);
+    }
+
+    public function checkDomainIsPresentInFilter($domain)
+    {
+        $this->goToPage(ProfessionalSpamFilterPage::DOMAIN_LIST_BTN, DomainListPage::TITLE);
+        $this->searchDomainList($domain);
+        $this->checkProtectionStatusIs(DomainListPage::STATUS_DOMAIN_IS_PRESENT_IN_THE_FILTER);
+    }
+
+    public function checkDomainIsNotPresentInFilter($domain)
+    {
+        $this->goToPage(ProfessionalSpamFilterPage::DOMAIN_LIST_BTN, DomainListPage::TITLE);
+        $this->searchDomainList($domain);
+        $this->checkProtectionStatusIs(DomainListPage::STATUS_DOMAIN_IS_NOT_PRESENT_IN_THE_FILTER);
+    }
+
+    public function checkProtectionStatusIs($status)
+    {
+        $this->click('Check status');
+        $this->waitForText($status, 60);
+    }
+
+    public function searchDomainList($domain)
+    {
+        $I = $this;
+        $I->amGoingTo("\n\n --- Search for {$domain} domain --- \n");
+        $I->fillField(DomainListPage::SEARCH_FIELD, $domain);
+        $I->click(DomainListPage::SEARCH_BTN);
+        $I->waitForText('Page 1 of 1. Total Items: 1');
+        $I->see($domain, DomainListPage::DOMAIN_TABLE);
+    }
+
+    public function checkDomainList($domainName, $isRoot = false)
+    {
+        $I = $this;
+        $I->amGoingTo("\n\n --- Check Domain list is present --- \n");
+        if ($isRoot) {
+            $I->goToPage(ProfessionalSpamFilterPage::DOMAIN_LIST_BTN, DomainListPage::TITLE);
+            $I->see($domainName, DomainListPage::DOMAIN_TABLE);
+        }
+        else {
+            $I->switchToLeftFrame();
+            $I->click("//a[contains(.,'Professional Spam Filter')]");
+            $I->switchToWorkFrame();
+            $I->amGoingTo("Check domin '{$domainName}' is present on the list");
+            $I->see($domainName, DomainListPage::DOMAIN_TABLE);
+        }
     }
 
     public function shareIp($resellerId = null)
@@ -293,6 +345,13 @@ class CommonSteps extends \WebGuy
         return $account;
     }
 
+    public function removeCreatedSubscriptions()
+    {
+        foreach(self::$accounts as $account) {
+            $this->removeSubscription($account['domain']);
+        }
+    }
+
     public function removeSubscription($domainName)
     {
         $I = $this;
@@ -300,8 +359,8 @@ class CommonSteps extends \WebGuy
         $I->switchToLeftFrame();
         $I->click("//a[contains(.,'Subscriptions')]");
         $I->switchToWorkFrame();
-        $I->waitForElement("//div[@class='b-indent status-ok']/a[text()='{$domainName} (Default Domain)']");
-        $value = $I->grabAttributeFrom("//div[@class='b-indent status-ok']/a[text()='{$domainName} (Default Domain)']", 'href');
+        $I->waitForElement("//div[@class='b-indent status-ok']/a[contains(text(), '{$domainName}')]");
+        $value = $I->grabAttributeFrom("//div[@class='b-indent status-ok']/a[contains(text(), '{$domainName}')]", 'href');
         $subscriptionNo = array_pop(explode('/', $value));
         $I->checkOption("//input[@value='{$subscriptionNo}']");
         $I->click("//span[contains(.,'Remove')]");
@@ -379,5 +438,62 @@ class CommonSteps extends \WebGuy
         $I->switchToWindow();
         $I->waitForElement('#topFrame');
         $I->switchToIFrame('topFrame');
+    }
+
+    public function goToConfigurationPageAndSetOptions(array $options)
+    {
+        $this->goToPage(ProfessionalSpamFilterPage::CONFIGURATION_BTN, ConfigurationPage::TITLE);
+        $this->setConfigurationOptions($options);
+    }
+
+    public function addAliasAsClient($domain, $alias = null)
+    {
+        if (! $alias) {
+            $alias = 'alias' . $domain;
+        }
+        $I = $this;
+        $I->click("//a[@id='buttonAddDomainAlias']");
+        $I->waitForText('Add a Domain Alias');
+        $I->fillField("//input[@id='name']", $alias);
+        $I->click("//button[@name='send']");
+        $I->waitForText("The domain alias $alias was created.", 30);
+
+        return $alias;
+    }
+
+    public function removeAliasAsClient($alias)
+    {
+        $I = $this;
+        $I->click($alias);
+        $I->click("Remove Domain Alias");
+        $I->waitForText("Removing this website will also delete all related files, directories, and web applications from the server.");
+        $I->click("Yes");
+        $I->waitForText("The alias was removed", 30);
+    }
+
+    public function loginAsClient($customerUsername, $customerPassword)
+    {
+        $this->login($customerUsername, $customerPassword, true);
+    }
+
+    public function loginAsRoot()
+    {
+        $this->login();
+    }
+
+    public function addAddonDomainAsClient($domain, $addonDomainName = null)
+    {
+        if (! $addonDomainName) {
+            $addonDomainName = 'addon' . $domain;
+        }
+        
+        $I = $this;
+        $I->click('Add New Domain');
+        $I->waitForText('Adding New Domain Name');
+        $I->fillField("//input[@id='domainName-name']", $addonDomainName);
+        $I->click("//button[@name='send']");
+        $I->waitForText("The domain $addonDomainName was successfully created.", 30);
+        
+        return $addonDomainName;
     }
 }
