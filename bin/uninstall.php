@@ -62,6 +62,6 @@ $paths->config = CFG_PATH;
 $paths->plesk = PLESK_DIR;
 $filesystem = Filesystem_AbstractFilesystem::createFilesystem();
 $output = new Output_ConsoleOutput();
-$resetMx = !empty($argv) && isset($argv[1]) && trim(strtolower($this->confirmation)) == '--resetmx';
+$resetMx = !empty($argv) && isset($argv[1]) && trim(strtolower($argv[1])) == '--resetmx';
 $uninstaller = new Uninstaller($paths, $filesystem, $output, $resetMx);
 $uninstaller->uninstall();

@@ -113,12 +113,12 @@ class Uninstaller
         }
 
         foreach ($domains as $domain){
-            $this->output->info("Resetting: " . $domain['domain']);
-            $result = $hooks->DelDomain(trim($domain['domain']), true, true);
+            $this->output->info("Resetting: " . $domain);
+            $result = $hooks->DelDomain(trim($domain), true, true);
 
             //If domain isn't added to SpamFilter then it isn't error
             if($result['status'] != 1 && $result['reason'] != 'NO_SUCH_DOMAIN'){
-                $failures[] = array('domain' => $domain['domain'], 'reason' => $result['reason']);
+                $failures[] = array('domain' => $domain, 'reason' => $result['reason']);
             }
         }
 
