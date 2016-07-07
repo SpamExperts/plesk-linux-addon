@@ -156,6 +156,10 @@ class SpamFilter_Panel_ProtectPlesk extends SpamFilter_Panel_Protect
 
                     $this->_logger->debug("[Plesk-BULK] Domain domain '{$this->_domain}' has been skipped because it was added already.");
                 }
+			} elseif ($return['status'] == false && $return['reason'] == SpamFilter_Hooks::DOMAIN_LIMIT_REACHED) {
+				$this->countsUp(self::COUNTS_FAILED);
+				$this->addDomainReason($this->_domain, SpamFilter_Hooks::DOMAIN_LIMIT_REACHED);
+				$this->_logger->debug("[WHM] Subdomain domain '{$this->_domain}' has NOT been added because domain limit was reached.");
             } elseif ($return['status'] == false) {
                 $this->countsUp(self::COUNTS_FAILED);
                 $this->_logger->debug("[Plesk] Domain '{$this->_domain}' has NOT been added due to an API error ({$return['reason']}).");
@@ -285,6 +289,10 @@ class SpamFilter_Panel_ProtectPlesk extends SpamFilter_Panel_Protect
 
 				$this->_logger->debug("[Plesk-BULK] Parked domain '{$parked}' has been skipped because it was added already.");
 			}
+		} elseif ($return['status'] == false && $return['reason'] == SpamFilter_Hooks::DOMAIN_LIMIT_REACHED) {
+			$this->countsUp(self::COUNTS_FAILED);
+			$this->addDomainReason($parked, SpamFilter_Hooks::DOMAIN_LIMIT_REACHED);
+			$this->_logger->debug("[WHM] Subdomain domain '{$parked}' has NOT been added because domain limit was reached.");
 		}
 		elseif ($return['status'] == false )
 		{
@@ -428,6 +436,10 @@ class SpamFilter_Panel_ProtectPlesk extends SpamFilter_Panel_Protect
 
 				$this->_logger->debug("[Plesk-BULK] Addon domain '{$addon}' has been skipped because it was added already.");
 			}
+		} elseif ($return['status'] == false && $return['reason'] == SpamFilter_Hooks::DOMAIN_LIMIT_REACHED) {
+			$this->countsUp(self::COUNTS_FAILED);
+			$this->addDomainReason($addon, SpamFilter_Hooks::DOMAIN_LIMIT_REACHED);
+			$this->_logger->debug("[WHM] Subdomain domain '{$addon}' has NOT been added because domain limit was reached.");
 		}
 		elseif ($return['status'] == false )
 		{
