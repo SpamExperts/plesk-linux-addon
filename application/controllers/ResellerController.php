@@ -124,7 +124,7 @@ class ResellerController extends Zend_Controller_Action
 
 	public function listdomainsAction()
 	{
-                $this->view->headTitle()->append("List domains");
+        $this->view->headTitle()->append("List domains");
 		if( !$this->_acl->isAllowed('list_domains') )
 		{
 			$this->_flashMessenger->addMessage( array('message' => $this->t->_('You do not have permission to this part of the system.'), 'status' => 'error') );
@@ -133,7 +133,11 @@ class ResellerController extends Zend_Controller_Action
 		}
 
 		$config = Zend_Registry::get('general_config');
+
 		$this->view->isConfigured = (!empty($config->apiuser)) ? true : false;
+
+        $this->view->add_extra_alias = $config->add_extra_alias;
+
 		if(!$this->view->isConfigured) { return false; }
                 
                 // Items Per Page functionality

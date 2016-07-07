@@ -100,7 +100,7 @@ if( !$this->isConfigured )
             $owner_domain = (!empty($d['owner_domain'])) ? '/owner_domain/' . $d['owner_domain'] : '';
             $owner_user = (!empty($d['user'])) ? '/owner_user/' . $d['user'] : '';
             $asAlis = '';
-            if (in_array($d['type'], array('addon', 'parked', 'alias')) && 0 < $this->setting_add_as_alias) {
+            if (in_array($d['type'], array('addon', 'parked', 'alias')) && 0 < $this->add_extra_alias) {
                 $check_status = 'Check status';
                 $togle_protection = 'Toggle Protection';
                 $loginLink = 'Login';
