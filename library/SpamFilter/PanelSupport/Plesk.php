@@ -520,29 +520,6 @@ class SpamFilter_PanelSupport_Plesk
      */
     public function validateOwnership($domain)
     {
-        //check if this is a domain or an alias
-        //in case of alias, check ownership for main domain
-
-        $aapi = new Plesk_Driver_Aliases();
-        $alias = $aapi->getAliasbyName($domain);
-        if (!empty($alias)) {
-            $this->_logger->debug("Retrieveing main domain for alias '{$domain}'.");
-
-            $dapi = new Plesk_Driver_Domain();
-            $domain = $dapi->getDomainbyId(array_keys($alias)[0]);
-
-            if (empty($domain)) {
-                $this->_logger->debug("Couldn't retrieve main domain for alias '{$domain}'.");
-
-                return false;
-            } else {
-                $domain = $domain[0];
-            }
-        }
-
-        //first check
-        $domainId = $this->getDomainID($domain);
-
         $user = SpamFilter_Core::getUsername();
         $this->_logger->debug("Checking access to '{$domain}' for '{$user}'");
         if (empty($user)) {
@@ -559,9 +536,29 @@ class SpamFilter_PanelSupport_Plesk
         
         // validate reseller 
         $reseller = pm_Session::getClient();
-        $clientName = mb_strtolower($this->getDomainUser($domain), 'UTF-8');
 
         if ($reseller->isReseller()) {
+            //check if this is a domain or an alias
+            //in case of alias, check ownership for main domain
+
+            $aapi = new Plesk_Driver_Aliases();
+            $alias = $aapi->getAliasbyName($domain);
+            if (!empty($alias)) {
+                $this->_logger->debug("Retrieveing main domain for alias '{$domain}'.");
+
+                $dapi = new Plesk_Driver_Domain();
+                $domain = $dapi->getDomainbyId(array_keys($alias)[0]);
+
+                if (empty($domain)) {
+                    $this->_logger->debug("Couldn't retrieve main domain for alias '{$domain}'.");
+
+                    return false;
+                } else {
+                    $domain = $domain[0];
+                }
+            }
+
+            $clientName = mb_strtolower($this->getDomainUser($domain), 'UTF-8');
 
             if (class_exists('pm_Client')) {
                 $client = pm_Client::getByLogin($clientName);
