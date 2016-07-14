@@ -547,7 +547,8 @@ class SpamFilter_PanelSupport_Plesk
                 $this->_logger->debug("Retrieveing main domain for alias '{$domain}'.");
 
                 $dapi = new Plesk_Driver_Domain();
-                $domain = $dapi->getDomainbyId(array_keys($alias)[0]);
+                $domainIds = array_keys($alias);
+                $domain = $dapi->getDomainbyId($domainIds[0]);
 
                 if (empty($domain)) {
                     $this->_logger->debug("Couldn't retrieve main domain for alias '{$domain}'.");
