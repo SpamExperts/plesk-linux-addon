@@ -182,6 +182,11 @@ class Installer_Installer
 
     private function checkRequirementsAreMet()
     {
+        if (version_compare($this->panelSupport->getVersion(), '12.6', '>=')) {
+            $this->output->error('This addon is not compatible with your Plesk version. Please install our Plesk extension instead.');
+            exit(1);
+        }
+
         // We *need* shell_exec.
         if (!function_exists('shell_exec')) {
             $this->output->error('shell_exec function is required for the installer to work.');
