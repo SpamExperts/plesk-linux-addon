@@ -28,7 +28,7 @@ class ConfigurationPage
     const CONFIGURE_EMAIL_ADDRESS_OPT       = "//input[@data-original-title='Configure the email address for this domain']";
     const PROCESS_ADDON_PLESK_OPT           = "//input[@data-original-title='Process aliases and sub-domains']";
     const PROCESS_ADDON_CPANEL_OPT          = "//input[@data-original-title='Process addon-, parked and subdomains']";
-    const ADD_ADDON_AS_ALIAS_PLESK_OPT               = "//input[@data-original-title='Add aliases and sub-domains as an alias instead of a normal domain.']";
+    const ADD_ADDON_AS_ALIAS_PLESK_OPT      = "//input[@data-original-title='Add aliases and sub-domains as an alias instead of a normal domain.']";
     const ADD_ADDON_AS_ALIAS_CPANEL_OPT     = "//input[@data-original-title='Add addon-, parked and subdomains as an alias instead of a normal domain.']";
     const USE_EXISTING_MX_OPT               = "//input[@data-original-title='Use existing MX records as routes in the spamfilter.']";
     const DO_NOT_PROTECT_REMOTE_DOMAINS_OPT = "//input[@data-original-title='Do not protect remote domains']";

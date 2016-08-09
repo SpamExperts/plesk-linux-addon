@@ -218,9 +218,11 @@ class C01ConfigurationCest
 
     public function verifyAddonDomainsAsNormalDomain(ConfigurationSteps $I)
     {
-        $I->setAutomaticallyAddDomainsToSpamfilterOption();
-        $I->setProcessAddOnAndParkedDomainsOption();
-        $I->setDoNotProtectRemoteDomainsOption(false);
+        $I->setConfigurationOptions(array(
+            ConfigurationPage::PROCESS_ADDON_PLESK_OPT => true,
+            ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT => true,
+            ConfigurationPage::DO_NOT_PROTECT_REMOTE_DOMAINS_OPT => false,
+        ));
         $I->shareIp();
         list($customerUsername, $customerPassword, $domain) = $I->createCustomer();
         $I->changeCustomerPlan($customerUsername);
@@ -234,7 +236,6 @@ class C01ConfigurationCest
         $I->goToPage(ProfessionalSpamFilterPage::DOMAIN_LIST_BTN, DomainListPage::TITLE);
         $I->searchDomainList($addonDomainName);
         $I->see($addonDomainName, DomainListPage::DOMAIN_TABLE);
-        $I->pauseExecution();
         $I->apiCheckDomainExists($addonDomainName);
     }
 
