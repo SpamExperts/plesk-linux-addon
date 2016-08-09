@@ -47,6 +47,7 @@ class C01ConfigurationCest
             ConfigurationPage::PROCESS_ADDON_PLESK_OPT => true,
             ConfigurationPage::DO_NOT_PROTECT_REMOTE_DOMAINS_OPT => false,
         ));
+        $I->shareIp();
         list($customerUsername, $customerPassword, $domain) = $I->createCustomer();
         $I->changeCustomerPlan($customerUsername);
         $I->wait(120);
@@ -57,20 +58,28 @@ class C01ConfigurationCest
         $I->loginAsClient($customerUsername, $customerPassword);
         $alias = $I->addAliasAsClient($domain);
         $I->apiCheckDomainExists($alias);
+        $I->logout();
+        $I->login();
+        $I->removeSubscription($domain);
     }
 
     public function verifyNotAutomaticallyAddDomainToPsf(ConfigurationSteps $I)
     {
-        $I->setAutomaticallyAddDomainsToSpamfilterOption(false);
+        $I->setConfigurationOptions(array(
+            ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT => false,
+        ));
         $account = $I->addNewSubscription();
         $I->checkDomainIsNotPresentInFilter($account['domain']);
         $I->apiCheckDomainNotExists($account['domain']);
+        $I->removeSubscription($account['domain']);
     }
 
     public function verifyNotAutomaticallyDeleteDomainToPsf(ConfigurationSteps $I)
     {
-        $I->setAutomaticallyAddDomainsToSpamfilterOption(false);
-        $I->setAutomaticallyDeleteDomainsFromSpamfilterOption(false);
+        $I->setConfigurationOptions(array(
+            ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT => false,
+            ConfigurationPage::AUTOMATICALLY_DELETE_DOMAINS_OPT => false,
+        ));
         $account = $I->addNewSubscription();
         $I->toggleProtection($account['domain']);
         $I->apiCheckDomainExists($account['domain']);
@@ -80,8 +89,10 @@ class C01ConfigurationCest
 
     public function verifyAutomaticallyDeleteDomainToPsf(ConfigurationSteps $I)
     {
-        $I->setAutomaticallyAddDomainsToSpamfilterOption();
-        $I->setAutomaticallyDeleteDomainsFromSpamfilterOption();
+        $I->setConfigurationOptions(array(
+            ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT => true,
+            ConfigurationPage::AUTOMATICALLY_DELETE_DOMAINS_OPT => true,
+        ));
 
         list($customerUsername, $customerPassword, $domain) = $I->createCustomer();
         $I->changeCustomerPlan($customerUsername);
@@ -107,8 +118,7 @@ class C01ConfigurationCest
             ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT => true,
             ConfigurationPage::PROCESS_ADDON_PLESK_OPT => true,
             ConfigurationPage::DO_NOT_PROTECT_REMOTE_DOMAINS_OPT => false,
-            ConfigurationPage::AUTOMATICALLY_DELETE_DOMAINS_OPT => true
-
+            ConfigurationPage::AUTOMATICALLY_DELETE_DOMAINS_OPT => true,
         ));
 
         list($customerUsername, $customerPassword, $domain) = $I->createCustomer();
