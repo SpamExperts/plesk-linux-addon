@@ -1,6 +1,6 @@
 <?php
 use Codeception\Scenario;
-
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Inherited Methods
@@ -31,18 +31,13 @@ class WebGuy extends \Codeception\Actor
 
     public function getEnvParameter($name, $default = null)
     {
-        $env = $this->scenario->current('env');
 
-        if (isset($this->parameters['env'][$env][$name])) {
-            return $this->parameters['env'][$env][$name];
-        }
-
-        return $default;
+        return $this->parameters['env'][$name];
     }
 
     private function parseYaml()
     {
-        $file = __DIR__.'/../acceptance.suite.yml';
-        $this->parameters = \Symfony\Component\Yaml\Yaml::parse(file_get_contents($file));
+        $file = realpath(__DIR__ . '/../acceptance.suite.yml');
+        $this->parameters = Yaml::parse(file_get_contents($file));
     }
 }

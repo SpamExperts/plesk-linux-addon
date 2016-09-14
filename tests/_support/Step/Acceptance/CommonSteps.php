@@ -31,7 +31,7 @@ class CommonSteps extends \WebGuy
 
         $I = $this;
         $I->amGoingTo("\n\n --- Login as '{$username}' --- \n");
-        $I->amOnPage('/');
+        $I->amOnUrl(getenv($this->getEnvParameter('url')));
         $I->waitForElement("//input[@id='loginSection-username']");
         $I->fillField("//input[@id='loginSection-username']", $username);
         $I->fillField("//input[@id='loginSection-password']", $password);
@@ -486,14 +486,14 @@ class CommonSteps extends \WebGuy
         if (! $addonDomainName) {
             $addonDomainName = 'addon' . $domain;
         }
-        
+
         $I = $this;
         $I->click('Add New Domain');
         $I->waitForText('Adding New Domain Name');
         $I->fillField("//input[@id='domainName-name']", $addonDomainName);
         $I->click("//button[@name='send']");
         $I->waitForText("The domain $addonDomainName was successfully created.", 30);
-        
+
         return $addonDomainName;
     }
 }

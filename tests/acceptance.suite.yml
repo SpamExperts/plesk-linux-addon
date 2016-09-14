@@ -17,15 +17,24 @@ modules:
          browser: firefox
          wait: 0
          restart: true
-#         window_size: 1240x768
          clear_cookies: true
 
 env:
-    plesk11:
-        username: 'PLESK11_USERNAME'
-        password: 'PLESK11_PASSWORD'
-        url: 'PLESK11_URL'
-    plesk12:
-        username: 'PLESK12_USERNAME'
-        password: 'PLESK12_PASSWORD'
-        url: 'PLESK12_URL'
+    # Environment variable names used for spam plugin configuration
+    api_url: 'API_URL'
+    api_hostname: 'API_HOSTNAME'
+    api_username: 'API_USERNAME'
+    api_password: 'API_PASSWORD'
+    primary_mx: 'PRIMARY_MX'
+
+    # Environment variables used for plesk
+    username: 'ADDON_USERNAME'
+    password: 'ADDON_PASSWORD'
+    url: 'ADDON_URL'
+
+    chrome:
+      modules:
+        config:
+          WebDriver:
+            browser: chrome
+    firefox:
