@@ -4,8 +4,8 @@ namespace Plesk;
 
 use PsfConfig;
 use WebGuy;
-use Pages\UpdatePage;
-use Pages\ProfessionalSpamFilterPage;
+use Page\UpdatePage;
+use Page\ProfessionalSpamFilterPage;
 use Step\Acceptance\UpdateSteps;
 
 class C06UpdateCest

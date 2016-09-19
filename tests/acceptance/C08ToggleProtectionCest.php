@@ -1,8 +1,8 @@
 <?php
 
-use Pages\ConfigurationPage;
-use Pages\DomainListPage;
-use Pages\ProfessionalSpamFilterPage;
+use Page\ConfigurationPage;
+use Page\DomainListPage;
+use Page\ProfessionalSpamFilterPage;
 use Step\Acceptance\CommonSteps;
 
 class C08ToggleProtectionCest
@@ -115,7 +115,7 @@ class C08ToggleProtectionCest
         list($customerUsername, $customerPassword, $domain) = $I->createCustomer();
         $I->changeCustomerPlan($customerUsername);
 //        $I->wait(120);
-        
+
         $I->goToPage(ProfessionalSpamFilterPage::DOMAIN_LIST_BTN, DomainListPage::TITLE);
         $I->searchDomainList($domain);
         $I->click(DomainListPage::TOGGLE_PROTECTION_LINK);

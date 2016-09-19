@@ -3,8 +3,8 @@
 namespace Plesk;
 
 use WebGuy;
-use Pages\DomainListPage;
-use Pages\ProfessionalSpamFilterPage;
+use Page\DomainListPage;
+use Page\ProfessionalSpamFilterPage;
 use Step\Acceptance\CommonSteps;
 use Step\Acceptance\DomainListSteps;
 

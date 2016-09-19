@@ -4,9 +4,9 @@ namespace Plesk;
 
 use PsfConfig;
 use WebGuy;
-use Pages\BulkprotectPage;
-use Pages\ConfigurationPage;
-use Pages\ProfessionalSpamFilterPage;
+use Page\BulkprotectPage;
+use Page\ConfigurationPage;
+use Page\ProfessionalSpamFilterPage;
 use Step\Acceptance\CommonSteps;
 use Step\Acceptance\BulkProtectSteps;
 use Codeception\Util\Locator;

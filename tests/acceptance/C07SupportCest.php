@@ -4,8 +4,8 @@ namespace Plesk;
 
 use PsfConfig;
 use WebGuy;
-use Pages\SupportPage;
-use Pages\ProfessionalSpamFilterPage;
+use Page\SupportPage;
+use Page\ProfessionalSpamFilterPage;
 use Step\Acceptance\SupportSteps;
 
 class C07SupportCest

@@ -3,9 +3,9 @@
 namespace Plesk;
 
 use PsfConfig;
-use Pages\DomainListPage;
-use Pages\ConfigurationPage;
-use Pages\ProfessionalSpamFilterPage;
+use Page\DomainListPage;
+use Page\ConfigurationPage;
+use Page\ProfessionalSpamFilterPage;
 use Step\Acceptance\ConfigurationSteps;
 
 class C01ConfigurationCest
@@ -135,7 +135,7 @@ class C01ConfigurationCest
         $I->removeAliasAsClient($alias);
         $I->apiCheckDomainNotExists($alias);
     }
-    
+
     public function verifyNotAutomaticallyChangeMXRecords(ConfigurationSteps $I)
     {
         $I->setAutomaticallyAddDomainsToSpamfilterOption(false);
@@ -263,7 +263,7 @@ class C01ConfigurationCest
         $I->login($customerUsername, $customerPassword, true);
 
         $aliasDomain = $I->addAliasAsClient($domain);
-        
+
         $I->logout();
         $I->login();
         $I->goToPage(ProfessionalSpamFilterPage::DOMAIN_LIST_BTN, DomainListPage::TITLE);

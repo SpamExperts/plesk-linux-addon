@@ -1,6 +1,6 @@
 <?php
 
-namespace Pages;
+namespace Page;
 
 class PleskLinuxClientPage
 {
@@ -46,5 +46,16 @@ class PleskLinuxClientPage
     const ADD_SUBSCRIPTION_DOMAIN_NAME_CONTAINER_XPATH = "//div[contains(.,'Domain name *')]";
 
     const ADD_SUBSCRIPTION_CONFIRMATION_MSG_XPATH = "//div[@class='msg-content']";
-    
+
+    const LEFT_FRAME_CSS = "#leftFrame";
+    const LEFT_FRAME_XPATH = "//*[@id='leftFrame']";
+    const LEFT_FRAME_NAME = "leftFrame";
+
+    const WORK_FRAME_CSS = "#workFrame";
+    const WORK_FRAME_XPATH = "//*[@id='workFrame']";
+    const WORK_FRAME_NAME = "workFrame";
+
+    const TOP_FRAME_CSS = "#topFrame";
+    const TOP_FRAME_XPATH = "//*[@id='topFrame']";
+    const TOP_FRAME_NAME = "topFrame";
 }

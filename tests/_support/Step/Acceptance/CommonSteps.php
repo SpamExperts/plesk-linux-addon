@@ -2,14 +2,15 @@
 
 namespace Step\Acceptance;
 
-use Pages\DomainListPage;
-use Pages\ConfigurationPage;
-use Pages\SpampanelPage;
-use Pages\PleskLinuxLoginPage;
-use Pages\PleskLinuxClientPage;
+use Page\ConfigurationPage;
+use Page\DomainListPage;
+use Page\PleskLinuxClientPage;
+use Page\PleskLinuxLoginPage;
+use Page\ProfessionalSpamFilterPage;
+use Page\SpampanelPage;
+
 use Facebook\WebDriver\WebDriver;
 use Codeception\Lib\Interfaces\Web;
-use Pages\ProfessionalSpamFilterPage;
 use Codeception\Util\Locator;
 
 class CommonSteps extends \WebGuy
@@ -22,41 +23,49 @@ class CommonSteps extends \WebGuy
 
     private static $accounts = array();
 
+    /**
+     * Function used to login into plesk control pannel
+     * @param  string  $username   username for login
+     * @param  string  $password   passwor for login
+     * @param  boolean $isCustomer is user customer or not
+     */
     public function login($username = "", $password = "", $isCustomer = false)
     {
-        if (empty($username)) {
+        // If username is empty use the default one
+        if (empty($username))
             $username = getenv($this->getEnvParameter('username'));
-        }
-        if (empty($password)) {
+
+        // If password is empty use the default one
+        if (empty($password))
             $password = getenv($this->getEnvParameter('password'));
-        }
 
-        $I = $this;
-        $I->amGoingTo("\n\n --- Login as '{$username}' --- \n");
-        $I->amOnUrl(getenv($this->getEnvParameter('url')));
+        $this->amGoingTo("\n\n --- Login as '{$username}' --- \n");
+        $this->amOnUrl(getenv($this->getEnvParameter('url')));
 
-        //Wait for page elements
-        $I->waitForElement(Locator::combine(PleskLinuxLoginPage::USERNAME_FIELD_XPATH, PleskLinuxLoginPage::USERNAME_FIELD_CSS), 10);
-        $I->waitForElement(Locator::combine(PleskLinuxLoginPage::PASSWORD_FIELD_XPATH, PleskLinuxLoginPage::PASSWORD_FIELD_CSS), 10);
-        $I->waitForElement(Locator::combine(PleskLinuxLoginPage::LOGIN_BTN_XPATH, PleskLinuxLoginPage::LOGIN_BTN_CSS), 10);
+        // Wait for page elements
+        $this->waitForElement(Locator::combine(PleskLinuxLoginPage::USERNAME_FIELD_XPATH, PleskLinuxLoginPage::USERNAME_FIELD_CSS), 10);
+        $this->waitForElement(Locator::combine(PleskLinuxLoginPage::PASSWORD_FIELD_XPATH, PleskLinuxLoginPage::PASSWORD_FIELD_CSS), 10);
+        $this->waitForElement(Locator::combine(PleskLinuxLoginPage::LOGIN_BTN_XPATH, PleskLinuxLoginPage::LOGIN_BTN_CSS), 10);
 
-        //Fill username and password
-        $I->fillField(Locator::combine(PleskLinuxLoginPage::USERNAME_FIELD_XPATH, PleskLinuxLoginPage::USERNAME_FIELD_CSS), $username);
-        $I->fillField(Locator::combine(PleskLinuxLoginPage::PASSWORD_FIELD_XPATH, PleskLinuxLoginPage::PASSWORD_FIELD_CSS), $password);
+        // Fill username and password
+        $this->fillField(Locator::combine(PleskLinuxLoginPage::USERNAME_FIELD_XPATH, PleskLinuxLoginPage::USERNAME_FIELD_CSS), $username);
+        $this->fillField(Locator::combine(PleskLinuxLoginPage::PASSWORD_FIELD_XPATH, PleskLinuxLoginPage::PASSWORD_FIELD_CSS), $password);
 
-        $I->click(Locator::combine(PleskLinuxLoginPage::LOGIN_BTN_XPATH, PleskLinuxLoginPage::LOGIN_BTN_CSS));
+        // Click login button
+        $this->click(Locator::combine(PleskLinuxLoginPage::LOGIN_BTN_XPATH, PleskLinuxLoginPage::LOGIN_BTN_CSS));
+
         if ($isCustomer) {
-            $I->wait(2);
-            $canSeeElement = $I->canSeeElement("//button[contains(text(), 'OK, back to Plesk')]");
+            $this->wait(2);
+            $canSeeElement = $this->canSeeElement("//button[contains(text(), 'OK, back to Plesk')]");
             if ($canSeeElement) {
-                $I->click("//button[contains(text(), 'OK, back to Plesk')]");
+                $this->click("//button[contains(text(), 'OK, back to Plesk')]");
             }
-            $I->see("Websites & Domains");
-            $I->seeElement("//span[contains(.,'Professional Spam Filter')]");
+            $this->see("Websites & Domains");
+            $this->seeElement("//span[contains(.,'Professional Spam Filter')]");
         } else {
-            $I->switchToTopFrame();
-            $I->waitForElement("//img[contains(@name,'logo')]");
-            $I->see('Log out', "//a[contains(.,'Log out')]");
+            $this->switchToTopFrame();
+            $this->waitForElement("//img[contains(@name,'logo')]");
+            $this->see('Log out', "//a[contains(.,'Log out')]");
         }
     }
 
@@ -208,16 +217,32 @@ class CommonSteps extends \WebGuy
         }
     }
 
+    /**
+     * Function used to check if Professional Spam Filter is installed
+     * @param  string $brandname Brand name
+     */
     public function checkPsfPresentForRoot($brandname = 'Professional Spam Filter')
     {
-        $I = $this;
-        $I->amGoingTo("\n\n --- Check PSF is present at root level --- \n");
-        $I->switchToLeftFrame();
-        $I->waitForElement("//td[contains(.,'Links to Additional Services')]");
-        $I->click("//a[contains(.,'{$brandname}')]");
-        $I->switchToWorkFrame();
-        $I->waitForText($brandname);
-        $I->see($brandname);
+        // Display info message
+        $this->amGoingTo("\n\n --- Check PSF is present at root level --- \n");
+
+        // Switch to left frame
+        $this->switchToLeftFrame();
+
+        // Wait for Links to Aditional Services category to show
+        $this->waitForElement("//td[contains(.,'Links to Additional Services')]");
+
+        // Click the brandname
+        $this->click("//a[contains(.,'{$brandname}')]");
+
+        // Switch back to mainframe
+        $this->switchToWorkFrame();
+
+        // Wait for brandname text to appear
+        $this->waitForText($brandname);
+
+        // See if the brandname text is displayed correctly
+        $this->see($brandname);
     }
 
     public function checkPsfPresentForReseller($brandname = 'Professional Spam Filter')

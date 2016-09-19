@@ -2,8 +2,8 @@
 
 namespace Step\Acceptance;
 
-use Pages\SupportPage;
-use Pages\ProfessionalSpamFilterPage;
+use Page\SupportPage;
+use Page\ProfessionalSpamFilterPage;
 
 class SupportSteps extends CommonSteps
 {

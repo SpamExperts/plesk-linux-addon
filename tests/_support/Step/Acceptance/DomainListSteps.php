@@ -2,8 +2,8 @@
 
 namespace Step\Acceptance;
 
-use Pages\DomainListPage;
-use Pages\ProfessionalSpamFilterPage;
+use Page\DomainListPage;
+use Page\ProfessionalSpamFilterPage;
 
 class DomainListSteps extends CommonSteps
 {
