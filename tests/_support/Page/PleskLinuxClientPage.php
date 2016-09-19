@@ -58,4 +58,47 @@ class PleskLinuxClientPage
     const TOP_FRAME_CSS = "#topFrame";
     const TOP_FRAME_XPATH = "//*[@id='topFrame']";
     const TOP_FRAME_NAME = "topFrame";
+
+    // Customers page
+
+    const ADD_NEW_CUSTOMER_BTN_CSS = "#buttonAddNewCustomer";
+    const ADD_NEW_CUSTOMER_BTN_XPATH = "//*[@id='buttonAddNewCustomer']";
+
+    const CONTACT_NAME_FIELD_CSS = "#contactInfoSection-contactInfo-contactName";
+    const CONTACT_NAME_FIELD_XPATH = "//input[@id='contactInfoSection-contactInfo-contactName']";
+
+    const EMAIL_ADDRESS_FIELD_CSS = "#contactInfoSection-contactInfo-email";
+    const EMAIL_ADDRESS_FIELD_XPATH = "//input[@id='contactInfoSection-contactInfo-email']";
+
+
+    const PLESK_USERNAME_FIELD_CSS = "#accessToPanelSection-loginInfo-userName";
+    const PLESK_USERNAME_FIELD_XPATH = "//input[@id='accessToPanelSection-loginInfo-userName']";
+
+    const PLESK_PASSWORD_FIELD_CSS = "#accessToPanelSection-loginInfo-password";
+    const PLESK_PASSWORD_FIELD_XPATH = "//input[@id='accessToPanelSection-loginInfo-password']";
+
+    const PLESK_REPEAT_PASSWORD_FIELD_CSS = "#accessToPanelSection-loginInfo-passwordConfirmation";
+    const PLESK_REPEAT_PASSWORD_FIELD_XPATH = "//input[@id='accessToPanelSection-loginInfo-passwordConfirmation']";
+
+    const SUBSCRIPTION_DOMAIN_FIELD_CSS = "#subscription-domainInfo-domainName";
+    const SUBSCRIPTION_DOMAIN_FIELD_XPATH = "//input[@id='subscription-domainInfo-domainName']";
+
+    const SUBSCRIPTION_USERNAME_FIELD_CSS = "#subscription-domainInfo-userName";
+    const SUBSCRIPTION_USERNAME_FIELD_XPATH = "//input[@id='subscription-domainInfo-userName']";
+
+    const SUBSCRIPTION_PASSWORD_FIELD_CSS = "#subscription-domainInfo-passwordConfirmation";
+    const SUBSCRIPTION_PASSWORD_FIELD_XPATH = "//input[@id='subscription-domainInfo-passwordConfirmation']";
+
+    const SUBSCRIPTION_REPEAT_PASSWORD_FIELD_CSS = "#subscription-subscriptionInfo-servicePlan";
+    const SUBSCRIPTION_REPEAT_PASSWORD_FIELD_XPATH = "//select[@id='subscription-subscriptionInfo-servicePlan']";
+
+    const SUBCRIPTION_SERVICE_PLAN_DROP_DOWN_CSS = "#subscription-subscriptionInfo-servicePlan";
+    const SUBCRIPTION_SERVICE_PLAN_DROP_DOWN_XPATH = "//select[@id='subscription-subscriptionInfo-servicePlan']";
+
+
+    // Const resellers page
+
+    const ADD_NEW_RESELLER_BTN_CSS = "#buttonAddNewReseller";
+    const ADD_NEW_RESELLER_BTN_XPATH = "//*[@id='buttonAddNewReseller']";
+
 }

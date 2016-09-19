@@ -79,9 +79,9 @@ class C08ToggleProtectionCest
     public function testToggleAsAliasAndUntoggleAlias(CommonSteps $I)
     {
         $I->goToConfigurationPageAndSetOptions([
-            ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT => true,
-            ConfigurationPage::PROCESS_ADDON_PLESK_OPT => true,
-            ConfigurationPage::ADD_ADDON_AS_ALIAS_PLESK_OPT => true,
+            Locator::Combine(ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT_CSS, ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT_XPATH) => true,
+            Locator::Combine(ConfigurationPage::PROCESS_ADDON_PLESK_OPT_CSS, ConfigurationPage::PROCESS_ADDON_PLESK_OPT_XPATH) => true,
+            Locator::Combine(ConfigurationPage::ADD_ADDON_AS_ALIAS_PLESK_OPT_CSS, ConfigurationPage::ADD_ADDON_AS_ALIAS_PLESK_OPT_XPATH) => true,
         ]);
 
         list($customerUsername, $customerPassword, $domain) = $I->createCustomer();
@@ -108,8 +108,8 @@ class C08ToggleProtectionCest
     {
         // setup
         $I->goToConfigurationPageAndSetOptions([
-            ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT => false,
-            ConfigurationPage::PROCESS_ADDON_PLESK_OPT => true,
+            Locator::Combine(ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT_CSS, ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT_XPATH) => false,
+            Locator::Combine(ConfigurationPage::PROCESS_ADDON_PLESK_OPT_CSS, ConfigurationPage::PROCESS_ADDON_PLESK_OPT_XPATH) => true,
         ]);
 
         list($customerUsername, $customerPassword, $domain) = $I->createCustomer();
@@ -135,10 +135,10 @@ class C08ToggleProtectionCest
         $I->checkProtectionStatusIs(DomainListPage::STATUS_DOMAIN_IS_PRESENT_IN_THE_FILTER);
 
         $I->goToConfigurationPageAndSetOptions([
-            ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT => false,
-            ConfigurationPage::AUTOMATICALLY_DELETE_DOMAINS_OPT => true,
-            ConfigurationPage::PROCESS_ADDON_PLESK_OPT => true,
-            ConfigurationPage::ADD_ADDON_AS_ALIAS_PLESK_OPT => false,
+            Locator::combine(ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT_CSS, ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT_XPATH) => false,
+            Locator::combine(ConfigurationPage::AUTOMATICALLY_DELETE_DOMAINS_OPT_CSS, ConfigurationPage::AUTOMATICALLY_DELETE_DOMAINS_OPT_XPATH) => true,
+            Locator::combine(ConfigurationPage::PROCESS_ADDON_PLESK_OPT_CSS, ConfigurationPage::PROCESS_ADDON_PLESK_OPT_XPATH) => true,
+            Locator::combine(ConfigurationPage::ADD_ADDON_AS_ALIAS_PLESK_OPT_CSS, ConfigurationPage::ADD_ADDON_AS_ALIAS_PLESK_OPT_XPATH) => false,
         ]);
 
         return [
@@ -152,9 +152,9 @@ class C08ToggleProtectionCest
     private function setupErrorAddedAsDomainNotAliasScenario(CommonSteps $I)
     {
         $I->goToConfigurationPageAndSetOptions([
-            ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT => true,
-            ConfigurationPage::PROCESS_ADDON_PLESK_OPT=> true,
-            ConfigurationPage::ADD_ADDON_AS_ALIAS_PLESK_OPT => false,
+            Locator::combine(ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT_CSS, ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT_XPATH) => true,
+            Locator::combine(ConfigurationPage::PROCESS_ADDON_PLESK_OPT_CSS, ConfigurationPage::PROCESS_ADDON_PLESK_OPT_XPATH)=> true,
+            Locator::combine(ConfigurationPage::ADD_ADDON_AS_ALIAS_PLESK_OPT_CSS, ConfigurationPage::ADD_ADDON_AS_ALIAS_PLESK_OPT_XPATH) => false,
         ]);
 
         list($customerUsername, $customerPassword, $domain) = $I->createCustomer();

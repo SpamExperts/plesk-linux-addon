@@ -7,6 +7,7 @@ use Page\DomainListPage;
 use Page\ConfigurationPage;
 use Page\ProfessionalSpamFilterPage;
 use Step\Acceptance\ConfigurationSteps;
+use Codeception\Util\Locator;
 
 class C01ConfigurationCest
 {
@@ -27,27 +28,35 @@ class C01ConfigurationCest
 
     public function verifyConfigurationPage(ConfigurationSteps $I)
     {
-        $I->checkUnsuccessfullConfigurations();
+        // Check addon configuration page layout
         $I->checkConfigurationPageLayout();
+
+        // Check error messages if configuration page fields are wrong
+        $I->checkUnsuccessfullConfigurations();
+
+        // Set configuration fields option
         $I->setFieldApiUrl(PsfConfig::getApiUrl());
         $I->setFieldApiHostname(PsfConfig::getApiHostname());
         $I->setFieldApiUsernameIfEmpty(PsfConfig::getApiUsername());
         $I->setFieldApiPassword(PsfConfig::getApiPassword());
         $I->setFieldPrimaryMX(PsfConfig::getPrimaryMX());
-        $I->amGoingTo(PsfConfig::getApiPassword());
 
+        // Save the configuration
         $I->submitSettingForm();
+
+        // Wait for success message
         $I->checkSubmissionIsSuccessful();
     }
 
     public function verifyAutomaticallyAddDomainToPsf(ConfigurationSteps $I)
     {
         $I->setConfigurationOptions(array(
-            ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT => true,
-            ConfigurationPage::PROCESS_ADDON_PLESK_OPT => true,
-            ConfigurationPage::DO_NOT_PROTECT_REMOTE_DOMAINS_OPT => false,
+            Locator::combine(ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT_CSS, ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT_XPATH) => true,
+            Locator::combine(ConfigurationPage::PROCESS_ADDON_PLESK_OPT_CSS, ConfigurationPage::PROCESS_ADDON_PLESK_OPT_XPATH) => true,
+            Locator::combine(ConfigurationPage::DO_NOT_PROTECT_REMOTE_DOMAINS_OPT_CSS, ConfigurationPage::DO_NOT_PROTECT_REMOTE_DOMAINS_OPT_XPATH) => false,
         ));
         $I->shareIp();
+
         list($customerUsername, $customerPassword, $domain) = $I->createCustomer();
         $I->changeCustomerPlan($customerUsername);
         $I->wait(120);
@@ -66,7 +75,7 @@ class C01ConfigurationCest
     public function verifyNotAutomaticallyAddDomainToPsf(ConfigurationSteps $I)
     {
         $I->setConfigurationOptions(array(
-            ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT => false,
+            Locator::combine(ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT_CSS, ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT_XPATH) => false,
         ));
         $account = $I->addNewSubscription();
         $I->checkDomainIsNotPresentInFilter($account['domain']);
@@ -77,8 +86,8 @@ class C01ConfigurationCest
     public function verifyNotAutomaticallyDeleteDomainToPsf(ConfigurationSteps $I)
     {
         $I->setConfigurationOptions(array(
-            ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT => false,
-            ConfigurationPage::AUTOMATICALLY_DELETE_DOMAINS_OPT => false,
+            Locator::combine(ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT_CSS, ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT_XPATH) => false,
+            Locator::combine(ConfigurationPage::AUTOMATICALLY_DELETE_DOMAINS_OPT_CSS, ConfigurationPage::AUTOMATICALLY_DELETE_DOMAINS_OPT_XPATH) => false,
         ));
         $account = $I->addNewSubscription();
         $I->toggleProtection($account['domain']);
@@ -90,8 +99,8 @@ class C01ConfigurationCest
     public function verifyAutomaticallyDeleteDomainToPsf(ConfigurationSteps $I)
     {
         $I->setConfigurationOptions(array(
-            ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT => true,
-            ConfigurationPage::AUTOMATICALLY_DELETE_DOMAINS_OPT => true,
+            Locator::combine(ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT_CSS, ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT_XPATH) => true,
+            Locator::combine(ConfigurationPage::AUTOMATICALLY_DELETE_DOMAINS_OPT_CSS, ConfigurationPage::AUTOMATICALLY_DELETE_DOMAINS_OPT_XPATH) => true,
         ));
 
         list($customerUsername, $customerPassword, $domain) = $I->createCustomer();
@@ -115,10 +124,10 @@ class C01ConfigurationCest
     public function verifyAutmaticallyDeleteSecondaryDomains(ConfigurationSteps $I)
     {
         $I->setConfigurationOptions(array(
-            ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT => true,
-            ConfigurationPage::PROCESS_ADDON_PLESK_OPT => true,
-            ConfigurationPage::DO_NOT_PROTECT_REMOTE_DOMAINS_OPT => false,
-            ConfigurationPage::AUTOMATICALLY_DELETE_DOMAINS_OPT => true,
+            Locator::Combine(ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT_CSS, ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT_XPATH) => true,
+            Locator::Combine(ConfigurationPage::PROCESS_ADDON_PLESK_OPT_CSS, ConfigurationPage::PROCESS_ADDON_PLESK_OPT_XPATH) => true,
+            Locator::Combine(ConfigurationPage::DO_NOT_PROTECT_REMOTE_DOMAINS_OPT_CSS, ConfigurationPage::DO_NOT_PROTECT_REMOTE_DOMAINS_OPT_XPATH) => false,
+            Locator::Combine(ConfigurationPage::AUTOMATICALLY_DELETE_DOMAINS_OPT_CSS, ConfigurationPage::AUTOMATICALLY_DELETE_DOMAINS_OPT_XPATH) => true,
         ));
 
         list($customerUsername, $customerPassword, $domain) = $I->createCustomer();
@@ -229,9 +238,9 @@ class C01ConfigurationCest
     public function verifyAddonDomainsAsNormalDomain(ConfigurationSteps $I)
     {
         $I->setConfigurationOptions(array(
-            ConfigurationPage::PROCESS_ADDON_PLESK_OPT => true,
-            ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT => true,
-            ConfigurationPage::DO_NOT_PROTECT_REMOTE_DOMAINS_OPT => false,
+            Locator::combine(ConfigurationPage::PROCESS_ADDON_PLESK_OPT_CSS, ConfigurationPage::PROCESS_ADDON_PLESK_OPT) => true,
+            Locator::combine(ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT_CSS, ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT) => true,
+            Locator::combine(ConfigurationPage::DO_NOT_PROTECT_REMOTE_DOMAINS_OPT_CSS, ConfigurationPage::DO_NOT_PROTECT_REMOTE_DOMAINS_OPT) => false,
         ));
         $I->shareIp();
         list($customerUsername, $customerPassword, $domain) = $I->createCustomer();
@@ -252,9 +261,9 @@ class C01ConfigurationCest
     public function verifyAddonDomainsAsAnAlias(ConfigurationSteps $I)
     {
         $I->setConfigurationOptions(array(
-            ConfigurationPage::PROCESS_ADDON_PLESK_OPT => true,
-            ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT => true,
-            ConfigurationPage::ADD_ADDON_AS_ALIAS_PLESK_OPT => true,
+            Locator::combine(ConfigurationPage::PROCESS_ADDON_PLESK_OPT_CSS, ConfigurationPage::PROCESS_ADDON_PLESK_OPT_XPATH) => true,
+            Locator::combine(ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT_CSS, ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT_XPATH) => true,
+            Locator::combine(ConfigurationPage::ADD_ADDON_AS_ALIAS_PLESK_OPT_CSS, ConfigurationPage::ADD_ADDON_AS_ALIAS_PLESK_OPT_XPATH) => true,
         ));
         $I->shareIp();
         list($customerUsername, $customerPassword, $domain) = $I->createCustomer();
@@ -275,9 +284,9 @@ class C01ConfigurationCest
     public function verifyAddonDomainsAsAnAliasSubscription(ConfigurationSteps $I)
     {
         $I->setConfigurationOptions(array(
-            ConfigurationPage::PROCESS_ADDON_PLESK_OPT => true,
-            ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT => true,
-            ConfigurationPage::ADD_ADDON_AS_ALIAS_PLESK_OPT => true,
+            Locator::combine(ConfigurationPage::PROCESS_ADDON_PLESK_OPT_CSS, ConfigurationPage::PROCESS_ADDON_PLESK_OPT_XPATH) => true,
+            Locator::combine(ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT_CSS, ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT_XPATH) => true,
+            Locator::combine(ConfigurationPage::ADD_ADDON_AS_ALIAS_PLESK_OPT_CSS, ConfigurationPage::ADD_ADDON_AS_ALIAS_PLESK_OPT_XPATH) => true,
         ));
         list($customerUsername, $customerPassword, $domain) = $I->createCustomer();
         $I->changeCustomerPlan($customerUsername);
