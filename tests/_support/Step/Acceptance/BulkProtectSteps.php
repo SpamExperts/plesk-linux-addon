@@ -2,9 +2,9 @@
 
 namespace Step\Acceptance;
 
-use Pages\BulkprotectPage;
-use Pages\PleskLinuxClientPage;
-use Pages\ProfessionalSpamFilterPage;
+use Page\BulkprotectPage;
+use Page\PleskLinuxClientPage;
+use Page\ProfessionalSpamFilterPage;
 
 class BulkProtectSteps extends CommonSteps
 {

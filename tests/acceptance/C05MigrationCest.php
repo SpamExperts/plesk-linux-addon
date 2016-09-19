@@ -4,8 +4,8 @@ namespace Plesk;
 
 use PsfConfig;
 use WebGuy;
-use Pages\MigrationPage;
-use Pages\ProfessionalSpamFilterPage;
+use Page\MigrationPage;
+use Page\ProfessionalSpamFilterPage;
 use Step\Acceptance\MigrationSteps;
 
 class C05MigrationCest

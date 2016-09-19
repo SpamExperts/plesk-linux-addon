@@ -2,8 +2,8 @@
 
 namespace Step\Acceptance;
 
-use Pages\BrandingPage;
-use Pages\ProfessionalSpamFilterPage;
+use Page\BrandingPage;
+use Page\ProfessionalSpamFilterPage;
 
 class BrandingSteps extends CommonSteps
 {

@@ -2,8 +2,8 @@
 
 namespace Step\Acceptance;
 
-use Pages\MigrationPage;
-use Pages\ProfessionalSpamFilterPage;
+use Page\MigrationPage;
+use Page\ProfessionalSpamFilterPage;
 
 class MigrationSteps extends CommonSteps
 {

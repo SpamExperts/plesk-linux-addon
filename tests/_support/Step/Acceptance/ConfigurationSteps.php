@@ -2,9 +2,9 @@
 
 namespace Step\Acceptance;
 
-use Pages\DomainListPage;
-use Pages\ConfigurationPage;
-use Pages\ProfessionalSpamFilterPage;
+use Page\DomainListPage;
+use Page\ConfigurationPage;
+use Page\ProfessionalSpamFilterPage;
 
 class ConfigurationSteps extends DomainListSteps
 {

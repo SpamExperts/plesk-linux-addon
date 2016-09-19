@@ -1,5 +1,6 @@
 <?php
-
+use Page\PleskLinuxClientPage;
+use Codeception\Util\Locator;
 
 /**
  * Inherited Methods
@@ -20,27 +21,48 @@ class AcceptanceTester extends \Codeception\Actor
 {
     use _generated\AcceptanceTesterActions;
 
+    /**
+     * Function used to switch to left frame of plesk control panel
+     */
     public function switchToLeftFrame()
     {
-        $I = $this;
-        $I->switchToWindow();
-        $I->waitForElement('#leftFrame');
-        $I->switchToIFrame('leftFrame');
+        // Switch to main window
+        $this->switchToWindow();
+
+        // Wait for left frame to appear
+        $this->waitForElement(Locator::combine(PleskLinuxClientPage::LEFT_FRAME_CSS, PleskLinuxClientPage::LEFT_FRAME_XPATH));
+
+        // Switch to main frame
+        $this->switchToIFrame(PleskLinuxClientPage::LEFT_FRAME_NAME);
     }
 
+    /**
+     * Function used to switch to main frame of plesk control panel
+     */
     public function switchToWorkFrame()
     {
-        $I = $this;
-        $I->switchToWindow();
-        $I->waitForElement('#workFrame');
-        $I->switchToIFrame('workFrame');
+        // Switch to main window
+        $this->switchToWindow();
+
+        // Wait for main frame to appear
+        $this->waitForElement(Locator::combine(PleskLinuxClientPage::WORK_FRAME_CSS, PleskLinuxClientPage::WORK_FRAME_XPATH));
+
+        // Switch to main frame
+        $this->switchToIFrame(PleskLinuxClientPage::WORK_FRAME_NAME);
     }
 
+    /**
+     * Function used to switch to top frame of plesk control panel
+     */
     public function switchToTopFrame()
     {
-        $I = $this;
-        $I->switchToWindow();
-        $I->waitForElement('#topFrame');
-        $I->switchToIFrame('topFrame');
+        // Switch to main window
+        $this->switchToWindow();
+
+        // Wait for main frame to appear
+        $this->waitForElement(Locator::combine(PleskLinuxClientPage::TOP_FRAME_CSS, PleskLinuxClientPage::TOP_FRAME_XPATH));
+
+        // Switch to main frame
+        $this->switchToIFrame(PleskLinuxClientPage::TOP_FRAME_NAME);
     }
 }
