@@ -8,6 +8,7 @@ use Page\PleskLinuxClientPage;
 use Page\PleskLinuxLoginPage;
 use Page\ProfessionalSpamFilterPage;
 use Page\SpampanelPage;
+use Page\ToolsAndSettingsPage;
 
 use Facebook\WebDriver\WebDriver;
 use Codeception\Lib\Interfaces\Web;
@@ -107,18 +108,16 @@ class CommonSteps extends \WebGuy
 
     public function logout()
     {
-        $I = $this;
-        $I->amOnPage('/login_up.php3');
+        $this->amOnPage('/login_up.php3');
     }
 
     public function loginOnSpampanel($domain)
     {
-        $I = $this;
-        $href = $I->grabAttributeFrom('//a[contains(text(), "Login")]', 'href');
-        $I->amOnUrl($href);
-        $I->waitForText("Welcome to the $domain control panel", 60);
-        $I->see("Logged in as: $domain");
-        $I->see("Domain User");
+        $href = $this->grabAttributeFrom('//a[contains(text(), "Login")]', 'href');
+        $this->amOnUrl($href);
+        $this->waitForText("Welcome to the $domain control panel", 60);
+        $this->see("Logged in as: $domain");
+        $this->see("Domain User");
     }
 
     public function logoutFromSpampanel()
@@ -167,28 +166,26 @@ class CommonSteps extends \WebGuy
 
     public function searchDomainList($domain)
     {
-        $I = $this;
-        $I->amGoingTo("\n\n --- Search for {$domain} domain --- \n");
-        $I->fillField(DomainListPage::SEARCH_FIELD, $domain);
-        $I->click(DomainListPage::SEARCH_BTN);
-        $I->waitForText('Page 1 of 1. Total Items: 1');
-        $I->see($domain, DomainListPage::DOMAIN_TABLE);
+        $this->amGoingTo("\n\n --- Search for {$domain} domain --- \n");
+        $this->fillField(Locator::combine(DomainListPage::SEARCH_FIELD_XPATH, DomainListPage::SEARCH_FIELD_CSS), $domain);
+        $this->click(Locator::combine(DomainListPage::SEARCH_BTN_XPATH, DomainListPage::SEARCH_BTN_CSS));
+        $this->waitForText('Page 1 of 1. Total Items: 1');
+        $this->see($domain, Locator::combine(DomainListPage::DOMAIN_TABLE_XPATH, DomainListPage::DOMAIN_TABLE_CSS));
     }
 
     public function checkDomainList($domainName, $isRoot = false)
     {
-        $I = $this;
-        $I->amGoingTo("\n\n --- Check Domain list is present --- \n");
+        $this->amGoingTo("\n\n --- Check Domain list is present --- \n");
         if ($isRoot) {
-            $I->goToPage(ProfessionalSpamFilterPage::DOMAIN_LIST_BTN, DomainListPage::TITLE);
-            $I->see($domainName, DomainListPage::DOMAIN_TABLE);
+            $this->goToPage(ProfessionalSpamFilterPage::DOMAIN_LIST_BTN, DomainListPage::TITLE);
+            $this->see($domainName, Locator::combine(DomainListPage::DOMAIN_TABLE_XPATH, DomainListPage::DOMAIN_TABLE_CSS));
         }
         else {
-            $I->switchToLeftFrame();
-            $I->click("//a[contains(.,'Professional Spam Filter')]");
-            $I->switchToWorkFrame();
-            $I->amGoingTo("Check domin '{$domainName}' is present on the list");
-            $I->see($domainName, DomainListPage::DOMAIN_TABLE);
+            $this->switchToLeftFrame();
+            $this->click(ProfessionalSpamFilterPage::PROF_SPAM_FILTER_BTN);
+            $this->switchToWorkFrame();
+            $this->amGoingTo("Check domain '{$domainName}' is present on the list");
+            $this->see($domainName, Locator::combine(DomainListPage::DOMAIN_TABLE_XPATH, DomainListPage::DOMAIN_TABLE_CSS));
         }
     }
 
@@ -197,21 +194,22 @@ class CommonSteps extends \WebGuy
         $I = $this;
         $I->amGoingTo("\n\n --- Enable a shared IP --- \n");
         $I->switchToLeftFrame();
-        $I->click("//a[contains(.,'Tools & Settings')]");
+        $I->click(ToolsAndSettingsPage::TOOLS_N_SETTINGS_LINK_XPATH);
         $I->switchToWorkFrame();
-        $I->click("//a[@href='/admin/ip-address/list/']");
-        $I->click("//a[@href='/admin/ip-address/edit/id/1']");
-        $I->checkOption("//input[@value='shared']");
-        $I->click("//button[@name='send']");
-        $I->waitForElement("//div[@class='msg-content']");
+        $I->click(Locator::combine(ToolsAndSettingsPage::IP_ADDRESSES_BTN_XPATH, ToolsAndSettingsPage::IP_ADDRESSES_BTN_CSS));
+        $I->click(ToolsAndSettingsPage::EDIT_IP_ADDRESS_LINK_XPATH);
+        $I->checkOption(Locator::combine(ToolsAndSettingsPage::SHARED_OPTION_CHECKBOX_XPATH, ToolsAndSettingsPage::SHARED_OPTION_CHECKBOX_CSS));
+        $I->click(Locator::combine(ToolsAndSettingsPage::OK_BTN_XPATH, ToolsAndSettingsPage::OK_BTN_CSS));
+        $I->waitForElementNotVisible(Locator::combine(ToolsAndSettingsPage::SHARED_OPTION_CHECKBOX_XPATH, ToolsAndSettingsPage::SHARED_OPTION_CHECKBOX_CSS), 30);
+        $I->waitForElement(Locator::combine(ToolsAndSettingsPage::IP_ADDRESSES_MSJ_XPATH, ToolsAndSettingsPage::IP_ADDRESSES_MSJ_CSS), 30);
         $I->see("The properties of the IP address");
         if ($resellerId) {
-            $I->click("//a[@href='/plesk/server/ip-address@1/client@']");
+            $I->click(ToolsAndSettingsPage::IP_RESELLER_OPTION_XPATH);
             $I->waitForText("Resellers who use Shared IP address");
-            $I->click("//span[@id='spanid-add-client']");
+            $I->click(Locator::combine(ToolsAndSettingsPage::RESELLER_ASSIGN_BTN_XPATH, ToolsAndSettingsPage::RESELLER_ASSIGN_BTN_CSS));
             $I->waitForText("Add IP address to reseller's pool");
             $I->checkOption("//input[@id='del_{$resellerId}']");
-            $I->click("//button[@id='buttonid-ok']");
+            $I->click(Locator::combine(ToolsAndSettingsPage::ADD_IP_TO_RESELLER_OK_BTN_XPATH, ToolsAndSettingsPage::ADD_IP_TO_RESELLER_OK_BTN_CSS));
             $I->waitForText("Resellers who use Shared IP address");
             $I->seeElement("//table/tbody/tr/td//a[contains(@href, '/admin/reseller/overview/id/{$resellerId}')]");
         }
@@ -247,29 +245,27 @@ class CommonSteps extends \WebGuy
 
     public function checkPsfPresentForReseller($brandname = 'Professional Spam Filter')
     {
-        $I = $this;
-        $I->amGoingTo("\n\n --- Check PSF is present at reseller level --- \n");
-        $I->switchToLeftFrame();
-        $I->waitForElement("//td[contains(.,'Links to Additional Services')]");
-        $I->switchToWorkFrame();
-        $I->waitForText($brandname);
-        $I->see($brandname);
-        $I->see('Home');
-        $I->click(ProfessionalSpamFilterPage::PROSPAMFILTER_BTN);
-        $I->waitForElement("//h3[contains(.,'List Domains')]");
-        $I->see("There are no domains on this server.", "//div[@class='alert alert-info']");
+        $this->amGoingTo("\n\n --- Check PSF is present at reseller level --- \n");
+        $this->switchToLeftFrame();
+        $this->waitForElement("//td[contains(.,'Links to Additional Services')]");
+        $this->switchToWorkFrame();
+        $this->waitForText($brandname);
+        $this->see($brandname);
+        $this->see('Home');
+        $this->click(ProfessionalSpamFilterPage::PROSPAMFILTER_BTN);
+        $this->waitForElement("//h3[contains(.,'List Domains')]");
+        $this->see("There are no domains on this server.", "//div[@class='alert alert-info']");
     }
 
     public function checkPsfPresentForCustomer($brandname = 'Professional Spam Filter')
     {
-        $I = $this;
-        $I->amGoingTo("\n\n --- Check PSF is present at customer level --- \n");
-        $I->click("//span[contains(.,'{$brandname}')]");
-        $I->see($brandname);
-        $I->switchToIFrame("pageIframe");
-        $I->waitForElement("//h3[contains(.,'List Domains')]");
-        $I->see($this->domain, "//tbody/tr[1]");
-        $I->dontSeeElement("//tbody/tr[2]");
+        $this->amGoingTo("\n\n --- Check PSF is present at customer level --- \n");
+        $this->click("//span[contains(.,'{$brandname}')]");
+        $this->see($brandname);
+        $this->switchToIFrame("pageIframe");
+        $this->waitForElement("//h3[contains(.,'List Domains')]");
+        $this->see($this->domain, "//tbody/tr[1]");
+        $this->dontSeeElement("//tbody/tr[2]");
     }
 
     public function createReseller()
@@ -354,25 +350,24 @@ class CommonSteps extends \WebGuy
         if (empty($params['password'])) {
             $params['password'] = uniqid();
         }
-        $I = $this;
-        $I->amGoingTo("\n\n --- Add a new subscription for '{$params['domain']}'--- \n");
-        $I->switchToLeftFrame();
-        $I->click("//a[contains(.,'Subscriptions')]");
-        $I->switchToWorkFrame();
+        $this->amGoingTo("\n\n --- Add a new subscription for '{$params['domain']}'--- \n");
+        $this->switchToLeftFrame();
+        $this->click("//a[contains(.,'Subscriptions')]");
+        $this->switchToWorkFrame();
 
-        $I->click(Locator::combine(PleskLinuxClientPage::CLIENT_ADD_NEW_SUBSCRIPTION_XPATH, PleskLinuxClientPage::CLIENT_ADD_NEW_SUBSCRIPTION_CSS));
+        $this->click(Locator::combine(PleskLinuxClientPage::CLIENT_ADD_NEW_SUBSCRIPTION_XPATH, PleskLinuxClientPage::CLIENT_ADD_NEW_SUBSCRIPTION_CSS));
 
-        $I->waitForElement(Locator::combine(PleskLinuxClientPage::CLIENT_SUBSCRIPTIONS_XPATH, PleskLinuxClientPage::CLIENT_SUBSCRIPTIONS_CSS), 10);
+        $this->waitForElement(Locator::combine(PleskLinuxClientPage::CLIENT_SUBSCRIPTIONS_XPATH, PleskLinuxClientPage::CLIENT_SUBSCRIPTIONS_CSS), 10);
 
-        $I->fillField(Locator::combine(PleskLinuxClientPage::ADD_SUBSCRIPTION_DOMAIN_FIELD_XPATH, PleskLinuxClientPage::ADD_SUBSCRIPTION_DOMAIN_FIELD_CSS), $params['domain']);
-        $I->fillField(Locator::combine(PleskLinuxClientPage::ADD_SUBSCRIPTION_USERNAME_FIELD_XPATH, PleskLinuxClientPage::ADD_SUBSCRIPTION_USERNAME_FIELD_CSS), $params['username']);
-        $I->fillField(Locator::combine(PleskLinuxClientPage::ADD_SUBSCRIPTION_PASSWORD_FIELD_XPATH, PleskLinuxClientPage::ADD_SUBSCRIPTION_PASSWORD_FIELD_CSS), $params['password']);
-        $I->fillField(Locator::combine(PleskLinuxClientPage::ADD_SUBSCRIPTION_REPEAT_PASSWORD_FIELD_XPATH, PleskLinuxClientPage::ADD_SUBSCRIPTION_REPEAT_PASSWORD_FIELD_CSS), $params['password']);
-        $I->click(Locator::combine(PleskLinuxClientPage::ADD_SUBSCRIPTION_OK_BTN_XPATH, PleskLinuxClientPage::ADD_SUBSCRIPTION_OK_BTN_CSS));
+        $this->fillField(Locator::combine(PleskLinuxClientPage::ADD_SUBSCRIPTION_DOMAIN_FIELD_XPATH, PleskLinuxClientPage::ADD_SUBSCRIPTION_DOMAIN_FIELD_CSS), $params['domain']);
+        $this->fillField(Locator::combine(PleskLinuxClientPage::ADD_SUBSCRIPTION_USERNAME_FIELD_XPATH, PleskLinuxClientPage::ADD_SUBSCRIPTION_USERNAME_FIELD_CSS), $params['username']);
+        $this->fillField(Locator::combine(PleskLinuxClientPage::ADD_SUBSCRIPTION_PASSWORD_FIELD_XPATH, PleskLinuxClientPage::ADD_SUBSCRIPTION_PASSWORD_FIELD_CSS), $params['password']);
+        $this->fillField(Locator::combine(PleskLinuxClientPage::ADD_SUBSCRIPTION_REPEAT_PASSWORD_FIELD_XPATH, PleskLinuxClientPage::ADD_SUBSCRIPTION_REPEAT_PASSWORD_FIELD_CSS), $params['password']);
+        $this->click(Locator::combine(PleskLinuxClientPage::ADD_SUBSCRIPTION_OK_BTN_XPATH, PleskLinuxClientPage::ADD_SUBSCRIPTION_OK_BTN_CSS));
 
-        $I->waitForElementNotVisible(PleskLinuxClientPage::ADD_SUBSCRIPTION_DOMAIN_NAME_CONTAINER_XPATH, 100);
-        $I->waitForElementVisible(PleskLinuxClientPage::ADD_SUBSCRIPTION_CONFIRMATION_MSG_XPATH, 100);
-        $I->see("Subscription {$params['domain']} was created.");
+        $this->waitForElementNotVisible(PleskLinuxClientPage::ADD_SUBSCRIPTION_DOMAIN_NAME_CONTAINER_XPATH, 100);
+        $this->waitForElementVisible(PleskLinuxClientPage::ADD_SUBSCRIPTION_CONFIRMATION_MSG_XPATH, 100);
+        $this->see("Subscription {$params['domain']} was created.");
 
         $account = array(
             'domain' => $params['domain'],

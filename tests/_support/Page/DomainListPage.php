@@ -6,21 +6,40 @@ class DomainListPage
 {
     const TITLE = "List Domains";
     const DESCRIPTION = "This page shows you a list of all domains owned by you and its respective status in the spamfilter.";
-
-    const SEARCH_FIELD                   = "//input[@id='searchInput']";
-    const SEARCH_BTN                     = "//button[@id='searchSubmit']";
-    const RESET_BTN                      = "//button[@id='searchReset']";
-    const CHECK_STATUS_FOR_ALL_DOMAIN    = "//button[@id='checkAllDomains']";
-    const TOGGLE_PROTECTION_FOR_SELECTED = "//button[@id='toggleSelected']";
-    const ITEMS_PER_PAGE_INPUT           = "//input[@id='itemsPerPage']";
-    const CHANGE_BTN                     = "//button[@id='changeItems']";
-    const DOMAIN_TABLE                   = "//table[@id='domainoverview']";
-    const TYPE_COLUMN_FROM_FIRST_ROW     = "//*[@id=\"domainoverview\"]/tbody/tr[1]/td[3]";
-
-    const CHECK_STATUS_LINK         = "span.pstatus a";
-    const TOGGLE_PROTECTION_LINK    = "//a[contains(.,'Toggle Protection')]";
-    const LOGIN_LINK                = "//a[contains(.,'Login')]";
-
+    
     const STATUS_DOMAIN_IS_PRESENT_IN_THE_FILTER = 'This domain is present in the filter.';
     const STATUS_DOMAIN_IS_NOT_PRESENT_IN_THE_FILTER = 'This domain is not present in the filter.';
+
+    const SEARCH_FIELD_XPATH = "//input[@id='searchInput']";
+    const SEARCH_FIELD_CSS   = "#searchInput";
+
+    const SEARCH_BTN_XPATH = "//button[@id='searchSubmit']";
+    const SEARCH_BTN_CSS   = "#searchSubmit";
+
+    const RESET_BTN_XPATH = "//button[@id='searchReset']";
+    const RESET_BTN_CSS   = "#searchReset";
+
+    const CHECK_STATUS_FOR_ALL_DOMAIN_XPATH = "//button[@id='checkAllDomains']";
+    const CHECK_STATUS_FOR_ALL_DOMAIN_CSS   = "#checkAllDomains";
+
+    const TOGGLE_PROTECTION_FOR_SELECTED_XPATH = "//button[@id='toggleSelected']";
+    const TOGGLE_PROTECTION_FOR_SELECTED_CSS   = "#toggleSelected"; 
+
+    const ITEMS_PER_PAGE_INPUT_XPATH = "//input[@id='itemsPerPage']";
+    const ITEMS_PER_PAGE_INPUT_CSS   = "#itemsPerPage";
+
+    const CHANGE_BTN_XPATH = "//button[@id='changeItems']";
+    const CHANGE_BTN_CSS   = "#changeItems";
+
+    const DOMAIN_TABLE_XPATH = "//table[@id='domainoverview']";
+    const DOMAIN_TABLE_CSS   = "#domainoverview";
+
+    const TYPE_COLUMN_FROM_FIRST_ROW_XPATH = "//*[@id=\"domainoverview\"]/tbody/tr[1]/td[3]";
+
+    const CHECK_STATUS_LINK_XPATH = "span.pstatus a";
+
+    const TOGGLE_PROTECTION_LINK_XPATH = "//a[contains(.,'Toggle Protection')]";
+    const TOGGLE_PROTECTION_LINK_CSS   = ".toggle";
+
+    const LOGIN_LINK_XPATH = "//a[contains(.,'Login')]";
 }
