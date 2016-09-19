@@ -26,8 +26,8 @@ class C04BulkProtectCest
     {
         $I->goToPage(ProfessionalSpamFilterPage::CONFIGURATION_BTN, ConfigurationPage::TITLE);
         $I->setConfigurationOptions(array(
-            ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT => false,
-            ConfigurationPage::FORCE_CHANGE_MX_ROUTE_OPT => false,
+            Locator::combine(ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT_CSS, ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT_XPATH) => false,
+            Locator::combine(ConfigurationPage::FORCE_CHANGE_MX_ROUTE_OPT_CSS, ConfigurationPage::FORCE_CHANGE_MX_ROUTE_OPT_XPATH) => false,
         ));
 
         $I->removeAllDomains();
@@ -49,8 +49,8 @@ class C04BulkProtectCest
 
         $I->goToPage(ProfessionalSpamFilterPage::CONFIGURATION_BTN, ConfigurationPage::TITLE);
         $I->setConfigurationOptions(array(
-            ConfigurationPage::AUTOMATICALLY_CHANGE_MX_OPT => true,
-            ConfigurationPage::FORCE_CHANGE_MX_ROUTE_OPT => true,
+            Locator::combine(ConfigurationPage::AUTOMATICALLY_CHANGE_MX_OPT_CSS, ConfigurationPage::AUTOMATICALLY_CHANGE_MX_OPT_XPATH) => true,
+            Locator::combine(ConfigurationPage::FORCE_CHANGE_MX_ROUTE_OPT_CSS, ConfigurationPage::FORCE_CHANGE_MX_ROUTE_OPT_XPATH) => true,
         ));
 
         $I->goToPage(ProfessionalSpamFilterPage::BULKPROTECT_BTN, BulkprotectPage::TITLE);

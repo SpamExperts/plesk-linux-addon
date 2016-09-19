@@ -1,1 +1,1 @@
-tests/acceptance/C03DomainListCest.php:verifyDomainListAsCustomer
+tests/acceptance/C01ConfigurationCest.php:verifyAutomaticallyAddDomainToPsf
