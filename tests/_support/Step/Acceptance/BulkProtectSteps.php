@@ -5,6 +5,7 @@ namespace Step\Acceptance;
 use Pages\BulkprotectPage;
 use Pages\PleskLinuxClientPage;
 use Pages\ProfessionalSpamFilterPage;
+use Codeception\Util\Locator;
 
 class BulkProtectSteps extends CommonSteps
 {
@@ -24,7 +25,7 @@ class BulkProtectSteps extends CommonSteps
         $I->seeElement(ProfessionalSpamFilterPage::UPDATE_LINK);
         $I->seeElement(ProfessionalSpamFilterPage::SUPPORT_LINK);
 
-        $I->seeElement(BulkprotectPage::EXECUTE_BULKPROTECT_BTN);
+        $I->seeElement(Locator::combine(BulkprotectPage::EXECUTE_BULKPROTECT_BTN_XPATH, BulkprotectPage::EXECUTE_BULKPROTECT_BTN_CSS));
     }
 
     public function checkLastExecutionInfo()
@@ -35,7 +36,7 @@ class BulkProtectSteps extends CommonSteps
 
     public function submitBulkprotectForm()
     {
-        $this->click('Execute bulkprotect');
+        $this->click(Locator::combine(BulkprotectPage::EXECUTE_BULKPROTECT_BTN_XPATH, BulkprotectPage::EXECUTE_BULKPROTECT_BTN_CSS));
     }
 
     public function checkBulkprotectRunning()
@@ -51,7 +52,7 @@ class BulkProtectSteps extends CommonSteps
     {
         $I = $this;
         $I->waitForText("Bulkprotect", 200);
-        $I->waitForElement(".//*[@id='bulkwarning']/div", 200);
+        $I->waitForElement(Locator::combine(BulkprotectPage::EXECUTE_BULKPROTECT_WARNING_XPATH, BulkprotectPage::EXECUTE_BULKPROTECT_WARNING_CSS), 200); 
         $I->waitForText("Bulkprotect has finished", 200);
         $I->see("The bulkprotect process has finished its work. Please see the tables below for the results.");
     }
@@ -60,20 +61,29 @@ class BulkProtectSteps extends CommonSteps
     {
         $I = $this;
         $I->switchToLeftFrame();
-        $I->click(PleskLinuxClientPage::CLIENT_SUBSCRIPTIONS);
+        $I->click(Locator::combine(PleskLinuxClientPage::CLIENT_SUBSCRIPTIONS_XPATH, PleskLinuxClientPage::CLIENT_SUBSCRIPTIONS_CSS));
         $I->switchToWorkFrame();
 
         if (!$I->getElementsCount("//td[contains(@class,'select')]")) {
             return;
         }
 
-        $I->click(PleskLinuxClientPage::CLIENT_ALL_ENTRIES_BUTTON);
-        $I->waitForElementVisible(PleskLinuxClientPage::CLIENT_SELECT_ALL_SUBSCRIPTIONS);
-        $I->checkOption(PleskLinuxClientPage::CLIENT_SELECT_ALL_SUBSCRIPTIONS);
-        $I->waitForElementVisible(PleskLinuxClientPage::CLIENT_ADD_NEW_SUBSCRIPTION);
-        $I->click(PleskLinuxClientPage::CLIENT_REMOVE_SUBSCRIPTION_BUTTON);
-        $I->waitForElementVisible("//button[contains(.,'Yes')]", 30);
-        $I->click("//button[contains(.,'Yes')]");
+        $I->waitForElementVisible(Locator::combine(PleskLinuxClientPage::CLIENT_ALL_ENTRIES_BUTTON_XPATH, PleskLinuxClientPage::CLIENT_ALL_ENTRIES_BUTTON_CSS), 10);
+        $I->click(Locator::combine(PleskLinuxClientPage::CLIENT_ALL_ENTRIES_BUTTON_XPATH, PleskLinuxClientPage::CLIENT_ALL_ENTRIES_BUTTON_CSS));
+
+        $I->waitForElementVisible(Locator::combine(PleskLinuxClientPage::SUBSCRIPTION_LIST_TABLE_XPATH, PleskLinuxClientPage::SUBSCRIPTION_LIST_TABLE_CSS), 10);
+        $I->waitForElementVisible(PleskLinuxClientPage::CLIENT_SELECT_ALL_SUBSCRIPTIONS_XPATH, 10);
+        $I->click(Locator::combine(PleskLinuxClientPage::CLIENT_SELECT_ALL_SUBSCRIPTIONS_XPATH, PleskLinuxClientPage::CLIENT_SELECT_ALL_SUBSCRIPTIONS_CSS));
+
+        $I->waitForElementVisible(Locator::combine(PleskLinuxClientPage::CLIENT_ADD_NEW_SUBSCRIPTION_XPATH, PleskLinuxClientPage::CLIENT_ADD_NEW_SUBSCRIPTION_CSS), 10);
+        $I->click(Locator::combine(PleskLinuxClientPage::CLIENT_REMOVE_SUBSCRIPTION_BUTTON_XPATH, PleskLinuxClientPage::CLIENT_REMOVE_SUBSCRIPTION_BUTTON_CSS));
+        $I->waitForElementVisible(Locator::combine(PleskLinuxClientPage::REMOVE_SELECTED_SUBSCRIPTION_BTN_XPATH, PleskLinuxClientPage::REMOVE_SELECTED_SUBSCRIPTION_BTN_CSS), 30);
+
+        $I->waitForElementVisible(Locator::combine(PleskLinuxClientPage::REMOVE_SUBSCRIPTION_CONFIRMATION_MSG_XPATH, PleskLinuxClientPage::REMOVE_SUBSCRIPTION_CONFIRMATION_MSG_CSS), 10);
+        $I->wait(1);
+        $I->click(Locator::combine(PleskLinuxClientPage::REMOVE_SELECTED_SUBSCRIPTION_BTN_XPATH, PleskLinuxClientPage::REMOVE_SELECTED_SUBSCRIPTION_BTN_CSS));
+        $I->waitForElementNotVisible(Locator::combine(PleskLinuxClientPage::REMOVE_SUBSCRIPTION_CONFIRMATION_MSG_XPATH, PleskLinuxClientPage::REMOVE_SUBSCRIPTION_CONFIRMATION_MSG_CSS), 10);
+
         $I->waitForText("Information: Selected subscriptions were removed.", 200);
     }
 }

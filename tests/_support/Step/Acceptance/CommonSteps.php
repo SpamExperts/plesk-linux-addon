@@ -5,16 +5,18 @@ namespace Step\Acceptance;
 use Pages\DomainListPage;
 use Pages\ConfigurationPage;
 use Pages\SpampanelPage;
+use Pages\PleskLinuxLoginPage;
+use Pages\PleskLinuxClientPage;
 use Facebook\WebDriver\WebDriver;
 use Codeception\Lib\Interfaces\Web;
 use Pages\ProfessionalSpamFilterPage;
+use Codeception\Util\Locator;
 
 class CommonSteps extends \WebGuy
 {
     protected $domainName;
     protected $resellerUsername;
     protected $resellerPassword;
-    protected $domain;
     protected $customerUsername;
     protected $customerPassword;
 
@@ -32,10 +34,17 @@ class CommonSteps extends \WebGuy
         $I = $this;
         $I->amGoingTo("\n\n --- Login as '{$username}' --- \n");
         $I->amOnUrl(getenv($this->getEnvParameter('url')));
-        $I->waitForElement("//input[@id='loginSection-username']");
-        $I->fillField("//input[@id='loginSection-username']", $username);
-        $I->fillField("//input[@id='loginSection-password']", $password);
-        $I->click('Log in');
+
+        //Wait for page elements
+        $I->waitForElement(Locator::combine(PleskLinuxLoginPage::USERNAME_FIELD_XPATH, PleskLinuxLoginPage::USERNAME_FIELD_CSS), 10);
+        $I->waitForElement(Locator::combine(PleskLinuxLoginPage::PASSWORD_FIELD_XPATH, PleskLinuxLoginPage::PASSWORD_FIELD_CSS), 10);
+        $I->waitForElement(Locator::combine(PleskLinuxLoginPage::LOGIN_BTN_XPATH, PleskLinuxLoginPage::LOGIN_BTN_CSS), 10);
+
+        //Fill username and password
+        $I->fillField(Locator::combine(PleskLinuxLoginPage::USERNAME_FIELD_XPATH, PleskLinuxLoginPage::USERNAME_FIELD_CSS), $username);
+        $I->fillField(Locator::combine(PleskLinuxLoginPage::PASSWORD_FIELD_XPATH, PleskLinuxLoginPage::PASSWORD_FIELD_CSS), $password);
+
+        $I->click(Locator::combine(PleskLinuxLoginPage::LOGIN_BTN_XPATH, PleskLinuxLoginPage::LOGIN_BTN_CSS));
         if ($isCustomer) {
             $I->wait(2);
             $canSeeElement = $I->canSeeElement("//button[contains(text(), 'OK, back to Plesk')]");
@@ -117,11 +126,12 @@ class CommonSteps extends \WebGuy
         $I->amGoingTo("\n\n --- Go to {$title} page --- \n");
         $I->switchToLeftFrame();
         $I->waitForElement("//td[contains(.,'Links to Additional Services')]");
-        $I->click("//a[contains(.,'Professional Spam Filter')]");
+        $I->wait(1);
+        $I->click(ProfessionalSpamFilterPage::PROF_SPAM_FILTER_BTN);
         $I->switchToWorkFrame();
-        $I->waitForText('Professional Spam Filter');
-        $I->see('Professional Spam Filter');
-        $I->waitForText('Configuration');
+        $I->waitForText(ProfessionalSpamFilterPage::TITLE, 10);
+        $I->see(ProfessionalSpamFilterPage::TITLE);
+        $I->waitForText(ConfigurationPage::TITLE);
         $I->click($page);
         $I->waitForText($title);
     }
@@ -324,14 +334,19 @@ class CommonSteps extends \WebGuy
         $I->switchToLeftFrame();
         $I->click("//a[contains(.,'Subscriptions')]");
         $I->switchToWorkFrame();
-        $I->click("//span[contains(.,'Add New Subscription')]");
-        $I->waitForElement("//span[contains(.,'Subscriptions')]");
-        $I->fillField("//input[@id='subscription-domainInfo-domainName']", $params['domain']);
-        $I->fillField("//input[@id='subscription-domainInfo-userName']", $params['username']);
-        $I->fillField("//input[@id='subscription-domainInfo-password']", $params['password']);
-        $I->fillField("//input[@id='subscription-domainInfo-passwordConfirmation']", $params['password']);
-        $I->click("//button[@name='send']");
-        $I->waitForElement("//div[@class='msg-content']", 30);
+
+        $I->click(Locator::combine(PleskLinuxClientPage::CLIENT_ADD_NEW_SUBSCRIPTION_XPATH, PleskLinuxClientPage::CLIENT_ADD_NEW_SUBSCRIPTION_CSS));
+
+        $I->waitForElement(Locator::combine(PleskLinuxClientPage::CLIENT_SUBSCRIPTIONS_XPATH, PleskLinuxClientPage::CLIENT_SUBSCRIPTIONS_CSS), 10);
+
+        $I->fillField(Locator::combine(PleskLinuxClientPage::ADD_SUBSCRIPTION_DOMAIN_FIELD_XPATH, PleskLinuxClientPage::ADD_SUBSCRIPTION_DOMAIN_FIELD_CSS), $params['domain']);
+        $I->fillField(Locator::combine(PleskLinuxClientPage::ADD_SUBSCRIPTION_USERNAME_FIELD_XPATH, PleskLinuxClientPage::ADD_SUBSCRIPTION_USERNAME_FIELD_CSS), $params['username']);
+        $I->fillField(Locator::combine(PleskLinuxClientPage::ADD_SUBSCRIPTION_PASSWORD_FIELD_XPATH, PleskLinuxClientPage::ADD_SUBSCRIPTION_PASSWORD_FIELD_CSS), $params['password']);
+        $I->fillField(Locator::combine(PleskLinuxClientPage::ADD_SUBSCRIPTION_REPEAT_PASSWORD_FIELD_XPATH, PleskLinuxClientPage::ADD_SUBSCRIPTION_REPEAT_PASSWORD_FIELD_CSS), $params['password']);
+        $I->click(Locator::combine(PleskLinuxClientPage::ADD_SUBSCRIPTION_OK_BTN_XPATH, PleskLinuxClientPage::ADD_SUBSCRIPTION_OK_BTN_CSS));
+
+        $I->waitForElementNotVisible(PleskLinuxClientPage::ADD_SUBSCRIPTION_DOMAIN_NAME_CONTAINER_XPATH, 100);
+        $I->waitForElementVisible(PleskLinuxClientPage::ADD_SUBSCRIPTION_CONFIRMATION_MSG_XPATH, 100);
         $I->see("Subscription {$params['domain']} was created.");
 
         $account = array(

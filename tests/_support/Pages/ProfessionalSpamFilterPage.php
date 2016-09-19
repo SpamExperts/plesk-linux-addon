@@ -21,4 +21,11 @@ class ProfessionalSpamFilterPage
     const UPDATE_LINK        = "//a[contains(.,'Update')]";
     const SUPPORT_LINK       = "//a[contains(.,'Support')]";
     const CONFIGURE_HREF     = "//a[contains(@href,'?q=admin/settings')]";
+
+    const PROF_SPAM_FILTER_BTN = "//a[contains(.,'Professional Spam Filter')]";
+
+    const TITLE = "Professional Spam Filter";
+    const TITLE_XPATH = "//h1[contains(.,'Professional Spam Filter')]";
+    const TITLE_CSS   = ".secontainer>header>h1";
+
 }

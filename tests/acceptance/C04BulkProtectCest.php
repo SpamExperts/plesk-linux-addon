@@ -9,6 +9,7 @@ use Pages\ConfigurationPage;
 use Pages\ProfessionalSpamFilterPage;
 use Step\Acceptance\CommonSteps;
 use Step\Acceptance\BulkProtectSteps;
+use Codeception\Util\Locator;
 
 class C04BulkProtectCest
 {
