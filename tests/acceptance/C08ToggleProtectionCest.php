@@ -3,42 +3,42 @@
 use Page\ConfigurationPage;
 use Page\DomainListPage;
 use Page\ProfessionalSpamFilterPage;
-use Step\Acceptance\CommonSteps;
+use Step\Acceptance\ToggleProtectionSteps;
 use Codeception\Util\Locator;
 
 class C08ToggleProtectionCest
 {
-    public function _before(CommonSteps $I)
+    public function _before(ToggleProtectionSteps $I)
     {
         $I->login();
     }
 
-    public function _after(CommonSteps $I)
+    public function _after(ToggleProtectionSteps $I)
     {
         $I->removeCreatedSubscriptions();
     }
 
-    public function _failed(CommonSteps $I)
+    public function _failed(ToggleProtectionSteps $I)
     {
         $this->_after($I);
     }
 
-    public function testToggleProtectionErrorAddedAsAliasNotDomain(CommonSteps $I)
+    public function testToggleProtectionErrorAddedAsAliasNotDomain(ToggleProtectionSteps $I)
     {
-        $setup = $this->setupErrorAddedAsAliasNotDomainScenario($I);
+        $setup = $I->setupErrorAddedAsAliasNotDomainScenario();
         $aliasDomainName = $setup['alias_domain_name'];
 
         // Test
         $I->goToPage(ProfessionalSpamFilterPage::DOMAIN_LIST_BTN, DomainListPage::TITLE);
         $I->searchDomainList($aliasDomainName);
-        $I->click(Locator::combine(DomainListPage::TOGGLE_PROTECTION_LINK_XPATH, DomainListPage::TOGGLE_PROTECTION_LINK_CSS);
+        $I->click(Locator::combine(DomainListPage::TOGGLE_PROTECTION_LINK_XPATH, DomainListPage::TOGGLE_PROTECTION_LINK_CSS));
         $message = "The protection status of $aliasDomainName could not be changed to unprotected because alias domains and subdomains are treated as normal domains and \"$aliasDomainName\" is already added as an alias.";
         $I->waitForText($message, 60);
     }
 
-    public function testHookErrorAddedAsAliasNotDomain(CommonSteps $I)
+    public function testHookErrorAddedAsAliasNotDomain(ToggleProtectionSteps $I)
     {
-        $setup = $this->setupErrorAddedAsAliasNotDomainScenario($I);
+        $setup = $I->setupErrorAddedAsAliasNotDomainScenario($I);
         $alias = $setup['alias_domain_name'];
         codecept_debug("SETUP FINISHED");
 
@@ -50,9 +50,9 @@ class C08ToggleProtectionCest
         $I->apiCheckDomainExists($alias);
     }
 
-    public function testToggleProtectionErrorAddedAsDomainNotAlias(CommonSteps $I)
+    public function testToggleProtectionErrorAddedAsDomainNotAlias(ToggleProtectionSteps $I)
     {
-        $setup = $this->setupErrorAddedAsDomainNotAliasScenario($I);
+        $setup = $I->setupErrorAddedAsDomainNotAliasScenario($I);
         $aliasDomainName = $setup['alias_domain_name'];
 
         // Test
@@ -64,9 +64,9 @@ class C08ToggleProtectionCest
         $I->waitForText($message, 60);
     }
 
-    public function testHookErrorAddedAsDomainNotAlias(CommonSteps $I)
+    public function testHookErrorAddedAsDomainNotAlias(ToggleProtectionSteps $I)
     {
-        $setup = $this->setupErrorAddedAsDomainNotAliasScenario($I);
+        $setup = $I->setupErrorAddedAsDomainNotAliasScenario($I);
         $alias = $setup['alias_domain_name'];
 
         // Test
@@ -77,7 +77,7 @@ class C08ToggleProtectionCest
         $I->apiCheckDomainExists($alias);
     }
 
-    public function testToggleAsAliasAndUntoggleAlias(CommonSteps $I)
+    public function testToggleAsAliasAndUntoggleAlias(ToggleProtectionSteps $I)
     {
         $I->goToConfigurationPageAndSetOptions([
             Locator::Combine(ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT_CSS, ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT_XPATH) => true,

@@ -84,7 +84,7 @@ class C01ConfigurationCest
         // Add an alias domain for the customer account
         $alias = $I->addAliasAsClient($domain);
 
-        // Check if alias domain exist in Spampane
+        // Check if alias domain exist in Spampanel
         $I->apiCheckDomainExists($alias);
 
         // $I->logout();
@@ -137,26 +137,52 @@ class C01ConfigurationCest
 
     public function verifyAutomaticallyDeleteDomainToPsf(ConfigurationSteps $I)
     {
+        // Set configuration options needed for the test
         $I->setConfigurationOptions(array(
             Locator::combine(ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT_CSS, ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT_XPATH) => true,
             Locator::combine(ConfigurationPage::AUTOMATICALLY_DELETE_DOMAINS_OPT_CSS, ConfigurationPage::AUTOMATICALLY_DELETE_DOMAINS_OPT_XPATH) => true,
         ));
 
+        // Create a new customer account
         list($customerUsername, $customerPassword, $domain) = $I->createCustomer();
+
+        // Change the customer plan to unlimited for the created account
         $I->changeCustomerPlan($customerUsername);
+
+        // Wait in order to domain be present in filter
         $I->wait(120);
+
+        // Check if customer domain is present in filter
         $I->checkDomainIsPresentInFilter($domain);
+
+        // Check if customer domain exist in Spampanel
         $I->apiCheckDomainExists($domain);
 
+        // Logout from root account
         $I->logout();
+
+        // Login with the customer account
         $I->loginAsClient($customerUsername, $customerPassword);
+
+        // Add an alias domain for the customer account
         $alias = $I->addAliasAsClient($domain);
+
+        // Check if alias domain exist in Spampanel
         $I->apiCheckDomainExists($alias);
 
+        // Logout from customer account
         $I->logout();
+
+        // Login as root
         $I->loginAsRoot();
+
+        // Remove subscriptions for the customer account
         $I->removeSubscription($domain);
+
+        // Check if customer domain don't exist in Spampanel
         $I->apiCheckDomainNotExists($domain);
+
+        // Check if alias domain don't exist in Spampanel
         $I->apiCheckDomainNotExists($alias);
     }
 

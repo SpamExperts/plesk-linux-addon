@@ -91,13 +91,13 @@ class CommonSteps extends \WebGuy
         $this->see('The settings have been saved.');
     }
 
-
     /**
      * Function used to return default configuration options
      * @return array array with config options locators
      */
     private function getDefaultConfigurationOptions()
     {
+        // Return array with default plugin config options
         return array(
             Locator::combine(ConfigurationPage::ENABLE_SSL_FOR_API_OPT_CSS, ConfigurationPage::ENABLE_SSL_FOR_API_OPT_XPATH) => false,
             Locator::combine(ConfigurationPage::ENABLE_AUTOMATIC_UPDATES_OPT_CSS,ConfigurationPage::ENABLE_AUTOMATIC_UPDATES_OPT_XPATH) => false,
@@ -116,12 +116,12 @@ class CommonSteps extends \WebGuy
         );
     }
 
-
     /**
      * Function used to logout
      */
     public function logout()
     {
+        // Go to the login page .php
         $this->amOnPage('/login_up.php3');
     }
 
@@ -226,35 +226,81 @@ class CommonSteps extends \WebGuy
         $this->see($domain, Locator::combine(DomainListPage::DOMAIN_TABLE_XPATH, DomainListPage::DOMAIN_TABLE_CSS));
     }
 
+    /**
+     * Function used to check if domain is in domain list
+     * @param  string  $domainName domain to check
+     * @param  boolean $isRoot     enter as root or as reseller or customer
+     */
     public function checkDomainList($domainName, $isRoot = false)
     {
+        // Display info message
         $this->amGoingTo("\n\n --- Check Domain list is present --- \n");
+
+        // If logged as root
         if ($isRoot) {
+            // Go to "Domain List" page
             $this->goToPage(ProfessionalSpamFilterPage::DOMAIN_LIST_BTN, DomainListPage::TITLE);
+
+            // Check if domain is present in list
             $this->see($domainName, Locator::combine(DomainListPage::DOMAIN_TABLE_XPATH, DomainListPage::DOMAIN_TABLE_CSS));
         }
+        // If logged as reseller or customer
         else {
+            // Switch to left frame
             $this->switchToLeftFrame();
+
+            // Click the "Professional Spam Filter" addon button
             $this->click(ProfessionalSpamFilterPage::PROF_SPAM_FILTER_BTN);
+
+            // Switch to main frame
             $this->switchToWorkFrame();
+
+            // Display info message
             $this->amGoingTo("Check domain '{$domainName}' is present on the list");
+
+            // Check if domain is present in list
             $this->see($domainName, Locator::combine(DomainListPage::DOMAIN_TABLE_XPATH, DomainListPage::DOMAIN_TABLE_CSS));
         }
     }
 
+    /**
+     * Function used to enable a shared IP
+     * @param  string $resellerId reseller account id
+     */
     public function shareIp($resellerId = null)
     {
+        // Display info message
         $this->amGoingTo("\n\n --- Enable a shared IP --- \n");
+
+        // Switch to left frame
         $this->switchToLeftFrame();
+
+        // Click "Tools and Settings" option
         $this->click(ToolsAndSettingsPage::TOOLS_N_SETTINGS_LINK_XPATH);
+
+        // Switch to main frame
         $this->switchToWorkFrame();
+
+        // Click "IP Adresses" link under "Tools & Resources" category
         $this->click(Locator::combine(ToolsAndSettingsPage::IP_ADDRESSES_BTN_XPATH, ToolsAndSettingsPage::IP_ADDRESSES_BTN_CSS));
+
+        // Click on the last IPv4 address in list
         $this->click(ToolsAndSettingsPage::EDIT_IP_ADDRESS_LINK_XPATH);
+
+        // Check "IP adress is distributed as Shared" option for that IP
         $this->checkOption(Locator::combine(ToolsAndSettingsPage::SHARED_OPTION_CHECKBOX_XPATH, ToolsAndSettingsPage::SHARED_OPTION_CHECKBOX_CSS));
+
+        // Click the "OK" button
         $this->click(Locator::combine(ToolsAndSettingsPage::OK_BTN_XPATH, ToolsAndSettingsPage::OK_BTN_CSS));
+
+        // Wait for settings to save
         $this->waitForElementNotVisible(Locator::combine(ToolsAndSettingsPage::SHARED_OPTION_CHECKBOX_XPATH, ToolsAndSettingsPage::SHARED_OPTION_CHECKBOX_CSS), 30);
+
+        // Wait for success message
         $this->waitForElement(Locator::combine(ToolsAndSettingsPage::IP_ADDRESSES_MSJ_XPATH, ToolsAndSettingsPage::IP_ADDRESSES_MSJ_CSS), 30);
-        $this->see("The properties of the IP address");
+        $this->waitForText("The properties of the IP address", 30);
+
+        // If reseller Id provided, repeat the above steps but for the reseller id not for the last IPv4 address
         if ($resellerId) {
             $this->click(ToolsAndSettingsPage::IP_RESELLER_OPTION_XPATH);
             $this->waitForText("Resellers who use Shared IP address");
@@ -341,35 +387,28 @@ class CommonSteps extends \WebGuy
         $this->switchToWorkFrame();
 
         // Click "Add New Reseller" button
-        $this->waitForElement(Locator::combine(PleskLinuxClientPage::ADD_NEW_RESELLER_BTN_CSS, PleskLinuxClientPage::ADD_NEW_RESELLER_BTN_XPATH), 10);
         $this->click(Locator::combine(PleskLinuxClientPage::ADD_NEW_RESELLER_BTN_CSS, PleskLinuxClientPage::ADD_NEW_RESELLER_BTN_XPATH));
 
         # Contact Information fields
 
         // Fill "Contact name" field
-        $this->waitForElement(Locator::combine(PleskLinuxClientPage::CONTACT_NAME_FIELD_CSS, PleskLinuxClientPage::CONTACT_NAME_FIELD_XPATH), 10);
         $this->fillField(Locator::combine(PleskLinuxClientPage::CONTACT_NAME_FIELD_CSS, PleskLinuxClientPage::CONTACT_NAME_FIELD_XPATH), $this->resellerUsername);
 
         // Fill "Email address" field
-        $this->waitForElement(Locator::combine(PleskLinuxClientPage::EMAIL_ADDRESS_FIELD_CSS, PleskLinuxClientPage::EMAIL_ADDRESS_FIELD_XPATH), 10);
         $this->fillField(Locator::combine(PleskLinuxClientPage::EMAIL_ADDRESS_FIELD_CSS, PleskLinuxClientPage::EMAIL_ADDRESS_FIELD_XPATH), "test@example.com");
 
         // Fill "Phone number" field (even if is not mandatory is needed later)
-        $this->waitForElement(Locator::combine(PleskLinuxClientPage::PHONE_NUMBER_FIELD_CSS, PleskLinuxClientPage::PHONE_NUMBER_FIELD_XPATH), 10);
         $this->fillField(Locator::combine(PleskLinuxClientPage::PHONE_NUMBER_FIELD_CSS, PleskLinuxClientPage::PHONE_NUMBER_FIELD_XPATH), "0123456789");
 
         # Access to Plesk fields
 
         // Fill "Username" field
-        $this->waitForElement(Locator::combine(PleskLinuxClientPage::PLESK_USERNAME_FIELD_CSS, PleskLinuxClientPage::PLESK_USERNAME_FIELD_XPATH), 10);
         $this->fillField(Locator::combine(PleskLinuxClientPage::PLESK_USERNAME_FIELD_CSS, PleskLinuxClientPage::PLESK_USERNAME_FIELD_XPATH), $this->resellerUsername);
 
         // Fill "Password" field
-        $this->waitForElement(Locator::combine(PleskLinuxClientPage::PLESK_PASSWORD_FIELD_CSS, PleskLinuxClientPage::PLESK_PASSWORD_FIELD_XPATH), 10);
         $this->fillField(Locator::combine(PleskLinuxClientPage::PLESK_PASSWORD_FIELD_CSS, PleskLinuxClientPage::PLESK_PASSWORD_FIELD_XPATH), $this->resellerPassword);
 
         // Fill "Repeat password" field
-        $this->waitForElement(Locator::combine(PleskLinuxClientPage::PLESK_REPEAT_PASSWORD_FIELD_CSS, PleskLinuxClientPage::PLESK_REPEAT_PASSWORD_FIELD_XPATH), 10);
         $this->fillField(Locator::combine(PleskLinuxClientPage::PLESK_REPEAT_PASSWORD_FIELD_CSS, PleskLinuxClientPage::PLESK_REPEAT_PASSWORD_FIELD_XPATH), $this->resellerPassword);
 
         // Click "OK" button
@@ -417,58 +456,45 @@ class CommonSteps extends \WebGuy
         $this->switchToWorkFrame();
 
         // Click "Add New Customer" button
-        $this->waitForElement(Locator::combine(PleskLinuxClientPage::ADD_NEW_CUSTOMER_BTN_CSS, PleskLinuxClientPage::ADD_NEW_CUSTOMER_BTN_XPATH), 10);
         $this->click(Locator::combine(PleskLinuxClientPage::ADD_NEW_CUSTOMER_BTN_CSS, PleskLinuxClientPage::ADD_NEW_CUSTOMER_BTN_XPATH));
 
         # Contact Information fields
 
         // Fill "Contact name" field
-        $this->waitForElement(Locator::combine(PleskLinuxClientPage::CONTACT_NAME_FIELD_CSS, PleskLinuxClientPage::CONTACT_NAME_FIELD_XPATH), 10);
         $this->fillField(Locator::combine(PleskLinuxClientPage::CONTACT_NAME_FIELD_CSS, PleskLinuxClientPage::CONTACT_NAME_FIELD_XPATH), $this->customerUsername);
 
         // Fill "Email address" field
-        $this->waitForElement(Locator::combine(PleskLinuxClientPage::EMAIL_ADDRESS_FIELD_CSS, PleskLinuxClientPage::EMAIL_ADDRESS_FIELD_XPATH), 10);
         $this->fillField(Locator::combine(PleskLinuxClientPage::EMAIL_ADDRESS_FIELD_CSS, PleskLinuxClientPage::EMAIL_ADDRESS_FIELD_XPATH), "test@example.com");
 
         // Fill "Phone number" field (even if is not mandatory is needed later)
-        $this->waitForElement(Locator::combine(PleskLinuxClientPage::PHONE_NUMBER_FIELD_CSS, PleskLinuxClientPage::PHONE_NUMBER_FIELD_XPATH), 10);
         $this->fillField(Locator::combine(PleskLinuxClientPage::PHONE_NUMBER_FIELD_CSS, PleskLinuxClientPage::PHONE_NUMBER_FIELD_XPATH), "0123456789");
 
         # Access to Plesk fields
 
         // Fill "Username" field
-        $this->waitForElement(Locator::combine(PleskLinuxClientPage::PLESK_USERNAME_FIELD_CSS, PleskLinuxClientPage::PLESK_USERNAME_FIELD_XPATH), 10);
         $this->fillField(Locator::combine(PleskLinuxClientPage::PLESK_USERNAME_FIELD_CSS, PleskLinuxClientPage::PLESK_USERNAME_FIELD_XPATH), $this->customerUsername);
 
         // Fill "Password" field
-        $this->waitForElement(Locator::combine(PleskLinuxClientPage::PLESK_PASSWORD_FIELD_CSS, PleskLinuxClientPage::PLESK_PASSWORD_FIELD_XPATH), 10);
         $this->fillField(Locator::combine(PleskLinuxClientPage::PLESK_PASSWORD_FIELD_CSS, PleskLinuxClientPage::PLESK_PASSWORD_FIELD_XPATH), $this->customerPassword);
 
         // Fill "Repeat password" field
-        $this->waitForElement(Locator::combine(PleskLinuxClientPage::PLESK_REPEAT_PASSWORD_FIELD_CSS, PleskLinuxClientPage::PLESK_REPEAT_PASSWORD_FIELD_XPATH), 10);
         $this->fillField(Locator::combine(PleskLinuxClientPage::PLESK_REPEAT_PASSWORD_FIELD_CSS, PleskLinuxClientPage::PLESK_REPEAT_PASSWORD_FIELD_XPATH), $this->customerPassword);
 
         # Subscription
 
         // Fill "Domain name" field
-        $this->waitForElement(Locator::combine(PleskLinuxClientPage::SUBSCRIPTION_DOMAIN_FIELD_CSS, PleskLinuxClientPage::SUBSCRIPTION_DOMAIN_FIELD_XPATH), 10);
         $this->fillField(Locator::combine(PleskLinuxClientPage::SUBSCRIPTION_DOMAIN_FIELD_CSS, PleskLinuxClientPage::SUBSCRIPTION_DOMAIN_FIELD_XPATH), $this->domain);
 
         // Fill "Username" field
-        $this->waitForElement(Locator::combine(PleskLinuxClientPage::SUBSCRIPTION_USERNAME_FIELD_CSS, PleskLinuxClientPage::SUBSCRIPTION_USERNAME_FIELD_XPATH), 10);
         $this->fillField(Locator::combine(PleskLinuxClientPage::SUBSCRIPTION_USERNAME_FIELD_CSS, PleskLinuxClientPage::SUBSCRIPTION_USERNAME_FIELD_XPATH), $this->customerUsername);
 
         // Fill "Password" field
-        $this->waitForElement(Locator::combine(PleskLinuxClientPage::SUBSCRIPTION_PASSWORD_FIELD_CSS, PleskLinuxClientPage::SUBSCRIPTION_PASSWORD_FIELD_XPATH), 10);
         $this->fillField(Locator::combine(PleskLinuxClientPage::SUBSCRIPTION_PASSWORD_FIELD_CSS, PleskLinuxClientPage::SUBSCRIPTION_PASSWORD_FIELD_XPATH), $this->customerPassword);
 
         // Fill "Repeat password" field
-        $this->waitForElement(Locator::combine(PleskLinuxClientPage::SUBSCRIPTION_REPEAT_PASSWORD_FIELD_CSS, PleskLinuxClientPage::SUBSCRIPTION_REPEAT_PASSWORD_FIELD_XPATH), 10);
         $this->fillField(Locator::combine(PleskLinuxClientPage::SUBSCRIPTION_REPEAT_PASSWORD_FIELD_CSS, PleskLinuxClientPage::SUBSCRIPTION_REPEAT_PASSWORD_FIELD_XPATH), $this->customerPassword);
 
-
         // Select "Service plan" option to "Default domain"
-        $this->waitForElement(Locator::combine(PleskLinuxClientPage::SUBCRIPTION_SERVICE_PLAN_DROP_DOWN_CSS, PleskLinuxClientPage::SUBCRIPTION_SERVICE_PLAN_DROP_DOWN_XPATH), 10);
         $this->selectOption(Locator::combine(PleskLinuxClientPage::SUBCRIPTION_SERVICE_PLAN_DROP_DOWN_CSS, PleskLinuxClientPage::SUBCRIPTION_SERVICE_PLAN_DROP_DOWN_XPATH), "Default Domain");
 
         // Click "OK" button
@@ -566,11 +592,9 @@ class CommonSteps extends \WebGuy
         $this->click(Locator::combine(PleskLinuxClientPage::CLIENT_ADD_NEW_SUBSCRIPTION_XPATH, PleskLinuxClientPage::CLIENT_ADD_NEW_SUBSCRIPTION_CSS));
 
         // Fill "Domain name" field with the domain
-        $this->waitForElement(Locator::combine(PleskLinuxClientPage::ADD_SUBSCRIPTION_DOMAIN_FIELD_XPATH, PleskLinuxClientPage::ADD_SUBSCRIPTION_DOMAIN_FIELD_CSS), 10);
         $this->fillField(Locator::combine(PleskLinuxClientPage::ADD_SUBSCRIPTION_DOMAIN_FIELD_XPATH, PleskLinuxClientPage::ADD_SUBSCRIPTION_DOMAIN_FIELD_CSS), $params['domain']);
 
         // Fill "Username" field with username
-        $this->waitForElement(Locator::combine(PleskLinuxClientPage::ADD_SUBSCRIPTION_USERNAME_FIELD_XPATH, PleskLinuxClientPage::ADD_SUBSCRIPTION_USERNAME_FIELD_CSS), 10);
         $this->fillField(Locator::combine(PleskLinuxClientPage::ADD_SUBSCRIPTION_USERNAME_FIELD_XPATH, PleskLinuxClientPage::ADD_SUBSCRIPTION_USERNAME_FIELD_CSS), $params['username']);
 
         // Fill "Password" field with password
@@ -579,9 +603,6 @@ class CommonSteps extends \WebGuy
         // Fill "Repeat password" field with the same password
         $this->waitForElement(Locator::combine(PleskLinuxClientPage::ADD_SUBSCRIPTION_REPEAT_PASSWORD_FIELD_XPATH, PleskLinuxClientPage::ADD_SUBSCRIPTION_REPEAT_PASSWORD_FIELD_CSS), 10);
         $this->fillField(Locator::combine(PleskLinuxClientPage::ADD_SUBSCRIPTION_REPEAT_PASSWORD_FIELD_XPATH, PleskLinuxClientPage::ADD_SUBSCRIPTION_REPEAT_PASSWORD_FIELD_CSS), $params['password']);
-
-        // Wait for "OK" button
-        $this->waitForElement(Locator::combine(PleskLinuxClientPage::ADD_SUBSCRIPTION_OK_BTN_XPATH, PleskLinuxClientPage::ADD_SUBSCRIPTION_OK_BTN_CSS), 10);
 
         // Click the "OK" button
         $this->click(Locator::combine(PleskLinuxClientPage::ADD_SUBSCRIPTION_OK_BTN_XPATH, PleskLinuxClientPage::ADD_SUBSCRIPTION_OK_BTN_CSS));
@@ -608,9 +629,8 @@ class CommonSteps extends \WebGuy
      */
     public function removeCreatedSubscriptions()
     {
-        foreach(self::$accounts as $account) {
+        foreach(self::$accounts as $account)
             $this->removeSubscription($account['domain']);
-        }
     }
 
     /**
@@ -684,6 +704,10 @@ class CommonSteps extends \WebGuy
         $I->waitForElementVisible("//table[@class='list']");
     }
 
+    /**
+     * Function used to generate random domain name
+     * @return string domain
+     */
     public function generateRandomDomainName()
     {
         $domain = uniqid("domain") . ".example.com";
@@ -692,6 +716,10 @@ class CommonSteps extends \WebGuy
         return $domain;
     }
 
+    /**
+     * Function used to generate random username
+     * @return string username
+     */
     public function generateRandomUserName()
     {
         $username = uniqid("pleskuser");
@@ -700,14 +728,17 @@ class CommonSteps extends \WebGuy
         return $username;
     }
 
+    /**
+     * Function used to get addon hostname
+     * @return [type] [description]
+     */
     public function getEnvHostname()
     {
         $url = getenv($this->getEnvParameter('url'));
         $parsed = parse_url($url);
 
-        if (empty($parsed['host'])) {
+        if (empty($parsed['host']))
             throw new \Exception("Couldnt parse url");
-        }
 
         return $parsed['host'];
     }
