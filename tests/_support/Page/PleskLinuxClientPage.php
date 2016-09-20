@@ -108,4 +108,7 @@ class PleskLinuxClientPage
     const SUBSCRIPTION_TABLE_CSS = "#subscriptions-list-table";
     const SUBSCRIPTION_TABLE_XPATH = "//*[@id='buttonAddNewReseller']";
 
+    const REMOVE_DOMAIN_ALIAS_BTN_CSS = "";
+    const REMOVE_DOMAIN_ALIAS_BTN_XPATH = "//*[@id='active-list-item-a:11']/div/div[2]/div/div[2]/div/div/div/ul/li[2]/a";
+
 }

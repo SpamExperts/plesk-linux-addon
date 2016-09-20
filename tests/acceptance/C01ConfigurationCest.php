@@ -235,12 +235,13 @@ class C01ConfigurationCest
         $I->assertContains($ip.'::25', $routes);
     }
 
+    // Fails
     public function verifyAddonDomainsAsNormalDomain(ConfigurationSteps $I)
     {
         $I->setConfigurationOptions(array(
-            Locator::combine(ConfigurationPage::PROCESS_ADDON_PLESK_OPT_CSS, ConfigurationPage::PROCESS_ADDON_PLESK_OPT) => true,
-            Locator::combine(ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT_CSS, ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT) => true,
-            Locator::combine(ConfigurationPage::DO_NOT_PROTECT_REMOTE_DOMAINS_OPT_CSS, ConfigurationPage::DO_NOT_PROTECT_REMOTE_DOMAINS_OPT) => false,
+            Locator::combine(ConfigurationPage::PROCESS_ADDON_PLESK_OPT_CSS, ConfigurationPage::PROCESS_ADDON_PLESK_OPT_XPATH) => true,
+            Locator::combine(ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT_CSS, ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT_XPATH) => true,
+            Locator::combine(ConfigurationPage::DO_NOT_PROTECT_REMOTE_DOMAINS_OPT_CSS, ConfigurationPage::DO_NOT_PROTECT_REMOTE_DOMAINS_OPT_XPATH) => false,
         ));
         $I->shareIp();
         list($customerUsername, $customerPassword, $domain) = $I->createCustomer();
@@ -254,7 +255,7 @@ class C01ConfigurationCest
         $I->login();
         $I->goToPage(ProfessionalSpamFilterPage::DOMAIN_LIST_BTN, DomainListPage::TITLE);
         $I->searchDomainList($addonDomainName);
-        $I->see($addonDomainName, DomainListPage::DOMAIN_TABLE);
+        $I->see($addonDomainName, Locator::combine(DomainListPage::DOMAIN_TABLE_CSS, DomainListPage::DOMAIN_TABLE_XPATH));
         $I->apiCheckDomainExists($addonDomainName);
     }
 
@@ -277,8 +278,8 @@ class C01ConfigurationCest
         $I->login();
         $I->goToPage(ProfessionalSpamFilterPage::DOMAIN_LIST_BTN, DomainListPage::TITLE);
         $I->searchDomainList($aliasDomain);
-        $I->see($aliasDomain, DomainListPage::DOMAIN_TABLE);
-        $I->see("alias", DomainListPage::DOMAIN_TABLE);
+        $I->see($aliasDomain, Locator::combine(DomainListPage::DOMAIN_TABLE_CSS, DomainListPage::DOMAIN_TABLE_XPATH));
+        $I->see("alias", Locator::combine(DomainListPage::DOMAIN_TABLE_CSS, DomainListPage::DOMAIN_TABLE_XPATH));
     }
 
     public function verifyAddonDomainsAsAnAliasSubscription(ConfigurationSteps $I)

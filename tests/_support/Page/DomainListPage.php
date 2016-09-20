@@ -6,7 +6,7 @@ class DomainListPage
 {
     const TITLE = "List Domains";
     const DESCRIPTION = "This page shows you a list of all domains owned by you and its respective status in the spamfilter.";
-    
+
     const STATUS_DOMAIN_IS_PRESENT_IN_THE_FILTER = 'This domain is present in the filter.';
     const STATUS_DOMAIN_IS_NOT_PRESENT_IN_THE_FILTER = 'This domain is not present in the filter.';
 
@@ -23,7 +23,7 @@ class DomainListPage
     const CHECK_STATUS_FOR_ALL_DOMAIN_CSS   = "#checkAllDomains";
 
     const TOGGLE_PROTECTION_FOR_SELECTED_XPATH = "//button[@id='toggleSelected']";
-    const TOGGLE_PROTECTION_FOR_SELECTED_CSS   = "#toggleSelected"; 
+    const TOGGLE_PROTECTION_FOR_SELECTED_CSS   = "#toggleSelected";
 
     const ITEMS_PER_PAGE_INPUT_XPATH = "//input[@id='itemsPerPage']";
     const ITEMS_PER_PAGE_INPUT_CSS   = "#itemsPerPage";
@@ -38,8 +38,8 @@ class DomainListPage
 
     const CHECK_STATUS_LINK_XPATH = "span.pstatus a";
 
-    const TOGGLE_PROTECTION_LINK_XPATH = "//a[contains(.,'Toggle Protection')]";
-    const TOGGLE_PROTECTION_LINK_CSS   = ".toggle";
+    const TOGGLE_PROTECTION_LINK_XPATH = "//*[@id='domainoverview']/tbody/tr/td[5]/a[1]";
+    const TOGGLE_PROTECTION_LINK_CSS   = "#domainoverview > tbody > tr > td:nth-child(5) > a.toggle";
 
     const LOGIN_LINK_XPATH = "//a[contains(.,'Login')]";
 }
