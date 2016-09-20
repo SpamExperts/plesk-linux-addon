@@ -174,7 +174,7 @@ class CommonSteps extends \WebGuy
 
     public function checkProtectionStatusIs($status)
     {
-        $this->click('Check status');
+        $this->click(DomainListPage::CHECK_STATUS_LINK_XPATH);
         $this->waitForText($status, 60);
     }
 

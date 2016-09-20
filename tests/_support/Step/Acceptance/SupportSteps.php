@@ -4,64 +4,63 @@ namespace Step\Acceptance;
 
 use Page\SupportPage;
 use Page\ProfessionalSpamFilterPage;
+use Codeception\Util\Locator;
 
 class SupportSteps extends CommonSteps
 {
     public function checkSupportPageLayout()
     {
-        $I = $this;
-        $I->amGoingTo("\n\n --- Check support page layout --- \n");
+        $this->amGoingTo("\n\n --- Check support page layout --- \n");
 
-        $I->seeElement(ProfessionalSpamFilterPage::CONFIGURATION_LINK);
-        $I->seeElement(ProfessionalSpamFilterPage::BRANDING_LINK);
-        $I->seeElement(ProfessionalSpamFilterPage::DOMAIN_LIST_LINK);
-        $I->seeElement(ProfessionalSpamFilterPage::BRANDING_LINK);
-        $I->seeElement(ProfessionalSpamFilterPage::MIGRATION_LINK);
-        $I->seeElement(ProfessionalSpamFilterPage::UPDATE_LINK);
-        $I->seeElement(ProfessionalSpamFilterPage::SUPPORT_LINK);
+        $this->seeElement(ProfessionalSpamFilterPage::CONFIGURATION_LINK);
+        $this->seeElement(ProfessionalSpamFilterPage::BRANDING_LINK);
+        $this->seeElement(ProfessionalSpamFilterPage::DOMAIN_LIST_LINK);
+        $this->seeElement(ProfessionalSpamFilterPage::BRANDING_LINK);
+        $this->seeElement(ProfessionalSpamFilterPage::MIGRATION_LINK);
+        $this->seeElement(ProfessionalSpamFilterPage::UPDATE_LINK);
+        $this->seeElement(ProfessionalSpamFilterPage::SUPPORT_LINK);
 
-        $I->see(SupportPage::TITLE);
-        $I->see(SupportPage::DESCRIPTION);
-        $I->see(SupportPage::TEXT_A);
-        $I->see(SupportPage::TEXT_B);
-        $I->see(SupportPage::TEXT_C);
-        $I->see(SupportPage::TEXT_D);
-        $I->see(SupportPage::TEXT_E);
+        $this->see(SupportPage::TITLE);
+        $this->see(SupportPage::DESCRIPTION);
+        $this->see(SupportPage::TEXT_A);
+        $this->see(SupportPage::TEXT_B);
+        $this->see(SupportPage::TEXT_C);
+        $this->see(SupportPage::TEXT_D);
+        $this->see(SupportPage::TEXT_E);
 
-        $I->seeElement(SupportPage::RUN_DIAGNOSTICS_BTN);
+        $this->seeElement(Locator::combine(SupportPage::RUN_DIAGNOSTICS_BTN_XPATH, SupportPage::RUN_DIAGNOSTICS_BTN_CSS));
     }
 
     public function submitDiagnosticForm()
     {
-        $this->click('Run diagnostics');
+        $this->click(Locator::combine(SupportPage::RUN_DIAGNOSTICS_BTN_XPATH, SupportPage::RUN_DIAGNOSTICS_BTN_CSS));
     }
 
     public function checkDiagnostics()
     {
-        $I = $this;
-        $I->see("PHP version:", "//strong[contains(.,'PHP version:')]");
-        $I->seeElement("//span[contains(.,'OK!')]");
-        $I->see("PHP extensions:", "//strong[contains(.,'PHP extensions:')]");
-        $I->seeElement("//span[contains(.,'OK!')]");
-        $I->see("Configuration permissions:", "//strong[contains(.,'Configuration permissions:')]");
-        $I->seeElement("//span[contains(.,'OK!')]");
-        $I->see("Panel version:", "//strong[contains(.,'Panel version:')]");
-        $I->seeElement("//span[contains(.,'OK!')]");
-        $I->see("Addon version:", "//strong[contains(.,'Addon version:')]");
-        $I->seeElement("//span[contains(.,'OK!')]");
-        $I->see("Hashes:", "//strong[contains(.,'Hashes:')]");
-        $I->seeElement("//span[contains(.,'OK!')]");
-        $I->see("Hooks:", "//strong[contains(.,'Hooks:')]");
-        $I->seeElement("//span[contains(.,'OK!')]");
-        $I->see("Symlinks:", "//strong[contains(.,'Symlinks:')]");
-        $I->seeElement("//span[contains(.,'OK!')]");
-        $I->see("Controlpanel API:", "//strong[contains(.,'Controlpanel API:')]");
-        $I->seeElement("//span[contains(.,'OK!')]");
-        $I->see("Spamfilter API:", "//strong[contains(.,'Spamfilter API:')]");
-        $I->seeElement("//span[contains(.,'OK!')]");
-        $I->see("Symlink to PHP5 binary:", "//strong[contains(.,'Symlink to PHP5 binary:')]");
-        $I->seeElement("//span[contains(.,'OK!')]");
-        $I->dontSeeElement("//span[contains(.,'WARNING')]");
-        $I->dontSeeElement("//span[contains(.,'CRITICAL')]");
+        $this->see("PHP version:", "//strong[contains(.,'PHP version:')]");
+        $this->seeElement("//span[contains(.,'OK!')]");
+        $this->see("PHP extensions:", "//strong[contains(.,'PHP extensions:')]");
+        $this->seeElement("//span[contains(.,'OK!')]");
+        $this->see("Configuration permissions:", "//strong[contains(.,'Configuration permissions:')]");
+        $this->seeElement("//span[contains(.,'OK!')]");
+        $this->see("Panel version:", "//strong[contains(.,'Panel version:')]");
+        $this->seeElement("//span[contains(.,'OK!')]");
+        $this->see("Addon version:", "//strong[contains(.,'Addon version:')]");
+        $this->seeElement("//span[contains(.,'OK!')]");
+        $this->see("Hashes:", "//strong[contains(.,'Hashes:')]");
+        $this->seeElement("//span[contains(.,'OK!')]");
+        $this->see("Hooks:", "//strong[contains(.,'Hooks:')]");
+        $this->seeElement("//span[contains(.,'OK!')]");
+        $this->see("Symlinks:", "//strong[contains(.,'Symlinks:')]");
+        $this->seeElement("//span[contains(.,'OK!')]");
+        $this->see("Controlpanel API:", "//strong[contains(.,'Controlpanel API:')]");
+        $this->seeElement("//span[contains(.,'OK!')]");
+        $this->see("Spamfilter API:", "//strong[contains(.,'Spamfilter API:')]");
+        $this->seeElement("//span[contains(.,'OK!')]");
+        $this->see("Symlink to PHP5 binary:", "//strong[contains(.,'Symlink to PHP5 binary:')]");
+        $this->seeElement("//span[contains(.,'OK!')]");
+        $this->dontSeeElement("//span[contains(.,'WARNING')]");
+        $this->dontSeeElement("//span[contains(.,'CRITICAL')]");
     }
 }

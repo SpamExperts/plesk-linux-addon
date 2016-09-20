@@ -13,5 +13,6 @@ class SupportPage
     const TEXT_D = "Addon version:";
     const TEXT_E = "Diagnostics";
 
-    const RUN_DIAGNOSTICS_BTN = "//input[@id='diagnostics']";
+    const RUN_DIAGNOSTICS_BTN_XPATH = "//input[@id='diagnostics']";
+    const RUN_DIAGNOSTICS_BTN_CSS   = "#submit";
 }
