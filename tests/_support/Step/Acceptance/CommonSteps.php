@@ -57,10 +57,8 @@ class CommonSteps extends \WebGuy
 
         if ($isCustomer) {
             $this->wait(2);
-            $canSeeElement = $this->canSeeElement("//button[contains(text(), 'OK, back to Plesk')]");
-            if ($canSeeElement) {
-                $this->click("//button[contains(text(), 'OK, back to Plesk')]");
-            }
+            $this->waitForElement("//button[contains(.,'OK, back to Plesk')]", 30);
+            $this->click("//button[contains(.,'OK, back to Plesk')]");
             $this->see("Websites & Domains");
             $this->seeElement("//span[contains(.,'Professional Spam Filter')]");
         } else {
@@ -530,12 +528,14 @@ class CommonSteps extends \WebGuy
 
         $this->waitForElementVisible(Locator::combine(PleskLinuxClientPage::REMOVE_SELECTED_SUBSCRIPTION_BTN_XPATH, PleskLinuxClientPage::REMOVE_SELECTED_SUBSCRIPTION_BTN_CSS), 30);
 
-        $this->click(Locator::combine(PleskLinuxClientPage::REMOVE_SELECTED_SUBSCRIPTION_BTN_XPATH, PleskLinuxClientPage::REMOVE_SELECTED_SUBSCRIPTION_BTN_CSS));
+        $this->waitForText("Yes");
+
+        $this->click(Locator::combine(PleskLinuxClientPage::REMOVE_SELECTED_SUBSCRIPTION_BTN_XPATH, PleskLinuxClientPage::REMOVE_SELECTED_SUBSCRIPTION_BTN_XPATH));
 
         $this->waitForElementNotVisible(Locator::combine(PleskLinuxClientPage::REMOVE_SELECTED_SUBSCRIPTION_BTN_XPATH, PleskLinuxClientPage::REMOVE_SELECTED_SUBSCRIPTION_BTN_CSS), 30);
 
-        $this->waitForElementVisible("//div[@class='msg-content']", 100);
-        $this->see("Selected subscriptions were removed.");
+        $this->waitForElementVisible("//div[@class='msg-content']", 30);
+        $this->waitForText("Selected subscriptions were removed.", 30);
     }
 
     public function openSubscription($domainName)
@@ -630,12 +630,19 @@ class CommonSteps extends \WebGuy
 
     public function removeAliasAsClient($alias)
     {
-        $I = $this;
-        $I->click($alias);
-        $I->click("Remove Domain Alias");
-        $I->waitForText("Removing this website will also delete all related files, directories, and web applications from the server.");
-        $I->click("Yes");
-        $I->waitForText("The alias was removed", 30);
+        $this->click($alias);
+        $this->click("Remove Domain Alias");
+        $this->waitForText("Removing this website will also delete all related files, directories, and web applications from the server.");
+        $this->waitForElement(Locator::combine(PleskLinuxClientPage::REMOVE_SUBSCRIPTION_CONFIRMATION_MSG_XPATH, PleskLinuxClientPage::REMOVE_SUBSCRIPTION_CONFIRMATION_MSG_CSS), 30);
+
+        $this->waitForElementVisible(Locator::combine(PleskLinuxClientPage::REMOVE_SELECTED_SUBSCRIPTION_BTN_XPATH, PleskLinuxClientPage::REMOVE_SELECTED_SUBSCRIPTION_BTN_CSS), 30);
+
+        $this->waitForText("Yes");
+
+        $this->click(Locator::combine(PleskLinuxClientPage::REMOVE_SELECTED_SUBSCRIPTION_BTN_XPATH, PleskLinuxClientPage::REMOVE_SELECTED_SUBSCRIPTION_BTN_XPATH));
+
+        $this->waitForElementNotVisible(Locator::combine(PleskLinuxClientPage::REMOVE_SELECTED_SUBSCRIPTION_BTN_XPATH, PleskLinuxClientPage::REMOVE_SELECTED_SUBSCRIPTION_BTN_CSS), 30);
+        $this->waitForText("The alias was removed", 60);
     }
 
     /**
@@ -664,12 +671,12 @@ class CommonSteps extends \WebGuy
             $addonDomainName = 'addon' . $domain;
         }
 
-        $I = $this;
-        $I->click('Add New Domain');
-        $I->waitForText('Adding New Domain Name');
-        $I->fillField("//input[@id='domainName-name']", $addonDomainName);
-        $I->click("//button[@name='send']");
-        $I->waitForText("The domain $addonDomainName was successfully created.", 30);
+        $this->waitForText('Add New Domain', 30);
+        $this->click('Add New Domain');
+        $this->waitForText('Adding New Domain Name');
+        $this->fillField("//input[@id='domainName-name']", $addonDomainName);
+        $this->click("//button[@name='send']");
+        $this->waitForText("The domain $addonDomainName was successfully created.", 30);
 
         return $addonDomainName;
     }

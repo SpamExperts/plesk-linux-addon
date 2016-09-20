@@ -62,7 +62,7 @@ class DomainListSteps extends CommonSteps
     {
         $this->goToPage(ProfessionalSpamFilterPage::DOMAIN_LIST_BTN, DomainListPage::TITLE);
         $this->searchDomainList($domain);
-        $this->click(DomainListPage::TOGGLE_PROTECTION_LINK);
+        $this->click(Locator::combine(DomainListPage::TOGGLE_PROTECTION_LINK_CSS, DomainListPage::TOGGLE_PROTECTION_LINK_XPATH));
         $this->waitForText("The protection status of {$domain} has been changed to protected", 30);
     }
 }
