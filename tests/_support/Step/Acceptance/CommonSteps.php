@@ -529,36 +529,69 @@ class CommonSteps extends \WebGuy
         $this->waitForText("Selected subscriptions were successfully re-associated with service plans.", 30);
     }
 
+    /**
+     * Function used to add new subscription for a certain account
+     * @param array $params subscription info
+     */
     public function addNewSubscription(array $params = array())
     {
-        if (empty($params['domain'])) {
+        // If domain name not present in $params, generate a random one
+        if (empty($params['domain']))
             $params['domain'] = $this->generateRandomDomainName();
-        }
-        if (empty($params['username'])) {
+
+        // If username not present in $params, generate a random one
+        if (empty($params['username']))
             $params['username'] = $this->generateRandomUserName();
-        }
-        if (empty($params['password'])) {
+
+        // If password not present in $params, generate a random one
+        if (empty($params['password']))
             $params['password'] = uniqid();
-        }
+
+        // Display info message
         $this->amGoingTo("\n\n --- Add a new subscription for '{$params['domain']}'--- \n");
+
+        // Switch to left frame
         $this->switchToLeftFrame();
+
+        // Click "Subscriptions" button
         $this->click("//a[contains(.,'Subscriptions')]");
+
+        // Switch to main frame
         $this->switchToWorkFrame();
 
+        // Wait for "Add New Subscription" button to appear
+        $this->waitForElement(Locator::combine(PleskLinuxClientPage::CLIENT_ADD_NEW_SUBSCRIPTION_XPATH, PleskLinuxClientPage::CLIENT_ADD_NEW_SUBSCRIPTION_CSS), 10);
+
+        // Click "Add New Subscription" button
         $this->click(Locator::combine(PleskLinuxClientPage::CLIENT_ADD_NEW_SUBSCRIPTION_XPATH, PleskLinuxClientPage::CLIENT_ADD_NEW_SUBSCRIPTION_CSS));
 
-        $this->waitForElement(Locator::combine(PleskLinuxClientPage::CLIENT_SUBSCRIPTIONS_XPATH, PleskLinuxClientPage::CLIENT_SUBSCRIPTIONS_CSS), 10);
-
+        // Fill "Domain name" field with the domain
+        $this->waitForElement(Locator::combine(PleskLinuxClientPage::ADD_SUBSCRIPTION_DOMAIN_FIELD_XPATH, PleskLinuxClientPage::ADD_SUBSCRIPTION_DOMAIN_FIELD_CSS), 10);
         $this->fillField(Locator::combine(PleskLinuxClientPage::ADD_SUBSCRIPTION_DOMAIN_FIELD_XPATH, PleskLinuxClientPage::ADD_SUBSCRIPTION_DOMAIN_FIELD_CSS), $params['domain']);
+
+        // Fill "Username" field with username
+        $this->waitForElement(Locator::combine(PleskLinuxClientPage::ADD_SUBSCRIPTION_USERNAME_FIELD_XPATH, PleskLinuxClientPage::ADD_SUBSCRIPTION_USERNAME_FIELD_CSS), 10);
         $this->fillField(Locator::combine(PleskLinuxClientPage::ADD_SUBSCRIPTION_USERNAME_FIELD_XPATH, PleskLinuxClientPage::ADD_SUBSCRIPTION_USERNAME_FIELD_CSS), $params['username']);
+
+        // Fill "Password" field with password
         $this->fillField(Locator::combine(PleskLinuxClientPage::ADD_SUBSCRIPTION_PASSWORD_FIELD_XPATH, PleskLinuxClientPage::ADD_SUBSCRIPTION_PASSWORD_FIELD_CSS), $params['password']);
+
+        // Fill "Repeat password" field with the same password
+        $this->waitForElement(Locator::combine(PleskLinuxClientPage::ADD_SUBSCRIPTION_REPEAT_PASSWORD_FIELD_XPATH, PleskLinuxClientPage::ADD_SUBSCRIPTION_REPEAT_PASSWORD_FIELD_CSS), 10);
         $this->fillField(Locator::combine(PleskLinuxClientPage::ADD_SUBSCRIPTION_REPEAT_PASSWORD_FIELD_XPATH, PleskLinuxClientPage::ADD_SUBSCRIPTION_REPEAT_PASSWORD_FIELD_CSS), $params['password']);
+
+        // Wait for "OK" button
+        $this->waitForElement(Locator::combine(PleskLinuxClientPage::ADD_SUBSCRIPTION_OK_BTN_XPATH, PleskLinuxClientPage::ADD_SUBSCRIPTION_OK_BTN_CSS), 10);
+
+        // Click the "OK" button
         $this->click(Locator::combine(PleskLinuxClientPage::ADD_SUBSCRIPTION_OK_BTN_XPATH, PleskLinuxClientPage::ADD_SUBSCRIPTION_OK_BTN_CSS));
 
         $this->waitForElementNotVisible(PleskLinuxClientPage::ADD_SUBSCRIPTION_DOMAIN_NAME_CONTAINER_XPATH, 100);
-        $this->waitForElementVisible(PleskLinuxClientPage::ADD_SUBSCRIPTION_CONFIRMATION_MSG_XPATH, 100);
-        $this->see("Subscription {$params['domain']} was created.");
 
+        // Wait for success message to appears
+        $this->waitForText("Subscription {$params['domain']} was created.", 30);
+
+        // Create an array with the subscription info
         $account = array(
             'domain' => $params['domain'],
             'username' => $params['username'],
@@ -570,6 +603,9 @@ class CommonSteps extends \WebGuy
         return $account;
     }
 
+    /**
+     * Function used to remove all created subscriptions
+     */
     public function removeCreatedSubscriptions()
     {
         foreach(self::$accounts as $account) {
@@ -577,30 +613,56 @@ class CommonSteps extends \WebGuy
         }
     }
 
+    /**
+     * Function used to remove created subscription for a certain domain name
+     * @param  string $domainName desired domain
+     */
     public function removeSubscription($domainName)
     {
+        // Display info message
         $this->amGoingTo("\n\n --- Remove subscription for '{$domainName}'--- \n");
+
+        // Switch to left frame
         $this->switchToLeftFrame();
+
+        // Click "Subscriptions" button
         $this->click("//a[contains(.,'Subscriptions')]");
+
+        // Switch to main frame
         $this->switchToWorkFrame();
+
+        // Wait for subscription list
         $this->waitForElement(Locator::combine(PleskLinuxClientPage::SUBSCRIPTION_TABLE_CSS, PleskLinuxClientPage::SUBSCRIPTION_TABLE_XPATH), 30);
+
+        // Wait for subscription domain name
         $this->waitForElement("//div[@class='b-indent status-ok']/a[contains(text(), '{$domainName}')]");
+
+        // Grab href of the subscription domain name
         $value = $this->grabAttributeFrom("//div[@class='b-indent status-ok']/a[contains(text(), '{$domainName}')]", 'href');
         $subscriptionNo = array_pop(explode('/', $value));
+
+        // Check subscription domain name
         $this->checkOption("//input[@value='{$subscriptionNo}']");
+
+        // Click remove button
         $this->click("//span[contains(.,'Remove')]");
 
-
+        // Wait for remove confirmation modal to appear
         $this->waitForElement(Locator::combine(PleskLinuxClientPage::REMOVE_SUBSCRIPTION_CONFIRMATION_MSG_XPATH, PleskLinuxClientPage::REMOVE_SUBSCRIPTION_CONFIRMATION_MSG_CSS), 30);
 
+        // Wait for remove button to appear
         $this->waitForElementVisible(Locator::combine(PleskLinuxClientPage::REMOVE_SELECTED_SUBSCRIPTION_BTN_XPATH, PleskLinuxClientPage::REMOVE_SELECTED_SUBSCRIPTION_BTN_CSS), 30);
 
+        // Wait for text inside button to change to "Yes"
         $this->waitForText("Yes");
 
+        // Click the "Yes" button
         $this->click(Locator::combine(PleskLinuxClientPage::REMOVE_SELECTED_SUBSCRIPTION_BTN_XPATH, PleskLinuxClientPage::REMOVE_SELECTED_SUBSCRIPTION_BTN_XPATH));
 
+        // Wait for button to disappear
         $this->waitForElementNotVisible(Locator::combine(PleskLinuxClientPage::REMOVE_SELECTED_SUBSCRIPTION_BTN_XPATH, PleskLinuxClientPage::REMOVE_SELECTED_SUBSCRIPTION_BTN_CSS), 30);
 
+        // Wait for success message
         $this->waitForElementVisible("//div[@class='msg-content']", 30);
         $this->waitForText("Selected subscriptions were removed.", 30);
     }
