@@ -49,7 +49,7 @@ class C03DomainListCest
         list($customerUsername, $customerPassword, $domain) = $I->createCustomer();
         $I->shareIp();
         $I->logout();
-        $I->login($customerUsername, $customerPassword, true);
+        $I->loginAsClient($customerUsername, $customerPassword);
         $I->checkPsfPresentForCustomer();
         $I->checkLoginFunctionality($domain, false);
     }

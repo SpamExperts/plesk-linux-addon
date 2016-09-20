@@ -648,6 +648,7 @@ class CommonSteps extends \WebGuy
         $this->login($customerUsername, $customerPassword, true);
         $this->waitForElement("//button[contains(.,'OK, back to Plesk')]", 30);
         $this->click("//button[contains(.,'OK, back to Plesk')]");
+        $this->waitForElementNotVisible("//button[contains(.,'OK, back to Plesk')]", 30);
     }
 
     /**
