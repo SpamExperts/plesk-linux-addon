@@ -38,7 +38,8 @@ class C08ToggleProtectionCest
 
     public function testHookErrorAddedAsAliasNotDomain(ToggleProtectionSteps $I)
     {
-        $setup = $I->setupErrorAddedAsAliasNotDomainScenario($I);
+
+        $setup = $I->setupErrorAddedAsAliasNotDomainScenario();
         $alias = $setup['alias_domain_name'];
         codecept_debug("SETUP FINISHED");
 
@@ -52,21 +53,22 @@ class C08ToggleProtectionCest
 
     public function testToggleProtectionErrorAddedAsDomainNotAlias(ToggleProtectionSteps $I)
     {
-        $setup = $I->setupErrorAddedAsDomainNotAliasScenario($I);
+
+        $setup = $I->setupErrorAddedAsDomainNotAliasScenario();
         $aliasDomainName = $setup['alias_domain_name'];
 
         // Test
         $I->goToPage(ProfessionalSpamFilterPage::DOMAIN_LIST_BTN, DomainListPage::TITLE);
         $I->searchDomainList($aliasDomainName);
         $I->checkProtectionStatusIs(DomainListPage::STATUS_DOMAIN_IS_PRESENT_IN_THE_FILTER);
-        $I->click(DomainListPage::TOGGLE_PROTECTION_LINK);
+        $I->click(Locator::combine(DomainListPage::TOGGLE_PROTECTION_LINK_XPATH, DomainListPage::TOGGLE_PROTECTION_LINK_CSS));
         $message = "The protection status of $aliasDomainName could not be changed to unprotected because alias domains and subdomains are treated as aliases and \"$aliasDomainName\" is already added as a normal domain.";
         $I->waitForText($message, 60);
     }
 
     public function testHookErrorAddedAsDomainNotAlias(ToggleProtectionSteps $I)
     {
-        $setup = $I->setupErrorAddedAsDomainNotAliasScenario($I);
+        $setup = $I->setupErrorAddedAsDomainNotAliasScenario();
         $alias = $setup['alias_domain_name'];
 
         // Test
@@ -98,11 +100,11 @@ class C08ToggleProtectionCest
         $I->loginAsRoot();
         $I->goToPage(ProfessionalSpamFilterPage::DOMAIN_LIST_BTN, DomainListPage::TITLE);
         $I->searchDomainList($alias);
-        $I->click(DomainListPage::TOGGLE_PROTECTION_LINK);
+        $I->click(Locator::combine(DomainListPage::TOGGLE_PROTECTION_LINK_XPATH, DomainListPage::TOGGLE_PROTECTION_LINK_CSS));
         $I->waitForText("The protection status of $alias has been changed to unprotected", 60);
         $I->checkProtectionStatusIs(DomainListPage::STATUS_DOMAIN_IS_NOT_PRESENT_IN_THE_FILTER);
         $I->apiCheckDomainNotExists($alias);
         $I->assertIsNotAliasInSpampanel($alias, $domain);
     }
-
 }
+

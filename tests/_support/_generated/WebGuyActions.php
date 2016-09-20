@@ -2784,7 +2784,8 @@ trait WebGuyActions
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
-     *
+     * Function used to check if domain exist in Spampanel
+     * @param  string  $domain desired domain
      * @see \Helper\SpampanelApi::apiCheckDomainExists()
      */
     public function apiCheckDomainExists($domain) {
@@ -2795,7 +2796,8 @@ trait WebGuyActions
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
-     *
+     * Function used to check if domain don't exist in Spampanel
+     * @param  string  $domain desired domain
      * @see \Helper\SpampanelApi::apiCheckDomainNotExists()
      */
     public function apiCheckDomainNotExists($domain) {
