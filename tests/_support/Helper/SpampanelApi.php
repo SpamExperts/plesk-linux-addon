@@ -18,19 +18,37 @@ class SpampanelApi extends \Codeception\Module
         $this->assertNotContains($alias, $aliases);
     }
 
+    /**
+     * Function used to check if domain exist in Spampanel
+     * @param  string  $domain desired domain
+     */
     public function apiCheckDomainExists($domain)
     {
+        // Display debug info
         codecept_debug("Checking if $domain exists in spampanel api");
+
+        // Make a Spampanel API request
         $response = $this->makeSpampanelApiRequest('domain/exists', ['domain' => $domain]);
+
+        // Check request return values
         $this->assertEquals(200, $response['info']['http_code']);
         $data = json_decode($response['output'], true);
         $this->assertEquals(1, $data['present']);
     }
 
+     /**
+     * Function used to check if domain don't exist in Spampanel
+     * @param  string  $domain desired domain
+     */
     public function apiCheckDomainNotExists($domain)
     {
+        // Dislay debug info
         codecept_debug("Checking if $domain NOT exists in spampanel api");
+
+        // Make a Spampanel API request
         $response = $this->makeSpampanelApiRequest('domain/exists', ['domain' => $domain]);
+
+        // Check request return values
         $this->assertEquals(200, $response['info']['http_code']);
         $data = json_decode($response['output'], true);
         $this->assertEquals(0, $data['present']);

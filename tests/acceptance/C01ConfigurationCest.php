@@ -50,49 +50,88 @@ class C01ConfigurationCest
 
     public function verifyAutomaticallyAddDomainToPsf(ConfigurationSteps $I)
     {
+        // Set configuration options needed for the test
         $I->setConfigurationOptions(array(
             Locator::combine(ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT_CSS, ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT_XPATH) => true,
             Locator::combine(ConfigurationPage::PROCESS_ADDON_PLESK_OPT_CSS, ConfigurationPage::PROCESS_ADDON_PLESK_OPT_XPATH) => true,
             Locator::combine(ConfigurationPage::DO_NOT_PROTECT_REMOTE_DOMAINS_OPT_CSS, ConfigurationPage::DO_NOT_PROTECT_REMOTE_DOMAINS_OPT_XPATH) => false,
         ));
+
+        // Enable a shared IP
         $I->shareIp();
 
+        // Create a new customer account
         list($customerUsername, $customerPassword, $domain) = $I->createCustomer();
+
+        // Change the customer plan to unlimited for the created account
         $I->changeCustomerPlan($customerUsername);
+
+        // Wait in order to domain be present in filter
         $I->wait(120);
+
+        // Check if customer domain is present in filter
         $I->checkDomainIsPresentInFilter($domain);
+
+        // Check if customer domain exist in Spampanel
         $I->apiCheckDomainExists($domain);
 
+        // Logout from root
         $I->logout();
+
+        // Login with the customer account
         $I->loginAsClient($customerUsername, $customerPassword);
+
+        // Add an alias domain for the customer account
         $alias = $I->addAliasAsClient($domain);
+
+        // Check if alias domain exist in Spampane
         $I->apiCheckDomainExists($alias);
-        $I->logout();
-        $I->login();
-        $I->removeSubscription($domain);
+
+        // $I->logout();
+        // $I->login();
+        // $I->removeSubscription($domain);
     }
 
     public function verifyNotAutomaticallyAddDomainToPsf(ConfigurationSteps $I)
     {
+        // Set configuration options needed for the test
         $I->setConfigurationOptions(array(
             Locator::combine(ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT_CSS, ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT_XPATH) => false,
         ));
+
+        // Create e new subscription
         $account = $I->addNewSubscription();
+
+        // Check if subscription domain is not present in filter
         $I->checkDomainIsNotPresentInFilter($account['domain']);
+
+        // Check if subscription domain dont exist
         $I->apiCheckDomainNotExists($account['domain']);
-        $I->removeSubscription($account['domain']);
+
+        // $I->removeSubscription($account['domain']);
     }
 
     public function verifyNotAutomaticallyDeleteDomainToPsf(ConfigurationSteps $I)
     {
+        // Set configuration options needed for the test
         $I->setConfigurationOptions(array(
             Locator::combine(ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT_CSS, ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT_XPATH) => false,
             Locator::combine(ConfigurationPage::AUTOMATICALLY_DELETE_DOMAINS_OPT_CSS, ConfigurationPage::AUTOMATICALLY_DELETE_DOMAINS_OPT_XPATH) => false,
         ));
+
+        // Create a new subscriptions
         $account = $I->addNewSubscription();
+
+        // Toggle protection for subscription domain
         $I->toggleProtection($account['domain']);
+
+        // Check if subscription domain exist
         $I->apiCheckDomainExists($account['domain']);
+
+        // Remove subscription
         $I->removeSubscription($account['domain']);
+
+        // Check if subscription domain exist even if subscription was removed
         $I->apiCheckDomainExists($account['domain']);
     }
 

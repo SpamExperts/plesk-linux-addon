@@ -58,11 +58,22 @@ class DomainListSteps extends CommonSteps
         $this->loginOnSpampanel($domain);
     }
 
+    /**
+     * Function used to toggle protection for a certain domain
+     * @param  string $domain desired domain
+     */
     public function toggleProtection($domain)
     {
+        // Go to "Domain List" page
         $this->goToPage(ProfessionalSpamFilterPage::DOMAIN_LIST_BTN, DomainListPage::TITLE);
+
+        // Search desired domain in list
         $this->searchDomainList($domain);
+
+        // Click "Toggle Protection" button for the domain
         $this->click(Locator::combine(DomainListPage::TOGGLE_PROTECTION_LINK_CSS, DomainListPage::TOGGLE_PROTECTION_LINK_XPATH));
+
+        // Wait for success message
         $this->waitForText("The protection status of {$domain} has been changed to protected", 30);
     }
 }

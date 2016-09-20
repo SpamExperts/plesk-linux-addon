@@ -158,32 +158,71 @@ class CommonSteps extends \WebGuy
         $I->waitForText($title);
     }
 
+    /**
+     * Function used to check if domain is present in filter
+     * @param  string $domain domain to check
+     */
     public function checkDomainIsPresentInFilter($domain)
     {
+        // Go to domain list page
         $this->goToPage(ProfessionalSpamFilterPage::DOMAIN_LIST_BTN, DomainListPage::TITLE);
+
+        // Search desired domain in the list
         $this->searchDomainList($domain);
+
+        // Check if domain status is "Protected"
         $this->checkProtectionStatusIs(DomainListPage::STATUS_DOMAIN_IS_PRESENT_IN_THE_FILTER);
     }
 
+    /**
+     * Function used to check if domain is not present in filter
+     * @param  string $domain domain to check
+     */
     public function checkDomainIsNotPresentInFilter($domain)
     {
+        // Go to domain list page
         $this->goToPage(ProfessionalSpamFilterPage::DOMAIN_LIST_BTN, DomainListPage::TITLE);
+
+        // Search desired domain in the list
         $this->searchDomainList($domain);
+
+        // Check if domain status is "Unprotected"
         $this->checkProtectionStatusIs(DomainListPage::STATUS_DOMAIN_IS_NOT_PRESENT_IN_THE_FILTER);
     }
 
+    /**
+     * Function used to check if protection status for a domain
+     * @param  string $status expected status
+     */
     public function checkProtectionStatusIs($status)
     {
+        // Click "Check status" button for the domain
         $this->click('Check status');
+
+        // Check if the status is the expected one
         $this->waitForText($status, 60);
     }
 
+
+    /**
+     * Function used to search if domain is present in Domain List
+     * @param  string $domain domain to search for
+     */
     public function searchDomainList($domain)
     {
+        // Display info message
         $this->amGoingTo("\n\n --- Search for {$domain} domain --- \n");
+
+        // Fill search field with the domain name
         $this->fillField(Locator::combine(DomainListPage::SEARCH_FIELD_XPATH, DomainListPage::SEARCH_FIELD_CSS), $domain);
+
+        // Click the search button
         $this->click(Locator::combine(DomainListPage::SEARCH_BTN_XPATH, DomainListPage::SEARCH_BTN_CSS));
+
+        // Wait for search to finish and find just 1 item
         $this->waitForText('Page 1 of 1. Total Items: 1');
+
+        // See if domain is present in domain list table
         $this->see($domain, Locator::combine(DomainListPage::DOMAIN_TABLE_XPATH, DomainListPage::DOMAIN_TABLE_CSS));
     }
 
@@ -315,7 +354,7 @@ class CommonSteps extends \WebGuy
         $this->waitForElement(Locator::combine(PleskLinuxClientPage::EMAIL_ADDRESS_FIELD_CSS, PleskLinuxClientPage::EMAIL_ADDRESS_FIELD_XPATH), 10);
         $this->fillField(Locator::combine(PleskLinuxClientPage::EMAIL_ADDRESS_FIELD_CSS, PleskLinuxClientPage::EMAIL_ADDRESS_FIELD_XPATH), "test@example.com");
 
-        // Fill "Phone number" field
+        // Fill "Phone number" field (even if is not mandatory is needed later)
         $this->waitForElement(Locator::combine(PleskLinuxClientPage::PHONE_NUMBER_FIELD_CSS, PleskLinuxClientPage::PHONE_NUMBER_FIELD_XPATH), 10);
         $this->fillField(Locator::combine(PleskLinuxClientPage::PHONE_NUMBER_FIELD_CSS, PleskLinuxClientPage::PHONE_NUMBER_FIELD_XPATH), "0123456789");
 
@@ -391,7 +430,7 @@ class CommonSteps extends \WebGuy
         $this->waitForElement(Locator::combine(PleskLinuxClientPage::EMAIL_ADDRESS_FIELD_CSS, PleskLinuxClientPage::EMAIL_ADDRESS_FIELD_XPATH), 10);
         $this->fillField(Locator::combine(PleskLinuxClientPage::EMAIL_ADDRESS_FIELD_CSS, PleskLinuxClientPage::EMAIL_ADDRESS_FIELD_XPATH), "test@example.com");
 
-        // Fill "Phone number" field
+        // Fill "Phone number" field (even if is not mandatory is needed later)
         $this->waitForElement(Locator::combine(PleskLinuxClientPage::PHONE_NUMBER_FIELD_CSS, PleskLinuxClientPage::PHONE_NUMBER_FIELD_XPATH), 10);
         $this->fillField(Locator::combine(PleskLinuxClientPage::PHONE_NUMBER_FIELD_CSS, PleskLinuxClientPage::PHONE_NUMBER_FIELD_XPATH), "0123456789");
 
@@ -433,8 +472,8 @@ class CommonSteps extends \WebGuy
         $this->selectOption(Locator::combine(PleskLinuxClientPage::SUBCRIPTION_SERVICE_PLAN_DROP_DOWN_CSS, PleskLinuxClientPage::SUBCRIPTION_SERVICE_PLAN_DROP_DOWN_XPATH), "Default Domain");
 
         // Click "OK" button
-        $this->click("//button[@name='send']");
-        $this->waitForElementNotVisible("//button[@name='send']", 100);
+        $this->click(PleskLinuxClientPage::CREATE_NEW_CUSTOMER_OK_BTN_XPATH);
+        $this->waitForElementNotVisible(PleskLinuxClientPage::CREATE_NEW_CUSTOMER_OK_BTN_XPATH, 100);
 
         // Wait for success message to appear
         $this->waitForElement("//div[@class='msg-content']", 10);
@@ -444,21 +483,50 @@ class CommonSteps extends \WebGuy
         return [$this->customerUsername, $this->customerPassword, $this->domain];
     }
 
+    /**
+     * Function used to change Customer Plan to Unlimited for a customer account
+     * @param  [type] $customerUsername customer username
+     */
     public function changeCustomerPlan($customerUsername)
     {
-        $I = $this;
-        $I->amGoingTo("\n\n --- Change the subscription plan for '$this->customerUsername' --- \n");
-        $I->switchToLeftFrame();
-        $I->click("//a[contains(.,'Customers')]");
-        $I->switchToWorkFrame();
-        $I->click("//a[contains(.,'$this->customerUsername')]");
-        $I->waitForElementVisible("//a[contains(.,'Subscription')]");
-        $I->checkOption("//input[contains(@name,'listGlobalCheckbox')]");
-        $I->click("//span[contains(.,'Change Plan')]");
-        $I->waitForElementVisible("//select[contains(@name,'planSection[servicePlan]')]");
-        $I->selectOption("//select[contains(@id,'planSection-servicePlan')]", "Unlimited");
-        $I->click("//button[contains(.,'OK')]");
-        $I->waitForElementVisible("//a[contains(.,'Subscription')]");
+        // Display info message
+        $this->amGoingTo("\n\n --- Change the subscription plan for '$this->customerUsername' --- \n");
+
+        // Switch to left frame
+        $this->switchToLeftFrame();
+
+        // Click "Customers" button
+        $this->click("//a[contains(.,'Customers')]");
+
+        // Switch to main frame
+        $this->switchToWorkFrame();
+
+        // Click the desired customer username
+        $this->click("//a[contains(.,'$this->customerUsername')]");
+
+        // Wait for "Subscriptions" category to load
+        $this->waitForElementVisible("//a[contains(.,'Subscription')]");
+
+        // Check all subscriptions
+        $this->checkOption("//input[contains(@name,'listGlobalCheckbox')]");
+
+        // Click "Change Plan" button
+        $this->click(Locator::combine(PleskLinuxClientPage::CHANGE_PLAN_BTN_CSS, PleskLinuxClientPage::CHANGE_PLAN_BTN_XPATH));
+
+        // Wait for "New service plan" drop down to appear
+        $this->waitForElementVisible(Locator::combine(PleskLinuxClientPage::NEW_SERVICE_PLAN_DROP_DOWN_CSS, PleskLinuxClientPage::NEW_SERVICE_PLAN_DROP_DOWN_XPATH));
+
+        // Select Unlimited as the "New service plan"
+        $this->selectOption(Locator::combine(PleskLinuxClientPage::NEW_SERVICE_PLAN_DROP_DOWN_CSS, PleskLinuxClientPage::NEW_SERVICE_PLAN_DROP_DOWN_XPATH), "Unlimited");
+
+        // Click OK button
+        $this->click(Locator::combine(PleskLinuxClientPage::CHANGE_PLAN_ON_BTN_CSS, PleskLinuxClientPage::CHANGE_PLAN_ON_BTN_XPATH));
+
+        // Wait for ok button to dissappear
+        $this->waitForElementNotVisible(Locator::combine(PleskLinuxClientPage::CHANGE_PLAN_ON_BTN_CSS, PleskLinuxClientPage::CHANGE_PLAN_ON_BTN_XPATH), 30);
+
+        // Wait for success message
+        $this->waitForText("Selected subscriptions were successfully re-associated with service plans.", 30);
     }
 
     public function addNewSubscription(array $params = array())
@@ -513,7 +581,6 @@ class CommonSteps extends \WebGuy
     {
         $this->amGoingTo("\n\n --- Remove subscription for '{$domainName}'--- \n");
         $this->switchToLeftFrame();
-        $this->wait(1);
         $this->click("//a[contains(.,'Subscriptions')]");
         $this->switchToWorkFrame();
         $this->waitForElement(Locator::combine(PleskLinuxClientPage::SUBSCRIPTION_TABLE_CSS, PleskLinuxClientPage::SUBSCRIPTION_TABLE_XPATH), 30);
@@ -583,28 +650,49 @@ class CommonSteps extends \WebGuy
         return $parsed['host'];
     }
 
+    /**
+     * Function used to switch to left frame of plesk control panel
+     */
     public function switchToLeftFrame()
     {
-        $I = $this;
-        $I->switchToWindow();
-        $I->waitForElement('#leftFrame');
-        $I->switchToIFrame('leftFrame');
+        // Switch to main window
+        $this->switchToWindow();
+
+        // Wait for left frame to appear
+        $this->waitForElement(Locator::combine(PleskLinuxClientPage::LEFT_FRAME_CSS, PleskLinuxClientPage::LEFT_FRAME_XPATH));
+
+        // Switch to main frame
+        $this->switchToIFrame(PleskLinuxClientPage::LEFT_FRAME_NAME);
     }
 
+    /**
+     * Function used to switch to main frame of plesk control panel
+     */
     public function switchToWorkFrame()
     {
-        $I = $this;
-        $I->switchToWindow();
-        $I->waitForElement('#workFrame');
-        $I->switchToIFrame('workFrame');
+        // Switch to main window
+        $this->switchToWindow();
+
+        // Wait for main frame to appear
+        $this->waitForElement(Locator::combine(PleskLinuxClientPage::WORK_FRAME_CSS, PleskLinuxClientPage::WORK_FRAME_XPATH));
+
+        // Switch to main frame
+        $this->switchToIFrame(PleskLinuxClientPage::WORK_FRAME_NAME);
     }
 
+    /**
+     * Function used to switch to top frame of plesk control panel
+     */
     public function switchToTopFrame()
     {
-        $I = $this;
-        $I->switchToWindow();
-        $I->waitForElement('#topFrame');
-        $I->switchToIFrame('topFrame');
+        // Switch to main window
+        $this->switchToWindow();
+
+        // Wait for main frame to appear
+        $this->waitForElement(Locator::combine(PleskLinuxClientPage::TOP_FRAME_CSS, PleskLinuxClientPage::TOP_FRAME_XPATH));
+
+        // Switch to main frame
+        $this->switchToIFrame(PleskLinuxClientPage::TOP_FRAME_NAME);
     }
 
     public function goToConfigurationPageAndSetOptions(array $options)
@@ -613,17 +701,41 @@ class CommonSteps extends \WebGuy
         $this->setConfigurationOptions($options);
     }
 
+    /**
+     * Function used to add an alias domain for a customer account
+     * @param string $domain customer domain
+     * @param string $alias  alias name (optional)
+     */
     public function addAliasAsClient($domain, $alias = null)
     {
-        if (!$alias) {
+        // If no alias provided, generate one based on domain
+        if (!$alias)
             $alias = 'alias' . $domain;
-        }
-        $I = $this;
-        $I->click("//a[@id='buttonAddDomainAlias']");
-        $I->waitForText('Add a Domain Alias');
-        $I->fillField("//input[@id='name']", $alias);
-        $I->click("//button[@name='send']");
-        $I->waitForText("The domain alias $alias was created.", 30);
+
+
+        // Wait for "Add New Domain Alias" button to show
+        $this->waitForElement(Locator::combine(PleskLinuxClientPage::ADD_NEW_DOMAIN_BTN_CSS, PleskLinuxClientPage::ADD_NEW_DOMAIN_BTN_XPATH), 10);
+
+        // Click "Add New Domain Alias" button
+        $this->click(Locator::combine(PleskLinuxClientPage::ADD_NEW_DOMAIN_ALIAS_BTN_CSS, PleskLinuxClientPage::ADD_NEW_DOMAIN_ALIAS_BTN_XPATH));
+
+        // Wait for page to load
+        $this->waitForText('Add a Domain Alias', 30);
+
+        // Filll "Domain alias name" field
+        $this->fillField(Locator::combine(PleskLinuxClientPage::DOMAIN_ALIAS_NAME_FIELD_CSS, PleskLinuxClientPage::DOMAIN_ALIAS_NAME_FIELD_XPATH), $alias);
+
+        // Wait for "OK" button to show
+        $this->waitForElement(Locator::combine(PleskLinuxClientPage::ADD_ALIAS_DOMAIN_OK_BTN_CSS, PleskLinuxClientPage::ADD_ALIAS_DOMAIN_OK_BTN_XPATH), 10);
+
+        // Click "OK" button
+        $this->click(Locator::combine(PleskLinuxClientPage::ADD_ALIAS_DOMAIN_OK_BTN_CSS, PleskLinuxClientPage::ADD_ALIAS_DOMAIN_OK_BTN_XPATH));
+
+        // Wait fo "OK" button to disappear
+        $this->waitForElementNotVisible(Locator::combine(PleskLinuxClientPage::ADD_ALIAS_DOMAIN_OK_BTN_CSS, PleskLinuxClientPage::ADD_ALIAS_DOMAIN_OK_BTN_XPATH), 30);
+
+        // Wait for success message
+        $this->waitForText("The domain alias $alias was created.", 30);
 
         return $alias;
     }
@@ -653,9 +765,6 @@ class CommonSteps extends \WebGuy
     public function loginAsClient($customerUsername, $customerPassword)
     {
         $this->login($customerUsername, $customerPassword, true);
-        $this->waitForElement("//button[contains(.,'OK, back to Plesk')]", 30);
-        $this->click("//button[contains(.,'OK, back to Plesk')]");
-        $this->waitForElementNotVisible("//button[contains(.,'OK, back to Plesk')]", 30);
     }
 
     /**
