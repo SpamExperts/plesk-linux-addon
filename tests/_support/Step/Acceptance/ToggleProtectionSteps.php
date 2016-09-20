@@ -9,37 +9,37 @@ use Codeception\Util\Locator;
 
 class ToggleProtectionSteps extends CommonSteps
 {
-	public function setupErrorAddedAsAliasNotDomainScenario(CommonSteps $I)
+	public function setupErrorAddedAsAliasNotDomainScenario()
     {
         // setup
-        $I->goToConfigurationPageAndSetOptions([
+        $this->goToConfigurationPageAndSetOptions([
             Locator::Combine(ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT_CSS, ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT_XPATH) => false,
             Locator::Combine(ConfigurationPage::PROCESS_ADDON_PLESK_OPT_CSS, ConfigurationPage::PROCESS_ADDON_PLESK_OPT_XPATH) => true,
         ]);
 
-        list($customerUsername, $customerPassword, $domain) = $I->createCustomer();
-        $I->changeCustomerPlan($customerUsername);
-//        $I->wait(120);
+        list($customerUsername, $customerPassword, $domain) = $this->createCustomer();
+        $this->changeCustomerPlan($customerUsername);
+//        $this->wait(120);
 
-        $I->goToPage(ProfessionalSpamFilterPage::DOMAIN_LIST_BTN, DomainListPage::TITLE);
-        $I->searchDomainList($domain);
-        $I->click(DomainListPage::TOGGLE_PROTECTION_LINK);
-        $I->waitForText("The protection status of $domain has been changed to protected", 60);
-        $I->checkProtectionStatusIs(DomainListPage::STATUS_DOMAIN_IS_PRESENT_IN_THE_FILTER);
+        $this->goToPage(ProfessionalSpamFilterPage::DOMAIN_LIST_BTN, DomainListPage::TITLE);
+        $this->searchDomainList($domain);
+        $this->click(Locator::combine(DomainListPage::TOGGLE_PROTECTION_LINK_XPATH, DomainListPage::TOGGLE_PROTECTION_LINK_CSS));
+        $this->waitForText("The protection status of $domain has been changed to protected", 60);
+        $this->checkProtectionStatusIs(DomainListPage::STATUS_DOMAIN_IS_PRESENT_IN_THE_FILTER);
 
-        $I->logout();
-        $I->loginAsClient($customerUsername, $customerPassword);
-        $aliasDomainName = $I->addAliasAsClient($domain);
+        $this->logout();
+        $this->loginAsClient($customerUsername, $customerPassword);
+        $aliasDomainName = $this->addAliasAsClient($domain);
 
-        $I->logout();
-        $I->loginAsRoot();
-        $I->goToPage(ProfessionalSpamFilterPage::DOMAIN_LIST_BTN, DomainListPage::TITLE);
-        $I->searchDomainList($aliasDomainName);
-        $I->checkProtectionStatusIs(DomainListPage::STATUS_DOMAIN_IS_NOT_PRESENT_IN_THE_FILTER);
-        $I->addDomainAlias($aliasDomainName, $domain);
-        $I->checkProtectionStatusIs(DomainListPage::STATUS_DOMAIN_IS_PRESENT_IN_THE_FILTER);
+        $this->logout();
+        $this->loginAsRoot();
+        $this->goToPage(ProfessionalSpamFilterPage::DOMAIN_LIST_BTN, DomainListPage::TITLE);
+        $this->searchDomainList($aliasDomainName);
+        $this->checkProtectionStatusIs(DomainListPage::STATUS_DOMAIN_IS_NOT_PRESENT_IN_THE_FILTER);
+        $this->addDomainAlias($aliasDomainName, $domain);
+        $this->checkProtectionStatusIs(DomainListPage::STATUS_DOMAIN_IS_PRESENT_IN_THE_FILTER);
 
-        $I->goToConfigurationPageAndSetOptions([
+        $this->goToConfigurationPageAndSetOptions([
             Locator::combine(ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT_CSS, ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT_XPATH) => false,
             Locator::combine(ConfigurationPage::AUTOMATICALLY_DELETE_DOMAINS_OPT_CSS, ConfigurationPage::AUTOMATICALLY_DELETE_DOMAINS_OPT_XPATH) => true,
             Locator::combine(ConfigurationPage::PROCESS_ADDON_PLESK_OPT_CSS, ConfigurationPage::PROCESS_ADDON_PLESK_OPT_XPATH) => true,
@@ -54,27 +54,27 @@ class ToggleProtectionSteps extends CommonSteps
         ];
     }
 
-    public function setupErrorAddedAsDomainNotAliasScenario(CommonSteps $I)
+    public function setupErrorAddedAsDomainNotAliasScenario()
     {
-        $I->goToConfigurationPageAndSetOptions([
+        $this->goToConfigurationPageAndSetOptions([
             Locator::combine(ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT_CSS, ConfigurationPage::AUTOMATICALLY_ADD_DOMAINS_OPT_XPATH) => true,
             Locator::combine(ConfigurationPage::PROCESS_ADDON_PLESK_OPT_CSS, ConfigurationPage::PROCESS_ADDON_PLESK_OPT_XPATH)=> true,
             Locator::combine(ConfigurationPage::ADD_ADDON_AS_ALIAS_PLESK_OPT_CSS, ConfigurationPage::ADD_ADDON_AS_ALIAS_PLESK_OPT_XPATH) => false,
         ]);
 
-        list($customerUsername, $customerPassword, $domain) = $I->createCustomer();
-        $I->changeCustomerPlan($customerUsername);
-        //$I->wait(120);
+        list($customerUsername, $customerPassword, $domain) = $this->createCustomer();
+        $this->changeCustomerPlan($customerUsername);
+        //$this->wait(120);
 
-        $I->logout();
-        $I->loginAsClient($customerUsername, $customerPassword);
-        $aliasDomainName = $I->addAliasAsClient($domain);
+        $this->logout();
+        $this->loginAsClient($customerUsername, $customerPassword);
+        $aliasDomainName = $this->addAliasAsClient($domain);
 
-        $I->apiCheckDomainExists($aliasDomainName);
+        $this->apiCheckDomainExists($aliasDomainName);
 
-        $I->logout();
-        $I->loginAsRoot();
-        $I->goToConfigurationPageAndSetOptions([
+        $this->logout();
+        $this->loginAsRoot();
+        $this->goToConfigurationPageAndSetOptions([
             ConfigurationPage::ADD_ADDON_AS_ALIAS_PLESK_OPT => true,
         ]);
 
