@@ -111,4 +111,33 @@ class PleskLinuxClientPage
     const REMOVE_DOMAIN_ALIAS_BTN_CSS = "";
     const REMOVE_DOMAIN_ALIAS_BTN_XPATH = "//*[@id='active-list-item-a:11']/div/div[2]/div/div[2]/div/div/div/ul/li[2]/a";
 
+    const CREATE_NEW_CUSTOMER_OK_BTN_XPATH = "//button[@name='send']";
+
+    const CHANGE_PLAN_BTN_CSS = "#buttonChangeSubscription";
+    const CHANGE_PLAN_BTN_XPATH = "//*[@id='buttonChangeSubscription']";
+
+    const NEW_SERVICE_PLAN_DROP_DOWN_CSS = "#planSection-servicePlan";
+    const NEW_SERVICE_PLAN_DROP_DOWN_XPATH = "//*[@id='planSection-servicePlan']";
+
+    const CHANGE_PLAN_ON_BTN_CSS = "#btn-send > button";
+    const CHANGE_PLAN_ON_BTN_XPATH = "//*[@id='btn-send']/button";
+
+    // Customer buttons
+
+
+    const ADD_NEW_DOMAIN_BTN_CSS = "#buttonAddDomain";
+    const ADD_NEW_DOMAIN_BTN_XPATH = "//*[@id='buttonAddDomain']";
+
+    const ADD_NEW_SUBDOMAIN_BTN_CSS = "#buttonAddSubDomain";
+    const ADD_NEW_SUBDOMAIN_BTN_XPATH = "//*[@id='buttonAddSubDomain']";
+
+    const ADD_NEW_DOMAIN_ALIAS_BTN_CSS = "#buttonAddDomainAlias";
+    const ADD_NEW_DOMAIN_ALIAS_BTN_XPATH = "//*[@id='buttonAddDomainAlias']";
+
+    const DOMAIN_ALIAS_NAME_FIELD_CSS = "#name";
+    const DOMAIN_ALIAS_NAME_FIELD_XPATH = "//*[@id='name']";
+
+    const ADD_ALIAS_DOMAIN_OK_BTN_XPATH = "//button[@name='send']";
+    const ADD_ALIAS_DOMAIN_OK_BTN_CSS   = "#btn-send>button";
+
 }
