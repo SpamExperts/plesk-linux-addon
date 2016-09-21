@@ -13,8 +13,8 @@ class PleskLinuxClientPage
     const CLIENT_SELECT_ALL_SUBSCRIPTIONS_XPATH = "//input[@name='listGlobalCheckbox']";
     const CLIENT_SELECT_ALL_SUBSCRIPTIONS_CSS   = ".checkbox";
 
-    const CLIENT_ADD_NEW_SUBSCRIPTION_XPATH = "//span[contains(.,'Add New Subscription')]";
-    const CLIENT_ADD_NEW_SUBSCRIPTION_CSS   = "#buttonAddNewOwnSubscription>i>i>i>span";
+    const CLIENT_ADD_NEW_SUBSCRIPTION_XPATH = "//*[@id='buttonAddNewOwnSubscription']";
+    const CLIENT_ADD_NEW_SUBSCRIPTION_CSS   = "#buttonAddNewOwnSubscription";
 
     const CLIENT_REMOVE_SUBSCRIPTION_BUTTON_XPATH = "//span[contains(.,'Remove')]";
     const CLIENT_REMOVE_SUBSCRIPTION_BUTTON_CSS   = "#buttonRemoveSubscription>i>i>i>span";
@@ -97,7 +97,6 @@ class PleskLinuxClientPage
     const SUBCRIPTION_SERVICE_PLAN_DROP_DOWN_CSS = "#subscription-subscriptionInfo-servicePlan";
     const SUBCRIPTION_SERVICE_PLAN_DROP_DOWN_XPATH = "//select[@id='subscription-subscriptionInfo-servicePlan']";
 
-
     // Const resellers page
 
     const ADD_NEW_RESELLER_BTN_CSS = "#buttonAddNewReseller";
@@ -111,6 +110,7 @@ class PleskLinuxClientPage
     const REMOVE_DOMAIN_ALIAS_BTN_CSS = "";
     const REMOVE_DOMAIN_ALIAS_BTN_XPATH = "//*[@id='active-list-item-a:11']/div/div[2]/div/div[2]/div/div/div/ul/li[2]/a";
 
+    const CREATE_NEW_CUSTOMER_OK_BTN_CSS   = "#btn-send>button";
     const CREATE_NEW_CUSTOMER_OK_BTN_XPATH = "//button[@name='send']";
 
     const CHANGE_PLAN_BTN_CSS = "#buttonChangeSubscription";
@@ -122,8 +122,16 @@ class PleskLinuxClientPage
     const CHANGE_PLAN_ON_BTN_CSS = "#btn-send > button";
     const CHANGE_PLAN_ON_BTN_XPATH = "//*[@id='btn-send']/button";
 
-    // Customer buttons
+    const SUBSCRIPTIONS_SEARCH_BAR_CSS = "#subscriptions-list-search-text-domainName";
+    const SUBSCRIPTIONS_SEARCH_BAR_XPATH = "//*[@id='subscriptions-list-search-text-domainName']";
 
+    const SUBSCRIPTION_SUBMIT_SEARCH_CSS = "#subscriptions-list-operations > div.quick-search-box > div > form > em";
+    const SUBSCRIPTION_SUBMIT_SEARCH_XPATH = "//*[@id='subscriptions-list-operations']/div[2]/div/form/em";
+
+    const SUBSCRIPTION_MANAGE_HOSTING_BTN_CSS = "";
+    const SUBSCRIPTION_MANAGE_HOSTING_BTN_XPATH = "//*[@id='subscriptions-list-table']/tbody/tr/td[5]/span/a";
+
+    // Customer buttons
 
     const ADD_NEW_DOMAIN_BTN_CSS = "#buttonAddDomain";
     const ADD_NEW_DOMAIN_BTN_XPATH = "//*[@id='buttonAddDomain']";
@@ -137,7 +145,13 @@ class PleskLinuxClientPage
     const DOMAIN_ALIAS_NAME_FIELD_CSS = "#name";
     const DOMAIN_ALIAS_NAME_FIELD_XPATH = "//*[@id='name']";
 
+    const ADDON_DOMAIN_NAME_FIELD_CSS = "#domainName-name";
+    const ADDON_DOMAIN_NAME_FIELD_XPATH = "//input[@id='domainName-name']";
+
     const ADD_ALIAS_DOMAIN_OK_BTN_XPATH = "//button[@name='send']";
     const ADD_ALIAS_DOMAIN_OK_BTN_CSS   = "#btn-send>button";
+
+    const ADD_DOMAIN_OK_BTN_XPATH = "//button[@name='send']";
+    const ADD_DOMAIN_OK_BTN_CSS   = "#btn-send>button";
 
 }

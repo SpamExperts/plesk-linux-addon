@@ -6,15 +6,31 @@ use RuntimeException;
 
 class SpampanelApi extends \Codeception\Module
 {
+    /**
+     * Function used to check if a domain is alias for other domain from Spampanel
+     * @param  string $alias  alias domain to check
+     * @param  string $domain domain
+     */
     public function assertIsAliasInSpampanel($alias, $domain)
     {
+        // Get Spampanel alias list for the domain
         $aliases = $this->apiGetDomainAliases($domain);
+
+        // See if the alias is in alias list from spampanel
         $this->assertContains($alias, $aliases);
     }
 
+    /**
+     * Function used to check if a domain is not alias for other domain from Spampanel
+     * @param  string $alias  alias domain to check
+     * @param  string $domain domain
+     */
     public function assertIsNotAliasInSpampanel($alias, $domain)
     {
+        // Get Spampanel alias list for the domain
         $aliases = $this->apiGetDomainAliases($domain);
+
+        // See if the alias is in alias list from spampanel
         $this->assertNotContains($alias, $aliases);
     }
 
@@ -54,6 +70,11 @@ class SpampanelApi extends \Codeception\Module
         $this->assertEquals(0, $data['present']);
     }
 
+    /**
+     * Function used to get routes for a certain domain in Spampanel
+     * @param  string $domain domain
+     * @return routes list
+     */
     public function apiGetDomainRoutes($domain)
     {
         codecept_debug("Getting $domain routes");
@@ -61,9 +82,8 @@ class SpampanelApi extends \Codeception\Module
         $this->assertEquals(200, $response['info']['http_code']);
         $response = json_decode($response['output'], true);
 
-        if (! empty($response['messages']['error'])) {
+        if (! empty($response['messages']['error']))
             return [];
-        }
 
         return $response['result'];
     }
@@ -75,9 +95,8 @@ class SpampanelApi extends \Codeception\Module
         $this->assertEquals(200, $response['info']['http_code']);
         $response = json_decode($response['output'], true);
 
-        if (! empty($response['messages']['error'])) {
+        if (! empty($response['messages']['error']))
             return [];
-        }
 
         return $response['result'];
     }
@@ -107,16 +126,15 @@ class SpampanelApi extends \Codeception\Module
         $this->checkResponseStatus($response);
         $response = json_decode($response['output'], true);
 
-        if (! empty($response['messages']['error'])) {
+        if (!empty($response['messages']['error']))
             throw new RuntimeException("Api error: ".var_export($response, true));
-        }
+
     }
 
     private function checkResponseStatus($response)
     {
-        if (200 != $response['info']['http_code']) {
+        if (200 != $response['info']['http_code'])
             throw new RuntimeException("Invalid api status code ".$response['info']['http_code']);
-        }
     }
 
     public function requestUrl($url, $username = null, $password = null)
@@ -127,9 +145,8 @@ class SpampanelApi extends \Codeception\Module
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
-        if ($username && $password) {
+        if ($username && $password)
             curl_setopt($ch, CURLOPT_USERPWD, $username . ":" . $password);
-        }
 
         $output =
             curl_exec($ch);

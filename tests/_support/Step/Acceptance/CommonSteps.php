@@ -125,10 +125,19 @@ class CommonSteps extends \WebGuy
         $this->amOnPage('/login_up.php3');
     }
 
+    /**
+     * Function used to login in Spampanel as a domain from "Domain List"
+     * @param  string $domain desired domain
+     */
     public function loginOnSpampanel($domain)
     {
+        // Grab Spampanel login link from "href" attribute
         $href = $this->grabAttributeFrom('//a[contains(text(), "Login")]', 'href');
+
+        // Go to Spampanel login link
         $this->amOnUrl($href);
+
+        // Wait for page to load
         $this->waitForText("Welcome to the $domain control panel", 60);
         $this->see("Logged in as: $domain");
         $this->see("Domain User");
@@ -142,20 +151,39 @@ class CommonSteps extends \WebGuy
         $this->click(SpampanelPage::LOGOUT_CONFIRM_LINK);
     }
 
+    /**
+     * Function used to navigate through addon Pages
+     * @param  string $page  page name
+     * @param  string $title page title
+     */
     public function goToPage($page, $title)
     {
-        $I = $this;
-        $I->amGoingTo("\n\n --- Go to {$title} page --- \n");
-        $I->switchToLeftFrame();
-        $I->waitForElement("//td[contains(.,'Links to Additional Services')]");
-        $I->wait(1);
-        $I->click(ProfessionalSpamFilterPage::PROF_SPAM_FILTER_BTN);
-        $I->switchToWorkFrame();
-        $I->waitForText(ProfessionalSpamFilterPage::TITLE, 10);
-        $I->see(ProfessionalSpamFilterPage::TITLE);
-        $I->waitForText(ConfigurationPage::TITLE);
-        $I->click($page);
-        $I->waitForText($title);
+        // Display info message
+        $this->amGoingTo("\n\n --- Go to {$title} page --- \n");
+
+        // Switch to left frame
+        $this->switchToLeftFrame();
+
+        // Wait for "Links to Additional Services"
+        $this->waitForElement("//td[contains(.,'Links to Additional Services')]");
+        $this->wait(1);
+
+        // Click "Professional Spam Filter" option
+        $this->click(ProfessionalSpamFilterPage::PROF_SPAM_FILTER_BTN);
+
+        // Switch to main frame
+        $this->switchToWorkFrame();
+
+        // Wait for addon main page to load
+        $this->waitForText(ProfessionalSpamFilterPage::TITLE, 10);
+        $this->see(ProfessionalSpamFilterPage::TITLE);
+        $this->waitForText(ConfigurationPage::TITLE);
+
+        // Click on desired page
+        $this->click($page);
+
+        // Wait for page to load
+        $this->waitForText($title);
     }
 
     /**
@@ -202,7 +230,6 @@ class CommonSteps extends \WebGuy
         // Check if the status is the expected one
         $this->waitForText($status, 60);
     }
-
 
     /**
      * Function used to search if domain is present in Domain List
@@ -366,6 +393,10 @@ class CommonSteps extends \WebGuy
         $this->dontSeeElement("//tbody/tr[2]");
     }
 
+    /**
+     * Function used to create a reseller account
+     * @return array array containing reseller username, password and id
+     */
     public function createReseller()
     {
         // Generate unique reseller username
@@ -425,7 +456,6 @@ class CommonSteps extends \WebGuy
 
         // Return array with username, password and resellerId
         return [$this->resellerUsername, $this->resellerPassword, $resellerId];
-
     }
 
     /**
@@ -498,12 +528,10 @@ class CommonSteps extends \WebGuy
         $this->selectOption(Locator::combine(PleskLinuxClientPage::SUBCRIPTION_SERVICE_PLAN_DROP_DOWN_CSS, PleskLinuxClientPage::SUBCRIPTION_SERVICE_PLAN_DROP_DOWN_XPATH), "Default Domain");
 
         // Click "OK" button
-        $this->click(PleskLinuxClientPage::CREATE_NEW_CUSTOMER_OK_BTN_XPATH);
-        $this->waitForElementNotVisible(PleskLinuxClientPage::CREATE_NEW_CUSTOMER_OK_BTN_XPATH, 100);
+        $this->click(Locator::combine(PleskLinuxClientPage::CREATE_NEW_CUSTOMER_OK_BTN_CSS, PleskLinuxClientPage::CREATE_NEW_CUSTOMER_OK_BTN_XPATH));
 
         // Wait for success message to appear
-        $this->waitForElement("//div[@class='msg-content']", 10);
-        $this->see("Customer {$this->customerUsername} was created.", "//div[@class='msg-box msg-info']");
+        $this->waitForText("Customer {$this->customerUsername} was created.", 100);
 
         // Return array with username, password and domain
         return [$this->customerUsername, $this->customerPassword, $this->domain];
@@ -548,11 +576,8 @@ class CommonSteps extends \WebGuy
         // Click OK button
         $this->click(Locator::combine(PleskLinuxClientPage::CHANGE_PLAN_ON_BTN_CSS, PleskLinuxClientPage::CHANGE_PLAN_ON_BTN_XPATH));
 
-        // Wait for ok button to dissappear
-        $this->waitForElementNotVisible(Locator::combine(PleskLinuxClientPage::CHANGE_PLAN_ON_BTN_CSS, PleskLinuxClientPage::CHANGE_PLAN_ON_BTN_XPATH), 30);
-
         // Wait for success message
-        $this->waitForText("Selected subscriptions were successfully re-associated with service plans.", 30);
+        $this->waitForText("Selected subscriptions were successfully re-associated with service plans.", 100);
     }
 
     /**
@@ -585,32 +610,28 @@ class CommonSteps extends \WebGuy
         // Switch to main frame
         $this->switchToWorkFrame();
 
-        // Wait for "Add New Subscription" button to appear
-        $this->waitForElement(Locator::combine(PleskLinuxClientPage::CLIENT_ADD_NEW_SUBSCRIPTION_XPATH, PleskLinuxClientPage::CLIENT_ADD_NEW_SUBSCRIPTION_CSS), 10);
-
         // Click "Add New Subscription" button
-        $this->click(Locator::combine(PleskLinuxClientPage::CLIENT_ADD_NEW_SUBSCRIPTION_XPATH, PleskLinuxClientPage::CLIENT_ADD_NEW_SUBSCRIPTION_CSS));
+        $this->click(Locator::combine(PleskLinuxClientPage::CLIENT_ADD_NEW_SUBSCRIPTION_CSS, PleskLinuxClientPage::CLIENT_ADD_NEW_SUBSCRIPTION_XPATH));
 
         // Fill "Domain name" field with the domain
-        $this->fillField(Locator::combine(PleskLinuxClientPage::ADD_SUBSCRIPTION_DOMAIN_FIELD_XPATH, PleskLinuxClientPage::ADD_SUBSCRIPTION_DOMAIN_FIELD_CSS), $params['domain']);
+        $this->fillField(Locator::combine(PleskLinuxClientPage::ADD_SUBSCRIPTION_DOMAIN_FIELD_CSS, PleskLinuxClientPage::ADD_SUBSCRIPTION_DOMAIN_FIELD_XPATH), $params['domain']);
 
-        // Fill "Username" field with username
-        $this->fillField(Locator::combine(PleskLinuxClientPage::ADD_SUBSCRIPTION_USERNAME_FIELD_XPATH, PleskLinuxClientPage::ADD_SUBSCRIPTION_USERNAME_FIELD_CSS), $params['username']);
+        // Fill "Username" field
+        $this->fillField(Locator::combine(PleskLinuxClientPage::ADD_SUBSCRIPTION_USERNAME_FIELD_CSS, PleskLinuxClientPage::ADD_SUBSCRIPTION_USERNAME_FIELD_XPATH), $params['username']);
 
-        // Fill "Password" field with password
-        $this->fillField(Locator::combine(PleskLinuxClientPage::ADD_SUBSCRIPTION_PASSWORD_FIELD_XPATH, PleskLinuxClientPage::ADD_SUBSCRIPTION_PASSWORD_FIELD_CSS), $params['password']);
+        // Fill "Password" field
+        $this->fillField(Locator::combine(PleskLinuxClientPage::ADD_SUBSCRIPTION_PASSWORD_FIELD_CSS, PleskLinuxClientPage::ADD_SUBSCRIPTION_PASSWORD_FIELD_XPATH), $params['password']);
 
-        // Fill "Repeat password" field with the same password
-        $this->waitForElement(Locator::combine(PleskLinuxClientPage::ADD_SUBSCRIPTION_REPEAT_PASSWORD_FIELD_XPATH, PleskLinuxClientPage::ADD_SUBSCRIPTION_REPEAT_PASSWORD_FIELD_CSS), 10);
-        $this->fillField(Locator::combine(PleskLinuxClientPage::ADD_SUBSCRIPTION_REPEAT_PASSWORD_FIELD_XPATH, PleskLinuxClientPage::ADD_SUBSCRIPTION_REPEAT_PASSWORD_FIELD_CSS), $params['password']);
+        // Fill "Repeat password" field
+        $this->fillField(Locator::combine(PleskLinuxClientPage::ADD_SUBSCRIPTION_REPEAT_PASSWORD_FIELD_CSS, PleskLinuxClientPage::ADD_SUBSCRIPTION_REPEAT_PASSWORD_FIELD_XPATH), $params['password']);
 
         // Click the "OK" button
-        $this->click(Locator::combine(PleskLinuxClientPage::ADD_SUBSCRIPTION_OK_BTN_XPATH, PleskLinuxClientPage::ADD_SUBSCRIPTION_OK_BTN_CSS));
+        $this->click(Locator::combine(PleskLinuxClientPage::ADD_SUBSCRIPTION_OK_BTN_CSS, PleskLinuxClientPage::ADD_SUBSCRIPTION_OK_BTN_XPATH));
 
-        $this->waitForElementNotVisible(PleskLinuxClientPage::ADD_SUBSCRIPTION_DOMAIN_NAME_CONTAINER_XPATH, 100);
+        // $this->waitForElementNotVisible(Locator::combine(PleskLinuxClientPage::ADD_SUBSCRIPTION_OK_BTN_CSS, PleskLinuxClientPage::ADD_SUBSCRIPTION_OK_BTN_XPATH), 100);
 
         // Wait for success message to appears
-        $this->waitForText("Subscription {$params['domain']} was created.", 30);
+        $this->waitForText("Subscription {$params['domain']} was created.", 100);
 
         // Create an array with the subscription info
         $account = array(
@@ -687,21 +708,50 @@ class CommonSteps extends \WebGuy
         $this->waitForText("Selected subscriptions were removed.", 30);
     }
 
+    /**
+     * Function used to open "DNS Settings" option for a subscription
+     * @param  string $domainName domain name
+     */
     public function openSubscription($domainName)
     {
-        $I = $this;
-        $I->amGoingTo("\n\n --- Open subscription for '{$domainName}'--- \n");
-        $I->switchToLeftFrame();
-        $I->click("//a[contains(.,'Subscriptions')]");
-        $I->switchToWorkFrame();
-        $I->fillField("//input[@id='subscriptions-list-search-text-domainName']", $domainName);
-        $I->click("//*[@class='search-field']//em");
-        $I->click(" //a[@class='s-btn sb-login']");
-        $I->waitForText("Websites & Domains");
-        $I->click("//span[@class='caption-control-wrap']");
-        $I->wait(2);
-        $I->click("//span[contains(.,'DNS Settings')]");
-        $I->waitForElementVisible("//table[@class='list']");
+        // Display info message
+        $this->amGoingTo("\n\n --- Open subscription for '{$domainName}'--- \n");
+
+        // Switch to left fraame
+        $this->switchToLeftFrame();
+
+        // Click "Subscription" option
+        $this->click("//a[contains(.,'Subscriptions')]");
+
+        // Switch to main frame
+        $this->switchToWorkFrame();
+
+        // Fill search bar field with the domain name
+        $this->fillField(Locator::combine(PleskLinuxClientPage::SUBSCRIPTIONS_SEARCH_BAR_CSS , PleskLinuxClientPage::SUBSCRIPTIONS_SEARCH_BAR_XPATH), $domainName);
+
+        // Click "Search" button
+        $this->click(Locator::combine(PleskLinuxClientPage::SUBSCRIPTION_SUBMIT_SEARCH_CSS, PleskLinuxClientPage::SUBSCRIPTION_SUBMIT_SEARCH_XPATH));
+
+        // Wait for search to finish
+        $this->wait(2);
+
+        // Click "Manage Hosting" button
+        $this->click("Manage Hosting");
+
+        // Wait for page to load
+        $this->waitForText("Websites & Domains", 30);
+
+        // Click "Show More" link
+        $this->click("//span[contains(.,'Show More')]");
+
+        // Wait for options to show
+        $this->wait(2);
+
+        // Click "DNS Settings" option
+        $this->click("//span[contains(.,'DNS Settings')]");
+
+        // Wait for table to appear
+        $this->waitForElementVisible("//table[@class='list']");
     }
 
     /**
@@ -730,7 +780,7 @@ class CommonSteps extends \WebGuy
 
     /**
      * Function used to get addon hostname
-     * @return [type] [description]
+     * @return string addon hostname
      */
     public function getEnvHostname()
     {
@@ -824,11 +874,8 @@ class CommonSteps extends \WebGuy
         // Click "OK" button
         $this->click(Locator::combine(PleskLinuxClientPage::ADD_ALIAS_DOMAIN_OK_BTN_CSS, PleskLinuxClientPage::ADD_ALIAS_DOMAIN_OK_BTN_XPATH));
 
-        // Wait fo "OK" button to disappear
-        $this->waitForElementNotVisible(Locator::combine(PleskLinuxClientPage::ADD_ALIAS_DOMAIN_OK_BTN_CSS, PleskLinuxClientPage::ADD_ALIAS_DOMAIN_OK_BTN_XPATH), 30);
-
         // Wait for success message
-        $this->waitForText("The domain alias $alias was created.", 30);
+        $this->waitForText("The domain alias $alias was created.", 100);
 
         return $alias;
     }
@@ -868,18 +915,37 @@ class CommonSteps extends \WebGuy
         $this->login();
     }
 
+    /**
+     * Function used to add an addon domain for a customer account
+     * @param string $domain customer domain
+     * @param string $addonDomainName  addon domain name (optional)
+     */
     public function addAddonDomainAsClient($domain, $addonDomainName = null)
     {
-        if (! $addonDomainName) {
+        // If no addon domain provided, generate one based on domain
+        if (!$addonDomainName)
             $addonDomainName = 'addon' . $domain;
-        }
 
-        $this->waitForText('Add New Domain', 30);
-        $this->click('Add New Domain');
-        $this->waitForText('Adding New Domain Name');
-        $this->fillField("//input[@id='domainName-name']", $addonDomainName);
-        $this->click("//button[@name='send']");
-        $this->waitForText("The domain $addonDomainName was successfully created.", 30);
+        // Wait for "Add domain" button to show
+        $this->waitForText(Locator::combine(PleskLinuxClientPage::ADD_NEW_DOMAIN_BTN_CSS, PleskLinuxClientPage::ADD_NEW_DOMAIN_BTN_XPATH), 30);
+
+        // Click "Add Domain" button
+        $this->click(Locator::combine(PleskLinuxClientPage::ADD_NEW_DOMAIN_BTN_CSS, PleskLinuxClientPage::ADD_NEW_DOMAIN_BTN_XPATH));
+
+        // Wait for page to load
+        $this->waitForText('Adding New Domain Name', 30);
+
+        // Fill "Domain name" field
+        $this->fillField(Locator::combine(PleskLinuxClientPage::ADDON_DOMAIN_NAME_FIELD_CSS, PleskLinuxClientPage::ADDON_DOMAIN_NAME_FIELD_XPATH), $addonDomainName);
+
+        // Wait for "OK" button to show
+        $this->waitForElement(Locator::combine(PleskLinuxClientPage::ADD_DOMAIN_OK_BTN_CSS, PleskLinuxClientPage::ADD_DOMAIN_OK_BTN_XPATH));
+
+        // Click the "OK" button
+        $this->click(Locator::combine(PleskLinuxClientPage::ADD_DOMAIN_OK_BTN_CSS, PleskLinuxClientPage::ADD_DOMAIN_OK_BTN_XPATH));
+
+        // Wait for success message
+        $this->waitForText("The domain $addonDomainName was successfully created.", 100);
 
         return $addonDomainName;
     }
