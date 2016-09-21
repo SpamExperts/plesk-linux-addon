@@ -75,7 +75,7 @@ class ToggleProtectionSteps extends CommonSteps
         $this->logout();
         $this->loginAsRoot();
         $this->goToConfigurationPageAndSetOptions([
-            ConfigurationPage::ADD_ADDON_AS_ALIAS_PLESK_OPT => true,
+            Locator::combine(ConfigurationPage::ADD_ADDON_AS_ALIAS_PLESK_OPT_CSS, ConfigurationPage::ADD_ADDON_AS_ALIAS_PLESK_OPT_XPATH) => true,
         ]);
 
         return [

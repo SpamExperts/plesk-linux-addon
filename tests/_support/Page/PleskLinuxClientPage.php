@@ -97,6 +97,9 @@ class PleskLinuxClientPage
     const SUBCRIPTION_SERVICE_PLAN_DROP_DOWN_CSS = "#subscription-subscriptionInfo-servicePlan";
     const SUBCRIPTION_SERVICE_PLAN_DROP_DOWN_XPATH = "//select[@id='subscription-subscriptionInfo-servicePlan']";
 
+    const CUSTOMER_LIST_TABLE_XPATH ="//table[@id='customers-list-table']";
+    const CUSTOMER_LIST_TABLE_CSS   = "#customers-list-table";
+
 
     // Const resellers page
 

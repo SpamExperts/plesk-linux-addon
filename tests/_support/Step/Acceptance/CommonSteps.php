@@ -200,7 +200,7 @@ class CommonSteps extends \WebGuy
         $this->click('Check status');
 
         // Check if the status is the expected one
-        $this->waitForText($status, 60);
+        $this->waitForText($status, 120);
     }
 
 
@@ -473,7 +473,7 @@ class CommonSteps extends \WebGuy
 
         // Click "OK" button
         $this->click(PleskLinuxClientPage::CREATE_NEW_CUSTOMER_OK_BTN_XPATH);
-        $this->waitForElementNotVisible(PleskLinuxClientPage::CREATE_NEW_CUSTOMER_OK_BTN_XPATH, 100);
+        $this->waitForElementNotVisible(Locator::combine(PleskLinuxClientPage::SUBSCRIPTION_REPEAT_PASSWORD_FIELD_XPATH, PleskLinuxClientPage::SUBSCRIPTION_REPEAT_PASSWORD_FIELD_CSS), 200);
 
         // Wait for success message to appear
         $this->waitForElement("//div[@class='msg-content']", 10);
@@ -500,6 +500,9 @@ class CommonSteps extends \WebGuy
 
         // Switch to main frame
         $this->switchToWorkFrame();
+
+        // Wait for table to appear
+        $this->waitForElementVisible(Locator::combine(PleskLinuxClientPage::CUSTOMER_LIST_TABLE_XPATH, PleskLinuxClientPage::CUSTOMER_LIST_TABLE_CSS), 30);
 
         // Click the desired customer username
         $this->click("//a[contains(.,'$this->customerUsername')]");
@@ -782,7 +785,7 @@ class CommonSteps extends \WebGuy
         $this->click(Locator::combine(PleskLinuxClientPage::ADD_NEW_DOMAIN_ALIAS_BTN_CSS, PleskLinuxClientPage::ADD_NEW_DOMAIN_ALIAS_BTN_XPATH));
 
         // Wait for page to load
-        $this->waitForText('Add a Domain Alias', 30);
+        $this->waitForText('Add a Domain Alias', 60);
 
         // Filll "Domain alias name" field
         $this->fillField(Locator::combine(PleskLinuxClientPage::DOMAIN_ALIAS_NAME_FIELD_CSS, PleskLinuxClientPage::DOMAIN_ALIAS_NAME_FIELD_XPATH), $alias);
@@ -794,7 +797,7 @@ class CommonSteps extends \WebGuy
         $this->click(Locator::combine(PleskLinuxClientPage::ADD_ALIAS_DOMAIN_OK_BTN_CSS, PleskLinuxClientPage::ADD_ALIAS_DOMAIN_OK_BTN_XPATH));
 
         // Wait fo "OK" button to disappear
-        $this->waitForElementNotVisible(Locator::combine(PleskLinuxClientPage::ADD_ALIAS_DOMAIN_OK_BTN_CSS, PleskLinuxClientPage::ADD_ALIAS_DOMAIN_OK_BTN_XPATH), 30);
+        $this->waitForElementNotVisible(Locator::combine(PleskLinuxClientPage::ADD_ALIAS_DOMAIN_OK_BTN_CSS, PleskLinuxClientPage::ADD_ALIAS_DOMAIN_OK_BTN_XPATH), 100);
 
         // Wait for success message
         $this->waitForText("The domain alias $alias was created.", 30);

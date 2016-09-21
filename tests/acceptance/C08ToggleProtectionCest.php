@@ -46,7 +46,7 @@ class C08ToggleProtectionCest
         // Test
         $I->apiCheckDomainExists($alias);
         $I->logout();
-        $I->loginAsClient($setup['customer_username'], $setup['customer_password']);
+        $I->login($setup['customer_username'], $setup['customer_password'], false);
         $I->removeAliasAsClient($alias);
         $I->apiCheckDomainExists($alias);
     }
