@@ -1,1 +1,1 @@
-tests/acceptance/C08ToggleProtectionCest.php:testToggleProtectionErrorAddedAsDomainNotAlias
+tests/acceptance/C08ToggleProtectionCest.php:testToggleAsAliasAndUntoggleAlias

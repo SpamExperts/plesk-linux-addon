@@ -3,7 +3,6 @@
 use Page\ConfigurationPage;
 use Page\DomainListPage;
 use Page\ProfessionalSpamFilterPage;
-use Step\Acceptance\CommonSteps;
 use Step\Acceptance\ToggleProtectionSteps;
 use Codeception\Util\Locator;
 
@@ -39,6 +38,7 @@ class C08ToggleProtectionCest
 
     public function testHookErrorAddedAsAliasNotDomain(ToggleProtectionSteps $I)
     {
+
         $setup = $I->setupErrorAddedAsAliasNotDomainScenario();
         $alias = $setup['alias_domain_name'];
         codecept_debug("SETUP FINISHED");
@@ -46,13 +46,14 @@ class C08ToggleProtectionCest
         // Test
         $I->apiCheckDomainExists($alias);
         $I->logout();
-        $I->login($setup['customer_username'], $setup['customer_password'], false);
+        $I->login($setup['customer_username'], $setup['customer_password']);
         $I->removeAliasAsClient($alias);
         $I->apiCheckDomainExists($alias);
     }
 
     public function testToggleProtectionErrorAddedAsDomainNotAlias(ToggleProtectionSteps $I)
     {
+
         $setup = $I->setupErrorAddedAsDomainNotAliasScenario();
         $aliasDomainName = $setup['alias_domain_name'];
 
@@ -73,7 +74,7 @@ class C08ToggleProtectionCest
         // Test
         $I->apiCheckDomainExists($alias);
         $I->logout();
-        $I->loginAsClient($setup['customer_username'], $setup['customer_password']);
+        $I->login($setup['customer_username'], $setup['customer_password']);
         $I->removeAliasAsClient($alias);
         $I->apiCheckDomainExists($alias);
     }

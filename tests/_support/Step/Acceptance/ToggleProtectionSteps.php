@@ -19,10 +19,11 @@ class ToggleProtectionSteps extends CommonSteps
 
         list($customerUsername, $customerPassword, $domain) = $this->createCustomer();
         $this->changeCustomerPlan($customerUsername);
-//        $this->wait(120);
+        $this->wait(120);
 
         $this->goToPage(ProfessionalSpamFilterPage::DOMAIN_LIST_BTN, DomainListPage::TITLE);
         $this->searchDomainList($domain);
+
         $this->click(Locator::combine(DomainListPage::TOGGLE_PROTECTION_LINK_XPATH, DomainListPage::TOGGLE_PROTECTION_LINK_CSS));
         $this->waitForText("The protection status of $domain has been changed to protected", 60);
         $this->checkProtectionStatusIs(DomainListPage::STATUS_DOMAIN_IS_PRESENT_IN_THE_FILTER);
@@ -64,7 +65,7 @@ class ToggleProtectionSteps extends CommonSteps
 
         list($customerUsername, $customerPassword, $domain) = $this->createCustomer();
         $this->changeCustomerPlan($customerUsername);
-        //$this->wait(120);
+        $this->wait(120);
 
         $this->logout();
         $this->loginAsClient($customerUsername, $customerPassword);
