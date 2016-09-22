@@ -17,11 +17,6 @@ class ConfigurationSteps extends DomainListSteps
         // Display info message
         $this->amGoingTo("\n\n --- Check configuration page layout --- \n");
 
-        // Check if title and descriptions are displayd properly
-        $this->see(ConfigurationPage::TITLE);
-        $this->see(ConfigurationPage::DESCRIPTION_A);
-        $this->see(ConfigurationPage::DESCRIPTION_B);
-
         // Check if top links are displayed properly
         $this->seeElement(ProfessionalSpamFilterPage::CONFIGURATION_LINK);
         $this->seeElement(ProfessionalSpamFilterPage::BRANDING_LINK);
@@ -30,6 +25,11 @@ class ConfigurationSteps extends DomainListSteps
         $this->seeElement(ProfessionalSpamFilterPage::MIGRATION_LINK);
         $this->seeElement(ProfessionalSpamFilterPage::UPDATE_LINK);
         $this->seeElement(ProfessionalSpamFilterPage::SUPPORT_LINK);
+
+        // Check if title and descriptions are displayd properly
+        $this->see(ConfigurationPage::TITLE);
+        $this->see(ConfigurationPage::DESCRIPTION_A);
+        $this->see(ConfigurationPage::DESCRIPTION_B);
 
         // Check if fields and their description are displayed properly
         $this->see('AntiSpam API URL');

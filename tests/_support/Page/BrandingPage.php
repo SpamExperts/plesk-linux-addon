@@ -14,8 +14,15 @@ class BrandingPage
     const SUB_TITLE_B   = "Change branding";
     const DESCRIPTION_B = "If you want to change the branding shown above, you can do this in the form below.";
 
-    const BRANDING_ICON     = "//img[@id='some_icon']";
-    const BRANDNAME_INPUT   = "//input[@id='brandname']";
-    const BRANDICON_SELECT  = "//input[@id='brandicon']";
-    const SAVE_BRANDING_BTN = "//input[@id='submit']";
+    const BRANDING_ICON_CSS = "#some_icon";
+    const BRANDING_ICON_XPATH = "//img[@id='some_icon']";
+
+    const BRANDNAME_INPUT_CSS = "#brandname";
+    const BRANDNAME_INPUT_XPATH = "//input[@id='brandname']";
+
+    const BRANDICON_SELECT_CSS = "#brandicon";
+    const BRANDICON_SELECT_XPATH = "//input[@id='brandicon']";
+
+    const SAVE_BRANDING_BTN_CSS = "#submit";
+    const SAVE_BRANDING_BTN_XPATH = "//input[@id='submit']";
 }

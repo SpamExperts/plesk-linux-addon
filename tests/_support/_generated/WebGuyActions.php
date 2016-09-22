@@ -2762,7 +2762,9 @@ trait WebGuyActions
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
-     *
+     * Function used to check if a domain is alias for other domain from Spampanel
+     * @param  string $alias  alias domain to check
+     * @param  string $domain domain
      * @see \Helper\SpampanelApi::assertIsAliasInSpampanel()
      */
     public function assertIsAliasInSpampanel($alias, $domain) {
@@ -2773,7 +2775,9 @@ trait WebGuyActions
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
-     *
+     * Function used to check if a domain is not alias for other domain from Spampanel
+     * @param  string $alias  alias domain to check
+     * @param  string $domain domain
      * @see \Helper\SpampanelApi::assertIsNotAliasInSpampanel()
      */
     public function assertIsNotAliasInSpampanel($alias, $domain) {
@@ -2808,7 +2812,9 @@ trait WebGuyActions
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
-     *
+     * Function used to get routes for a certain domain in Spampanel
+     * @param  string $domain domain
+     * @return routes list
      * @see \Helper\SpampanelApi::apiGetDomainRoutes()
      */
     public function apiGetDomainRoutes($domain) {

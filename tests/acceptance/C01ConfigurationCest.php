@@ -12,16 +12,28 @@ use Codeception\Util\Locator;
 
 class C01ConfigurationCest
 {
+    /**
+     * Function called before each test for setup
+     */
     public function _before(ConfigurationSteps $I)
     {
-        $I->login();
+        // Login as root
+        $I->loginAsRoot();
+
+        // Go to addon "Configuration" page
         $I->goToPage(ProfessionalSpamFilterPage::CONFIGURATION_BTN, ConfigurationPage::TITLE);
     }
 
+    /**
+     * Function called after each test for cleanup
+     */
     public function _after(ConfigurationSteps $I)
     {
     }
 
+    /**
+     * Function called when a test has failed
+     */
     public function _failed(ConfigurationSteps $I)
     {
         $this->_after($I);
@@ -427,7 +439,7 @@ class C01ConfigurationCest
         $I->logout();
 
         // Login with the customer account
-        $I->login($customerUsername, $customerPassword, true);
+        $I->loginAsClient($customerUsername, $customerPassword);
 
         // Add an addon domain name for the customer account
         $addonDomainName = $I->addAddonDomainAsClient($domain);
@@ -436,7 +448,7 @@ class C01ConfigurationCest
         $I->logout();
 
         // Login as root
-        $I->login();
+        $I->loginAsRoot();
 
         // Go to "Domain List" page
         $I->goToPage(ProfessionalSpamFilterPage::DOMAIN_LIST_BTN, DomainListPage::TITLE);
@@ -485,7 +497,7 @@ class C01ConfigurationCest
         $I->logout();
 
         // Login as root
-        $I->login();
+        $I->loginAsRoot();
 
         // Go to "Domain List" page
         $I->goToPage(ProfessionalSpamFilterPage::DOMAIN_LIST_BTN, DomainListPage::TITLE);
@@ -528,7 +540,7 @@ class C01ConfigurationCest
         $I->logout();
 
         // Login with the client account
-        $I->login($customerUsername, $customerPassword, true);
+        $I->loginAsClient($customerUsername, $customerPassword);
 
         // Add an alias domain for the customer account
         $aliasDomain = $I->addAliasAsClient($domain);

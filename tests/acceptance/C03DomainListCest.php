@@ -12,13 +12,27 @@ class C03DomainListCest
 {
     protected $doamin;
 
+    /**
+     * Function called before each test for setup
+     */
     public function _before(DomainListSteps $I)
     {
         $I->login();
     }
 
+    /**
+     * Function called after each test for cleanup
+     */
     public function _after(DomainListSteps $I)
     {
+    }
+
+     /**
+     * Function called when a test has failed
+     */
+    public function _failed(BrandingSteps $I)
+    {
+        $this->_after($I);
     }
 
     public function verifyDomainListAsRoot(DomainListSteps $I)

@@ -60,14 +60,7 @@ class CommonSteps extends \WebGuy
             $this->waitForElement("//button[contains(.,'OK, back to Plesk')]", 30);
             $this->click("//button[contains(.,'OK, back to Plesk')]");
             $this->see("Websites & Domains");
-            $this->seeElement("//span[contains(.,'Professional Spam Filter')]");
         }
-        // else {
-        // $this->switchToTopFrame();
-        // $this->waitForElement("//img[contains(@name,'logo')]");
-        // $this->see('Log out', "//a[contains(.,'Log out')]");
-        // }
-        //wait ceva
     }
 
     /**
@@ -343,8 +336,8 @@ class CommonSteps extends \WebGuy
     }
 
     /**
-     * Function used to check if Professional Spam Filter is installed
-     * @param  string $brandname Brand name
+     * Function used to check if Professional Spam Filter is installed for root
+     * @param  string $brandname expected brandname
      */
     public function checkPsfPresentForRoot($brandname = 'Professional Spam Filter')
     {
@@ -365,34 +358,49 @@ class CommonSteps extends \WebGuy
 
         // Wait for brandname text to appear
         $this->waitForText($brandname);
-
-        // See if the brandname text is displayed correctly
-        $this->see($brandname);
     }
 
+    /**
+     * Function used to check if Professional Spam Filter is installed for reseller
+     * @param  string $brandname expected brandname
+     */
     public function checkPsfPresentForReseller($brandname = 'Professional Spam Filter')
     {
+        // Display info message
         $this->amGoingTo("\n\n --- Check PSF is present at reseller level --- \n");
+
+        // Switch to left frame
         $this->switchToLeftFrame();
+
+        // Wait fo "Links to Aditional Services" category to appear
         $this->waitForElement("//td[contains(.,'Links to Additional Services')]");
+
+        // Switch to main frame
         $this->switchToWorkFrame();
+
+        // Wait for expected brandname text to appear
         $this->waitForText($brandname);
         $this->see($brandname);
         $this->see('Home');
-        $this->click(ProfessionalSpamFilterPage::PROSPAMFILTER_BTN);
-        $this->waitForElement("//h3[contains(.,'List Domains')]");
-        $this->see("There are no domains on this server.", "//div[@class='alert alert-info']");
+
+        // Click the new brandname
+        $this->click("//a[contains(.,'{$brandname}')]");
+
+        // Check if no domain is present in list
+        $this->waitForText("There are no domains on this server.", 30);
     }
 
+    /**
+     * Function used to check if Professional Spam Filter is installed for customer
+     * @param  string $brandname expected brandname
+     */
     public function checkPsfPresentForCustomer($brandname = 'Professional Spam Filter')
     {
+        // Display info message
         $this->amGoingTo("\n\n --- Check PSF is present at customer level --- \n");
-        $this->click("//span[contains(.,'{$brandname}')]");
-        $this->see($brandname);
-        $this->switchToIFrame("pageIframe");
-        $this->waitForElement("//h3[contains(.,'List Domains')]");
-        $this->see($this->domain, "//tbody/tr[1]");
-        $this->dontSeeElement("//tbody/tr[2]");
+
+        // Wait for expected brandname text to appear
+        $this->waitForText($brandname);
     }
 
     /**
