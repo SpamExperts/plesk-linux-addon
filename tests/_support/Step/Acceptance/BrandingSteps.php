@@ -10,7 +10,6 @@ class BrandingSteps extends ConfigurationSteps
 {
     /**
      * Function used to check "Branding" page layout
-     * @return [type] [description]
      */
     public function checkPageLayout()
     {

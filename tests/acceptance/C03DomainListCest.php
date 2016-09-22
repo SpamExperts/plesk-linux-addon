@@ -17,7 +17,7 @@ class C03DomainListCest
      */
     public function _before(DomainListSteps $I)
     {
-        $I->login();
+        $I->loginAsRoot();
     }
 
     /**

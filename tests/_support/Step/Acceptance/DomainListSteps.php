@@ -69,7 +69,6 @@ class DomainListSteps extends CommonSteps
         $this->waitForText(DomainListPage::STATUS_DOMAIN_IS_PRESENT_IN_THE_FILTER, 30);
     }
 
-
     /**
      * Function used to check login functionality
      * @param  string  $domain domain to login with

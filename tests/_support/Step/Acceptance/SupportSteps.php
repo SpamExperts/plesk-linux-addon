@@ -8,10 +8,15 @@ use Codeception\Util\Locator;
 
 class SupportSteps extends CommonSteps
 {
+    /**
+     * Function used to check "Support" page layout
+     */
     public function checkSupportPageLayout()
     {
+        // Display info message
         $this->amGoingTo("\n\n --- Check support page layout --- \n");
 
+        // Check if top links are displayed properly
         $this->seeElement(ProfessionalSpamFilterPage::CONFIGURATION_LINK);
         $this->seeElement(ProfessionalSpamFilterPage::BRANDING_LINK);
         $this->seeElement(ProfessionalSpamFilterPage::DOMAIN_LIST_LINK);
@@ -20,6 +25,7 @@ class SupportSteps extends CommonSteps
         $this->seeElement(ProfessionalSpamFilterPage::UPDATE_LINK);
         $this->seeElement(ProfessionalSpamFilterPage::SUPPORT_LINK);
 
+        // Check if title and descriptions are displayed properly
         $this->see(SupportPage::TITLE);
         $this->see(SupportPage::DESCRIPTION);
         $this->see(SupportPage::TEXT_A);
@@ -28,14 +34,22 @@ class SupportSteps extends CommonSteps
         $this->see(SupportPage::TEXT_D);
         $this->see(SupportPage::TEXT_E);
 
+        // Check if the "Rung diagnostics" button is displayed
         $this->seeElement(Locator::combine(SupportPage::RUN_DIAGNOSTICS_BTN_XPATH, SupportPage::RUN_DIAGNOSTICS_BTN_CSS));
     }
 
+    /**
+     * Function used to submit diagnostics form (Run diagnostics)
+     */
     public function submitDiagnosticForm()
     {
+        // Click "Run diagnostics" button
         $this->click(Locator::combine(SupportPage::RUN_DIAGNOSTICS_BTN_XPATH, SupportPage::RUN_DIAGNOSTICS_BTN_CSS));
     }
 
+    /**
+     * Function used to check diagnostics result (all indicators should be OK)
+     */
     public function checkDiagnostics()
     {
         $this->see("PHP version:", "//strong[contains(.,'PHP version:')]");
