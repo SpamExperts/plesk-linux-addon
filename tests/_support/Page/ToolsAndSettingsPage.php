@@ -6,14 +6,14 @@ class ToolsAndSettingsPage
 {
 	const TOOLS_N_SETTINGS_LINK_XPATH = "//a[contains(.,'Tools & Settings')]";
 
-	const IP_ADDRESSES_BTN_XPATH = "//a[@href='/admin/ip-address/list/']";
-	const IP_ADDRESSES_BTN_CSS   = "#buttonIpAddresses>a";
+	const IP_ADDRESSES_BTN_XPATH = "//*[@id='buttonIpAddresses']";
+	const IP_ADDRESSES_BTN_CSS   = "#buttonIpAddresses";
 
 	const EDIT_IP_ADDRESS_LINK_XPATH = "//a[@href='/admin/ip-address/edit/id/1']";
 
 	const SHARED_OPTION_CHECKBOX_XPATH = "//*[@id='generalSection-distributionType-shared']";
 	const SHARED_OPTION_CHECKBOX_CSS   = "#generalSection-distributionType-shared";
-	
+
 	const OK_BTN_XPATH = "//button[@name='send']";
 	const OK_BTN_CSS   = "#btn-send>button";
 
