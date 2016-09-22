@@ -157,4 +157,12 @@ class PleskLinuxClientPage
     const ADD_DOMAIN_OK_BTN_XPATH = "//button[@name='send']";
     const ADD_DOMAIN_OK_BTN_CSS   = "#btn-send>button";
 
+    // Client page
+
+    const CLIENT_SEARCH_BAR_CSS = "#searchTerm";
+    const CLIENT_SEARCH_BAR_XPATH = "//*[@id='searchTerm']";
+
+    const CLIENT_DOMAIN_TABLE_CSS = "#domainoverview";
+    const CLIENT_DOMAIN_TABLE_XPATH = "//*[@id='domainoverview']";
+
 }

@@ -11,6 +11,7 @@ use Page\SpampanelPage;
 use Page\ToolsAndSettingsPage;
 
 use Facebook\WebDriver\WebDriver;
+use Facebook\WebDriver\WebDriverKeys;
 use Codeception\Lib\Interfaces\Web;
 use Codeception\Util\Locator;
 
@@ -401,6 +402,25 @@ class CommonSteps extends \WebGuy
 
         // Wait for expected brandname text to appear
         $this->waitForText($brandname);
+
+        // Fill the new brand name in the top search bar
+        $this->fillField(Locator::combine(PleskLinuxClientPage::CLIENT_SEARCH_BAR_CSS, PleskLinuxClientPage::CLIENT_SEARCH_BAR_CSS), $brandname);
+
+        // Press "Enter" key
+        $this->pressKey(Locator::combine(PleskLinuxClientPage::CLIENT_SEARCH_BAR_CSS, PleskLinuxClientPage::CLIENT_SEARCH_BAR_CSS),WebDriverKeys::ENTER);
+
+        // Wait for "pageIframe" to load
+        $this->waitForElement("#pageIframe", 100);
+
+        // Switch to "pageIframe"
+        $this->switchToIFrame("pageIframe");
+
+        // Wait for page to load
+        $this->waitForElement("//h3[contains(.,'List Domains')]", 30);
+
+        // Expect to see just a single domain in "Domain List"
+        $this->see($this->domain, Locator::combine(PleskLinuxClientPage::CLIENT_DOMAIN_TABLE_CSS, PleskLinuxClientPage::CLIENT_DOMAIN_TABLE_XPATH));
+        // $this->dontSeeElement("//tbody/tr[2]");
     }
 
     /**
@@ -426,6 +446,9 @@ class CommonSteps extends \WebGuy
 
         // Switch to main frame
         $this->switchToWorkFrame();
+
+        // Wait for Resellers page to load
+        $this->waitForText("This is where you manage accounts of resellers", 100);
 
         // Click "Add New Reseller" button
         $this->click(Locator::combine(PleskLinuxClientPage::ADD_NEW_RESELLER_BTN_CSS, PleskLinuxClientPage::ADD_NEW_RESELLER_BTN_XPATH));
@@ -494,6 +517,9 @@ class CommonSteps extends \WebGuy
 
         // Switch to main frame
         $this->switchToWorkFrame();
+
+        // Wait for Customers page to load
+        $this->waitForText("This is where you manage accounts of your hosting service customers", 100);
 
         // Click "Add New Customer" button
         $this->click(Locator::combine(PleskLinuxClientPage::ADD_NEW_CUSTOMER_BTN_CSS, PleskLinuxClientPage::ADD_NEW_CUSTOMER_BTN_XPATH));
@@ -622,6 +648,9 @@ class CommonSteps extends \WebGuy
 
         // Switch to main frame
         $this->switchToWorkFrame();
+
+        // Wait for Subscriptions page to load
+        $this->waitForText("Customers obtain hosting services from you by subscribing to a hosting plan", 100);
 
         // Click "Add New Subscription" button
         $this->click(Locator::combine(PleskLinuxClientPage::CLIENT_ADD_NEW_SUBSCRIPTION_CSS, PleskLinuxClientPage::CLIENT_ADD_NEW_SUBSCRIPTION_XPATH));
