@@ -709,6 +709,7 @@ class CommonSteps extends \WebGuy
         $this->switchToLeftFrame();
 
         // Click "Subscriptions" button
+        $this->wait(1);
         $this->click("//a[contains(.,'Subscriptions')]");
 
         // Switch to main frame
@@ -969,7 +970,7 @@ class CommonSteps extends \WebGuy
             $addonDomainName = 'addon' . $domain;
 
         // Wait for "Add domain" button to show
-        $this->waitForText(Locator::combine(PleskLinuxClientPage::ADD_NEW_DOMAIN_BTN_CSS, PleskLinuxClientPage::ADD_NEW_DOMAIN_BTN_XPATH), 30);
+        $this->waitForElement(Locator::combine(PleskLinuxClientPage::ADD_NEW_DOMAIN_BTN_CSS, PleskLinuxClientPage::ADD_NEW_DOMAIN_BTN_XPATH), 30);
 
         // Click "Add Domain" button
         $this->click(Locator::combine(PleskLinuxClientPage::ADD_NEW_DOMAIN_BTN_CSS, PleskLinuxClientPage::ADD_NEW_DOMAIN_BTN_XPATH));

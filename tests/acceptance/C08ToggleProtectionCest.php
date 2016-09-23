@@ -100,6 +100,7 @@ class C08ToggleProtectionCest
         $I->loginAsRoot();
         $I->goToPage(ProfessionalSpamFilterPage::DOMAIN_LIST_BTN, DomainListPage::TITLE);
         $I->searchDomainList($alias);
+        $I->pauseExecution();
         $I->click(Locator::combine(DomainListPage::TOGGLE_PROTECTION_LINK_XPATH, DomainListPage::TOGGLE_PROTECTION_LINK_CSS));
         $I->waitForText("The protection status of $alias has been changed to unprotected", 60);
         $I->checkProtectionStatusIs(DomainListPage::STATUS_DOMAIN_IS_NOT_PRESENT_IN_THE_FILTER);
