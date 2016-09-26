@@ -296,16 +296,18 @@ class CommonSteps extends \WebGuy
         $this->amGoingTo("\n\n --- Enable a shared IP --- \n");
 
         // Switch to left frame
-        $this->switchToLeftFrame();
+        $this->switchToTopFrame();
 
-        // Click "Tools and Settings" option
-        $this->click(ToolsAndSettingsPage::TOOLS_N_SETTINGS_LINK_XPATH);
+        // Type "IP Addresses" in the search bar
+         $this->fillField(Locator::combine(PleskLinuxClientPage::CLIENT_SEARCH_BAR_CSS, PleskLinuxClientPage::CLIENT_SEARCH_BAR_CSS), "IP Addresses");
+
+        // Press "Enter" key
+        $this->pressKey(Locator::combine(PleskLinuxClientPage::CLIENT_SEARCH_BAR_CSS, PleskLinuxClientPage::CLIENT_SEARCH_BAR_CSS),WebDriverKeys::ENTER);
 
         // Switch to main frame
         $this->switchToWorkFrame();
 
-        // Click "IP Adresses" link under "Tools & Resources" category
-        $this->click(Locator::combine(ToolsAndSettingsPage::IP_ADDRESSES_BTN_XPATH, ToolsAndSettingsPage::IP_ADDRESSES_BTN_CSS));
+        $this->wait(2);
 
         // Click on the last IPv4 address in list
         $this->click(ToolsAndSettingsPage::EDIT_IP_ADDRESS_LINK_XPATH);
