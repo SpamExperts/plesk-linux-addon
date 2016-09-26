@@ -33,7 +33,6 @@ class C05MigrationCest
         $this->_after($I);
     }
 
-
     public function verifyMigrationPage(MigrationSteps $I)
     {
         // Go to the "Migration page"

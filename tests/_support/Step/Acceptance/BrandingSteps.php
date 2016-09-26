@@ -73,7 +73,6 @@ class BrandingSteps extends ConfigurationSteps
     /**
      * Function used to check brandname for root
      * @param  string $brandname expected brandname
-     * @return [type]            [description]
      */
     public function checkBrandingForRoot($brandname)
     {
@@ -84,7 +83,6 @@ class BrandingSteps extends ConfigurationSteps
     /**
      * Function used to check brandname for reseller
      * @param  string $brandname expected brandname
-     * @return [type]            [description]
      */
     public function checkBrandingForReseller($brandname)
     {
@@ -95,7 +93,6 @@ class BrandingSteps extends ConfigurationSteps
     /**
      * Function used to check brandname for root
      * @param  string $brandname expected customer
-     * @return [type]            [description]
      */
     public function checkBrandingForCustomer($brandname)
     {

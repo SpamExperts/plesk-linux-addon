@@ -445,6 +445,9 @@ class C01ConfigurationCest
         // Add an addon domain name for the customer account
         $addonDomainName = $I->addAddonDomainAsClient($domain);
 
+        // Wait in order to domain be present in filter
+        $I->wait(120);
+
         // Logout from customer account
         $I->logout();
 

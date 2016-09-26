@@ -9,7 +9,10 @@ class C00PsfInstallCest
 {
     public function verifyPleaskPsfAddonIsInstalled(CommonSteps $I)
     {
-        $I->login();
+        // Login as root
+        $I->loginAsRoot();
+
+        // Check if "Professional Spam Filter" is installed for root
         $I->checkPsfPresentForRoot();
     }
 }
