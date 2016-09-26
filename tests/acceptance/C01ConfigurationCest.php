@@ -142,7 +142,7 @@ class C01ConfigurationCest
         $I->apiCheckDomainExists($account['domain']);
     }
 
-    public function verifyAutomaticallyDeleteDomainToPsf(ConfigurationSteps $I)   
+    public function verifyAutomaticallyDeleteDomainToPsf(ConfigurationSteps $I)
     {
         // Set configuration options needed for the test
         $I->setConfigurationOptions(array(
@@ -317,7 +317,7 @@ class C01ConfigurationCest
         $I->assertContains("mail.".$account['domain'].'::25', $routes);
     }
 
-    public function verifyNotConfigureTheEmailAddressForThisDomainOption(ConfigurationSteps $I)    
+    public function verifyNotConfigureTheEmailAddressForThisDomainOption(ConfigurationSteps $I)
     {
         // Set configuration options needed for the test
         $I->setAutomaticallyAddDomainsToSpamfilterOption(false);
@@ -340,12 +340,12 @@ class C01ConfigurationCest
 
         // Go to Spampanel "Domain settings" option
         $I->click("//div[@class='datauri datauri-settings']");
- 
+
         // Check if "devnull@spamlogin" is not present in contact email field
         $I->dontSeeInField(Locator::combine(SpampanelPage::CONTACT_EMAIL_FIELD_CSS, SpampanelPage::CONTACT_EMAIL_FIELD_XPATH), 'devnull@spamlogin.com');
     }
 
-    public function verifyConfigureTheEmailAddressForThisDomainOption(ConfigurationSteps $I)  
+    public function verifyConfigureTheEmailAddressForThisDomainOption(ConfigurationSteps $I)
     {
         // Set configuration options needed for the test
         $I->setAutomaticallyAddDomainsToSpamfilterOption(false);
@@ -415,7 +415,7 @@ class C01ConfigurationCest
     }
 
     // Fails at apiCheckDomainExists
-    public function verifyAddonDomainsAsNormalDomain(ConfigurationSteps $I)  
+    public function verifyAddonDomainsAsNormalDomain(ConfigurationSteps $I)
     {
         // Set configuration options needed for the test
         $I->setConfigurationOptions(array(
@@ -553,7 +553,7 @@ class C01ConfigurationCest
         $I->assertIsAliasInSpampanel($aliasDomain, $domain);
     }
 
-    public function verifyRedirectBackToPleskUponLogout(ConfigurationSteps $I) 
+    public function verifyRedirectBackToPleskUponLogout(ConfigurationSteps $I)
     {
         // Set configuration options needed for the test
         $I->setRedirectBackToPleskOption();

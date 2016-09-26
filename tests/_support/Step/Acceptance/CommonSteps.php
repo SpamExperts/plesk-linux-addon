@@ -296,10 +296,16 @@ class CommonSteps extends \WebGuy
         $this->amGoingTo("\n\n --- Enable a shared IP --- \n");
 
         // Switch to left frame
+        $this->switchToLeftFrame();
+
+        // Go to home page
+        $this->click(ToolsAndSettingsPage::HOME_BTN_XPATH);
+
+        // Switch to top frame
         $this->switchToTopFrame();
 
         // Type "IP Addresses" in the search bar
-         $this->fillField(Locator::combine(PleskLinuxClientPage::CLIENT_SEARCH_BAR_CSS, PleskLinuxClientPage::CLIENT_SEARCH_BAR_CSS), "IP Addresses");
+        $this->fillField(Locator::combine(PleskLinuxClientPage::CLIENT_SEARCH_BAR_CSS, PleskLinuxClientPage::CLIENT_SEARCH_BAR_CSS), "IP Addresses");
 
         // Press "Enter" key
         $this->pressKey(Locator::combine(PleskLinuxClientPage::CLIENT_SEARCH_BAR_CSS, PleskLinuxClientPage::CLIENT_SEARCH_BAR_CSS),WebDriverKeys::ENTER);
@@ -307,7 +313,7 @@ class CommonSteps extends \WebGuy
         // Switch to main frame
         $this->switchToWorkFrame();
 
-        $this->wait(2);
+        $this->waitForText("View, add, remove IP addresses, and assign IP addresses to resellers.", 30);
 
         // Click on the last IPv4 address in list
         $this->click(ToolsAndSettingsPage::EDIT_IP_ADDRESS_LINK_XPATH);
@@ -902,7 +908,7 @@ class CommonSteps extends \WebGuy
 
 
         // Wait for "Add New Domain Alias" button to show
-        $this->waitForElement(Locator::combine(PleskLinuxClientPage::ADD_NEW_DOMAIN_BTN_CSS, PleskLinuxClientPage::ADD_NEW_DOMAIN_BTN_XPATH), 10);
+        $this->waitForElement(Locator::combine(PleskLinuxClientPage::ADD_NEW_DOMAIN_ALIAS_BTN_CSS, PleskLinuxClientPage::ADD_NEW_DOMAIN_ALIAS_BTN_CSS), 10);
 
         // Click "Add New Domain Alias" button
         $this->click(Locator::combine(PleskLinuxClientPage::ADD_NEW_DOMAIN_ALIAS_BTN_CSS, PleskLinuxClientPage::ADD_NEW_DOMAIN_ALIAS_BTN_XPATH));
@@ -938,8 +944,7 @@ class CommonSteps extends \WebGuy
 
         $this->click(Locator::combine(PleskLinuxClientPage::REMOVE_SELECTED_SUBSCRIPTION_BTN_XPATH, PleskLinuxClientPage::REMOVE_SELECTED_SUBSCRIPTION_BTN_XPATH));
 
-        $this->waitForElementNotVisible(Locator::combine(PleskLinuxClientPage::REMOVE_SELECTED_SUBSCRIPTION_BTN_XPATH, PleskLinuxClientPage::REMOVE_SELECTED_SUBSCRIPTION_BTN_CSS), 30);
-        $this->waitForText("The alias was removed", 60);
+        $this->dontSee($alias);
     }
 
     /**

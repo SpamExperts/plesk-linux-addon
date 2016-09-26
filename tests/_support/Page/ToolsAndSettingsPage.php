@@ -4,7 +4,7 @@ namespace Page;
 
 class ToolsAndSettingsPage
 {
-	const TOOLS_N_SETTINGS_LINK_XPATH = "//a[contains(.,'Tools & Settings')]";
+	const HOME_BTN_XPATH = "//a[contains(.,'Home')]";
 
 	const IP_ADDRESSES_BTN_XPATH = "//*[@id='buttonIpAddresses']";
 	const IP_ADDRESSES_BTN_CSS   = "#buttonIpAddresses";
