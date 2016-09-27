@@ -1047,8 +1047,10 @@ class CommonSteps extends \WebGuy
         $this->switchToWorkFrame();
 
         // Check if there are any Customers in list
-        if (!$this->getElementsCount("//td[contains(@class,'select')]"))
+        if (!$this->getElementsCount("//td[contains(@class,'select')]")) {
+            $this->click("//a[contains(.,'Home')]");
             return;
+        }
 
         // Select all customers
         $this->click("//input[@name='listGlobalCheckbox']");
@@ -1087,8 +1089,10 @@ class CommonSteps extends \WebGuy
         $this->switchToWorkFrame();
 
         // Check if there are any Customers in list
-        if (!$this->getElementsCount("//td[contains(@class,'select')]"))
+        if (!$this->getElementsCount("//td[contains(@class,'select')]")) {
+            $this->click("//a[contains(.,'Home')]");
             return;
+        }
 
         // Select all customers
         $this->click("//input[@name='listGlobalCheckbox']");
@@ -1127,8 +1131,10 @@ class CommonSteps extends \WebGuy
         $this->switchToWorkFrame();
 
         // Check if there are any Customers in list
-        if (!$this->getElementsCount("//td[contains(@class,'select')]"))
+        if (!$this->getElementsCount("//td[contains(@class,'select')]")) {
+            $this->click("//a[contains(.,'Home')]");
             return;
+        }
 
         // Select all customers
         $this->click("//input[@name='listGlobalCheckbox']");
