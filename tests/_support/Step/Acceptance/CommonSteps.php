@@ -301,6 +301,9 @@ class CommonSteps extends \WebGuy
         // Go to home page
         $this->click(ToolsAndSettingsPage::HOME_BTN_XPATH);
 
+        // Wait for homepage to load
+        $this->wait(3);
+
         // Switch to top frame
         $this->switchToTopFrame();
 
@@ -613,9 +616,6 @@ class CommonSteps extends \WebGuy
 
         // Click "Change Plan" button
         $this->click(Locator::combine(PleskLinuxClientPage::CHANGE_PLAN_BTN_CSS, PleskLinuxClientPage::CHANGE_PLAN_BTN_XPATH));
-
-        // Wait for "New service plan" drop down to appear
-        $this->waitForElementVisible(Locator::combine(PleskLinuxClientPage::NEW_SERVICE_PLAN_DROP_DOWN_CSS, PleskLinuxClientPage::NEW_SERVICE_PLAN_DROP_DOWN_XPATH));
 
         // Select Unlimited as the "New service plan"
         $this->selectOption(Locator::combine(PleskLinuxClientPage::NEW_SERVICE_PLAN_DROP_DOWN_CSS, PleskLinuxClientPage::NEW_SERVICE_PLAN_DROP_DOWN_XPATH), "Unlimited");
