@@ -29,6 +29,7 @@ class C01ConfigurationCest
      */
     public function _after(ConfigurationSteps $I)
     {
+        $I->cleanupPlesk();
     }
 
     /**

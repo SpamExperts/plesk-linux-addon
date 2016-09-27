@@ -305,10 +305,10 @@ class CommonSteps extends \WebGuy
         $this->switchToTopFrame();
 
         // Type "IP Addresses" in the search bar
-        $this->fillField(Locator::combine(PleskLinuxClientPage::CLIENT_SEARCH_BAR_CSS, PleskLinuxClientPage::CLIENT_SEARCH_BAR_CSS), "IP Addresses");
+        $this->fillField(Locator::combine(PleskLinuxClientPage::CLIENT_SEARCH_BAR_CSS, PleskLinuxClientPage::CLIENT_SEARCH_BAR_XPATH), "IP Addresses");
 
         // Press "Enter" key
-        $this->pressKey(Locator::combine(PleskLinuxClientPage::CLIENT_SEARCH_BAR_CSS, PleskLinuxClientPage::CLIENT_SEARCH_BAR_CSS),WebDriverKeys::ENTER);
+        $this->pressKey(Locator::combine(PleskLinuxClientPage::CLIENT_SEARCH_BAR_CSS, PleskLinuxClientPage::CLIENT_SEARCH_BAR_XPATH),WebDriverKeys::ENTER);
 
         // Switch to main frame
         $this->switchToWorkFrame();
@@ -998,5 +998,154 @@ class CommonSteps extends \WebGuy
         $this->waitForText("The domain $addonDomainName was successfully created.", 100);
 
         return $addonDomainName;
+    }
+
+    /**
+     * Function used to remove all created customers,resellers, domains or subscriptions from Plesk and Spampanel
+     */
+    public function cleanupPlesk()
+    {
+        // Logout from any account
+        $this->logout();
+
+        // Login as root
+        $this->loginAsRoot();
+
+        // Go to the configuration page
+        $this->goToPage(ProfessionalSpamFilterPage::CONFIGURATION_BTN, ConfigurationPage::TITLE);
+
+        // Make sure removed domains are removed from Spampanel
+        $this->setConfigurationOptions(array(
+            Locator::combine(ConfigurationPage::AUTOMATICALLY_DELETE_DOMAINS_OPT_CSS, ConfigurationPage::AUTOMATICALLY_DELETE_DOMAINS_OPT_XPATH) => true
+        ));
+
+        // Remove all created customer accounts
+        $this->removeAllCustomers();
+
+        // Remove all created reseller accounts
+        $this->removeAllResellers();
+
+        // Remove all created subscriptions
+        $this->removeAllSubscriptions();
+    }
+
+    /**
+     * Function used to remove all customers from Plesk
+     */
+    public function removeAllCustomers()
+    {
+        // Display info message
+        $this->amGoingTo("\n\n --- Remove all customer accounts --- \n");
+
+        // Switch to left frame
+        $this->switchToLeftFrame();
+
+        // Click on "Customers" option
+        $this->click("//a[contains(.,'Customers')]");
+
+        // Switch to left main frame
+        $this->switchToWorkFrame();
+
+        // Check if there are any Customers in list
+        if (!$this->getElementsCount("//td[contains(@class,'select')]"))
+            return;
+
+        // Select all customers
+        $this->click("//input[@name='listGlobalCheckbox']");
+
+        // Click the remove button
+        $this->click("#buttonRemoveUser");
+
+        // Wait for modal to show
+        $this->waitForText("Do you want to remove the selected customer accounts?", 30);
+
+        // Wait for "Yes" button to show
+        $this->waitForText("Yes", 30);
+
+        // Click on "Yes" button
+        $this->click("//button[contains(.,'Yes')]");
+
+        // Wait for removal to finish
+        $this->waitForText("Selected customers were deleted", 300);
+    }
+
+    /**
+     * Function used to remove all resellers from Plesk
+     */
+    public function removeAllResellers()
+    {
+        // Display info message
+        $this->amGoingTo("\n\n --- Remove all reseller accounts --- \n");
+
+        // Switch to left frame
+        $this->switchToLeftFrame();
+
+        // Click on "Customers" option
+        $this->click("//a[contains(.,'Resellers')]");
+
+        // Switch to left main frame
+        $this->switchToWorkFrame();
+
+        // Check if there are any Customers in list
+        if (!$this->getElementsCount("//td[contains(@class,'select')]"))
+            return;
+
+        // Select all customers
+        $this->click("//input[@name='listGlobalCheckbox']");
+
+        // Click the remove button
+        $this->click("#buttonRemoveUser");
+
+        // Wait for modal to show
+        $this->waitForText("Do you really want to remove the selected resellers and all their service plans, customers and subscriptions?", 30);
+
+        // Wait for "Yes" button to show
+        $this->waitForText("Yes", 30);
+
+        // Click on "Yes" button
+        $this->click("//button[contains(.,'Yes')]");
+
+        // Wait for removal to finish
+        $this->waitForText("The selected resellers were removed", 300);
+    }
+
+    /**
+     * Function used to remove all subscriptions from Plesk
+     */
+    public function removeAllSubscriptions()
+    {
+        // Display info message
+        $this->amGoingTo("\n\n --- Remove all subscriptions --- \n");
+
+        // Switch to left frame
+        $this->switchToLeftFrame();
+
+        // Click on "Customers" option
+        $this->click("//a[contains(.,'Subscriptions')]");
+
+        // Switch to left main frame
+        $this->switchToWorkFrame();
+
+        // Check if there are any Customers in list
+        if (!$this->getElementsCount("//td[contains(@class,'select')]"))
+            return;
+
+        // Select all customers
+        $this->click("//input[@name='listGlobalCheckbox']");
+
+        // Click the remove button
+        $this->click("#buttonRemoveUser");
+
+        // Wait for modal to show
+        $this->waitForText("Do you really want to remove selected subscriptions?", 30);
+
+        // Wait for "Yes" button to show
+        $this->waitForText("Yes", 30);
+
+        // Click on "Yes" button
+        $this->click("//button[contains(.,'Yes')]");
+
+        // Wait for removal to finish
+        $this->waitForText("Selected subscriptions were removed", 300);
     }
 }

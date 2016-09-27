@@ -23,6 +23,7 @@ class C07SupportCest
      */
     public function _after(SupportSteps $I)
     {
+        $I->cleanupPlesk();
     }
 
     /**

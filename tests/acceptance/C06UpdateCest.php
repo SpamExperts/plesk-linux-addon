@@ -23,6 +23,7 @@ class C06UpdateCest
      */
     public function _after(UpdateSteps $I)
     {
+        $I->cleanupPlesk();
     }
 
     /**

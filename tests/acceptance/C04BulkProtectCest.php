@@ -26,6 +26,7 @@ class C04BulkProtectCest
      */
     public function _after(BulkProtectSteps $I)
     {
+        $I->cleanupPlesk();
     }
 
     /**

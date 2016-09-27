@@ -25,6 +25,7 @@ class C03DomainListCest
      */
     public function _after(DomainListSteps $I)
     {
+        $I->cleanupPlesk();
     }
 
     /**

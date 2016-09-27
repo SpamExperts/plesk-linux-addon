@@ -42,6 +42,8 @@ class C02BrandingCest
 
         // Check if changing brandname was successful
         $I->checkSettingsSavedSuccessfully();
+
+        $I->cleanupPlesk();
     }
 
     /**

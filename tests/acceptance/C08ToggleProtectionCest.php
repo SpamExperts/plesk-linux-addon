@@ -16,6 +16,7 @@ class C08ToggleProtectionCest
     public function _after(ToggleProtectionSteps $I)
     {
         $I->removeCreatedSubscriptions();
+        $I->cleanupPlesk();
     }
 
     public function _failed(ToggleProtectionSteps $I)
@@ -34,7 +35,7 @@ class C08ToggleProtectionCest
         // Search for $aliasDomainName
         $I->searchDomainList($aliasDomainName);
 
-        // Toggle protection 
+        // Toggle protection
         $I->click(Locator::combine(DomainListPage::TOGGLE_PROTECTION_LINK_XPATH, DomainListPage::TOGGLE_PROTECTION_LINK_CSS));
         $message = "The protection status of $aliasDomainName could not be changed to unprotected because alias domains and subdomains are treated as normal domains and \"$aliasDomainName\" is already added as an alias.";
         $I->waitForText($message, 60);
@@ -54,7 +55,7 @@ class C08ToggleProtectionCest
 
         // Login as client
         $I->login($setup['customer_username'], $setup['customer_password']);
-        
+
         // Delete alias
         $I->removeAliasAsClient($alias);
 

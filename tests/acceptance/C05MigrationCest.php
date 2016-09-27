@@ -23,6 +23,7 @@ class C05MigrationCest
      */
     public function _after(MigrationSteps $I)
     {
+        $I->cleanupPlesk();
     }
 
     /**
