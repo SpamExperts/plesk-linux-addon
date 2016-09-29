@@ -147,7 +147,7 @@ class C08ToggleProtectionCest
 
         // Check domain is not present in filter and Spampanel
         $I->checkProtectionStatusIs(DomainListPage::STATUS_DOMAIN_IS_NOT_PRESENT_IN_THE_FILTER);
-        $I->apiCheckDomainNotExists($alias);
+        $I->apiCheckDomainNotExists($domain);
         $I->assertIsNotAliasInSpampanel($alias, $domain);
     }
 }

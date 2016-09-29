@@ -1056,7 +1056,7 @@ class CommonSteps extends \WebGuy
         $this->click("//input[@name='listGlobalCheckbox']");
 
         // Click the remove button
-        $this->click("#buttonRemoveUser");
+        $this->click(Locator::combine("#buttonRemoveUser", "//span[contains(.,'Remove')]"));
 
         // Wait for modal to show
         $this->waitForText("Do you want to remove the selected customer accounts?", 30);
@@ -1098,7 +1098,7 @@ class CommonSteps extends \WebGuy
         $this->click("//input[@name='listGlobalCheckbox']");
 
         // Click the remove button
-        $this->click("#buttonRemoveUser");
+        $this->click(Locator::combine("#buttonRemoveUser", "//span[contains(.,'Remove')]"));
 
         // Wait for modal to show
         $this->waitForText("Do you really want to remove the selected resellers and all their service plans, customers and subscriptions?", 30);
@@ -1140,7 +1140,7 @@ class CommonSteps extends \WebGuy
         $this->click("//input[@name='listGlobalCheckbox']");
 
         // Click the remove button
-        $this->click("#buttonRemoveUser");
+        $this->click(Locator::combine("#buttonRemoveUser", "//span[contains(.,'Remove')]"));
 
         // Wait for modal to show
         $this->waitForText("Do you really want to remove selected subscriptions?", 30);
