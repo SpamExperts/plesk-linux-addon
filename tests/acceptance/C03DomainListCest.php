@@ -28,7 +28,7 @@ class C03DomainListCest
      */
     public function _after(DomainListSteps $I)
     {
-        // $I->cleanupPlesk();
+        $I->cleanupPlesk();
     }
 
     /**
@@ -36,7 +36,7 @@ class C03DomainListCest
      */
     public function _failed(DomainListSteps $I)
     {
-        // $this->_after($I);
+        $this->_after($I);
     }
 
     public function verifyDomainListAsRoot(DomainListSteps $I)
