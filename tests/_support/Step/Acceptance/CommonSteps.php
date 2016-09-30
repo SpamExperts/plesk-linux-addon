@@ -1047,14 +1047,16 @@ class CommonSteps extends \WebGuy
         $this->switchToWorkFrame();
 
         // Check if there are any Customers in list
-        if (!$this->getElementsCount("//td[contains(@class,'select')]"))
+        if (!$this->getElementsCount("//td[contains(@class,'select')]")) {
+            $this->click("//a[contains(.,'Home')]");
             return;
+        }
 
         // Select all customers
         $this->click("//input[@name='listGlobalCheckbox']");
 
         // Click the remove button
-        $this->click("#buttonRemoveUser");
+        $this->click(Locator::combine("#buttonRemoveUser", "//span[contains(.,'Remove')]"));
 
         // Wait for modal to show
         $this->waitForText("Do you want to remove the selected customer accounts?", 30);
@@ -1087,14 +1089,16 @@ class CommonSteps extends \WebGuy
         $this->switchToWorkFrame();
 
         // Check if there are any Customers in list
-        if (!$this->getElementsCount("//td[contains(@class,'select')]"))
+        if (!$this->getElementsCount("//td[contains(@class,'select')]")) {
+            $this->click("//a[contains(.,'Home')]");
             return;
+        }
 
         // Select all customers
         $this->click("//input[@name='listGlobalCheckbox']");
 
         // Click the remove button
-        $this->click("#buttonRemoveUser");
+        $this->click(Locator::combine("#buttonRemoveUser", "//span[contains(.,'Remove')]"));
 
         // Wait for modal to show
         $this->waitForText("Do you really want to remove the selected resellers and all their service plans, customers and subscriptions?", 30);
@@ -1127,14 +1131,16 @@ class CommonSteps extends \WebGuy
         $this->switchToWorkFrame();
 
         // Check if there are any Customers in list
-        if (!$this->getElementsCount("//td[contains(@class,'select')]"))
+        if (!$this->getElementsCount("//td[contains(@class,'select')]")) {
+            $this->click("//a[contains(.,'Home')]");
             return;
+        }
 
         // Select all customers
         $this->click("//input[@name='listGlobalCheckbox']");
 
         // Click the remove button
-        $this->click("#buttonRemoveUser");
+        $this->click(Locator::combine("#buttonRemoveUser", "//span[contains(.,'Remove')]"));
 
         // Wait for modal to show
         $this->waitForText("Do you really want to remove selected subscriptions?", 30);

@@ -44,11 +44,14 @@ class C03DomainListCest
         // Go to "Domain List" page
         $I->goToPage(ProfessionalSpamFilterPage::DOMAIN_LIST_BTN, DomainListPage::TITLE);
 
-        // check "Domain List" page layout
-        $I->checkListDomainsPageLayout();
-
         // Create a new subscription
         $account = $I->addNewSubscription();
+
+        // Go to "Domain List" page
+        $I->goToPage(ProfessionalSpamFilterPage::DOMAIN_LIST_BTN, DomainListPage::TITLE);
+
+        // check "Domain List" page layout
+        $I->checkListDomainsPageLayout();
 
         // Check if subscription domain is present in list
         $I->checkDomainList($account['domain'], true);
