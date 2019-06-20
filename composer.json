@@ -10,7 +10,7 @@
     }
   ],
   "require-dev": {
-    "codeception/codeception": "2.1.5",
+    "codeception/codeception": "3.0.1",
     "squizlabs/php_codesniffer": "*",
     "wimg/php-compatibility": "dev-master",
     "simplyadmire/composer-plugins" : "@dev"
